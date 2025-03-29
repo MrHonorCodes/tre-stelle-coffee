@@ -5,12 +5,12 @@ const config = {
   theme: {
     extend: {
       colors: {
-        primary: '#6D0F0F',
-        secondary: '#D4A762',
-        tertiary: '#2E1A13',
-        'soft-white': '#F8F5F2',
-        'dark-text': '#1A1A1A',
-        'light-text': '#F8F5F2',
+        primary: "rgb(109, 15, 15)", // #6D0F0F in RGB
+        secondary: "rgb(212, 167, 98)", // #D4A762 in RGB
+        tertiary: "rgb(46, 26, 19)", // #2E1A13 in RGB
+        "soft-white": "rgb(248, 245, 242)",
+        "dark-text": "rgb(26, 26, 26)",
+        "light-text": "rgb(248, 245, 242)",
       },
     },
   },

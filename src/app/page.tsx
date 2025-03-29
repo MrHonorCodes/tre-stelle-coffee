@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useEffect } from 'react';
 import FadeIn from '../../components/ui/FadeIn';
@@ -14,6 +15,23 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-soft-white">
+      <div className="mt-8 p-8 bg-primary-direct">
+  <p className="text-white">This should be maroon with direct CSS</p>
+</div>
+      <div className="flex p-4 gap-2 mt-4">
+  <div className="w-20 h-20 bg-primary rounded shadow-md flex items-center justify-center text-white">Primary</div>
+  <div className="w-20 h-20 bg-secondary rounded shadow-md flex items-center justify-center text-black">Secondary</div>
+  <div className="w-20 h-20 bg-tertiary rounded shadow-md flex items-center justify-center text-white">Tertiary</div>
+</div>
+<section style={{backgroundColor: '#4B0000', color: 'white', padding: '2rem'}}>
+  <h2>Testing Direct Styles</h2>
+  <p>This should appear in maroon with white text</p>
+</section>
+
+<div className="bg-[#4B0000] text-white p-4 m-4">
+  Testing with arbitrary value syntax
+</div>
+
       {/* Hero Section with maroon background */}
       <section className="relative h-screen overflow-hidden bg-primary pt-16">
         <div className="container mx-auto px-4 h-[calc(100%-80px)] flex items-center">
@@ -88,7 +106,7 @@ export default function Home() {
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <ScrollReveal delay={0.1}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
+                <div className="bg-primary-fix/20 p-6 rounded-lg hover:bg-primary-fix/30 transition-all duration-300 h-full">
                   <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
@@ -99,8 +117,8 @@ export default function Home() {
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
-                  <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-primary-fix/20 p-6 rounded-lg hover:bg-primary-fix/30 transition-all duration-300 h-full">
+                  <div className="bg-primary-fix w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                     </svg>
@@ -110,8 +128,8 @@ export default function Home() {
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.3}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
-                  <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="bg-primary-fix/20 p-6 rounded-lg hover:bg-primary-fix/30 transition-all duration-300 h-full">
+                  <div className="bg-primary-fix w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
@@ -125,7 +143,7 @@ export default function Home() {
         </div>
       </section>
       {/* Location Section with wave divider */}
-<section className="relative bg-primary py-24">
+<section className="relative bg-primary-fix py-24">
   {/* Wavy top divider */}
   <div className="absolute top-0 left-0 w-full overflow-hidden rotate-180" style={{ height: '100px', transform: 'translateY(-99px)' }}>
     <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="w-full h-full">
@@ -146,11 +164,11 @@ export default function Home() {
             alt="Tre Stelle Coffee Shop Storefront" 
             className="w-full h-80 object-cover"
             onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'https://via.placeholder.com/800x400?text=Tre+Stelle+Coffee+Storefront';
+              (e.target as HTMLImageElement).onerror = null;
+              (e.target as HTMLImageElement).src = 'https://via.placeholder.com/800x400?text=Tre+Stelle+Coffee+Storefront';
             }}
           />
-          <div className="absolute inset-0 bg-primary/20"></div>
+          <div className="absolute inset-0 bg-primary-fix/20"></div>
         </div>
         
         <div className="p-8 text-center">
@@ -163,7 +181,7 @@ export default function Home() {
             href="https://maps.google.com/?q=17390+Preston+Road+suite+210+Dallas+Texas+75252" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-block px-8 py-3 bg-primary text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+            className="inline-block px-8 py-3 bg-primary-fix text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
           >
             VIEW LOCATION
           </a>
@@ -176,7 +194,7 @@ export default function Home() {
 {/* Contact and Follow Section */}
 <section className="relative py-20 bg-tertiary text-light-text overflow-hidden">
   <div className="absolute inset-0 z-0">
-    <div className="absolute inset-0 bg-primary/80"></div>
+    <div className="absolute inset-0 bg-primary-fix/80"></div>
     <div 
       className="absolute inset-0 bg-cover bg-center opacity-30" 
       style={{ 
@@ -245,7 +263,7 @@ export default function Home() {
               href="https://www.facebook.com/Tre-Stelle-Coffee-Co-101818161638598/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="h-14 w-14 rounded-full bg-primary flex items-center justify-center border-2 border-secondary hover:bg-secondary hover:text-primary transition-all duration-300"
+              className="h-14 w-14 rounded-full bg-primary-fix flex items-center justify-center border-2 border-secondary hover:bg-secondary hover:text-primary transition-all duration-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
@@ -255,7 +273,7 @@ export default function Home() {
               href="https://www.instagram.com/trestellecoffee/" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="h-14 w-14 rounded-full bg-primary flex items-center justify-center border-2 border-secondary hover:bg-secondary hover:text-primary transition-all duration-300"
+              className="h-14 w-14 rounded-full bg-primary-fix flex items-center justify-center border-2 border-secondary hover:bg-secondary hover:text-primary transition-all duration-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
