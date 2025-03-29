@@ -1,5 +1,3 @@
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
 
 @import "tailwindcss";
@@ -33,7 +31,7 @@ body {
 /* Add this to your globals.css */
 :root {
   --color-primary: #6D0F0F;
-  --color-secondary: #D4A762;
+  --color-secondary: #e7c583;
   --color-tertiary: #2E1A13;
   --color-soft-white: #F8F5F2;
   --color-dark-text: #1A1A1A;
