@@ -1,103 +1,90 @@
-import Image from "next/image";
+import { motion } from 'framer-motion'; // Install this: npm install framer-motion
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <>
+      {/* Hero Section */}
+      <section className="pt-16 md:pt-0 min-h-screen bg-primary relative overflow-hidden">
+        <div className="container mx-auto px-4 md:min-h-screen flex flex-col md:flex-row items-center">
+          <motion.div 
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="md:w-1/2 text-soft-white z-10 py-16 md:py-0"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              Bridging the gap between modern & traditional coffee!
+            </h1>
+            <p className="text-lg mb-8 max-w-xl">
+              Our green coffee supplier sources coffees from farms around the world to ensure we receive the best coffee. Experience the perfect blend of quality and tradition.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a href="/shop" className="bg-secondary text-dark-text px-8 py-3 rounded-full font-semibold transition-all hover:bg-opacity-80 inline-block">
+                Shop Now
+              </a>
+              <a href="/about-us" className="border-2 border-soft-white text-soft-white px-8 py-3 rounded-full font-semibold transition-all hover:bg-soft-white hover:text-primary inline-block">
+                Learn More
+              </a>
+            </div>
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="md:w-1/2 mt-8 md:mt-0 relative z-10"
           >
-            Read our docs
-          </a>
+            <div className="bg-tertiary rounded-lg overflow-hidden shadow-2xl">
+              {/* Replace with actual video */}
+              <div className="aspect-w-16 aspect-h-9 bg-tertiary flex items-center justify-center">
+                <span className="text-soft-white">Video Player</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-20 bg-soft-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="md:w-1/2"
+            >
+              <span className="text-secondary uppercase tracking-wider font-semibold text-sm block mb-3">Since 2019</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Coffee Roasting Company</h2>
+              <p className="text-gray-700 mb-4">
+                Originally beginning the business in late 2019 as solely a Roasting company with the help of his Father, the business has now expanded to a Coffee Shop & Roastery. Along with serving high quality coffee, our main objective is to build a coffee business with the intentions of inclusion of all individuals from various walks of life.
+              </p>
+              <p className="text-gray-700 mb-6">
+                We take pride in sourcing the finest beans from around the world and roasting them to perfection, creating unique flavor profiles that highlight each coffee&apos;s natural characteristics.
+              </p>
+              <a href="/about-us" className="bg-secondary text-dark-text px-8 py-3 rounded-full font-semibold transition-all hover:bg-opacity-80 inline-block">
+                About Us
+              </a>
+            </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="md:w-1/2"
+            >
+              <div className="rounded-lg overflow-hidden shadow-2xl">
+                {/* Replace with actual video */}
+                <div className="aspect-w-16 aspect-h-9 bg-tertiary flex items-center justify-center">
+                  <span className="text-soft-white">About Video</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
