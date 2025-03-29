@@ -65,7 +65,7 @@ return (
                 Tre Stelle Coffee Co.
             </h2>
             <p className="text-gray-700 mb-6 text-lg">
-                Originally beginning the business in late 2019 as solely a Roasting company with the help of his Father, the business has now expanded to a Coffee Shop & Roastery. Along with serving high quality coffee, our main objective is to build a coffee business with the intentions of inclusion of all individuals from various walks of life.
+                Tre Stelle Coffee Co. was founded in late 2019, initially as a specialized roasting company. Jonathan established the business with support from his father, and we&apos;ve since expanded into a full-service Coffee Shop & Roastery. Beyond serving exceptional coffee, our core mission is to create an inclusive coffee business that welcomes individuals from all backgrounds and walks of life.
             </p>
             <a href="/products" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Our Products
@@ -80,10 +80,10 @@ return (
                 Inspiration
             </h2>
             <p className="text-gray-700 mb-2 text-lg">
-                Growing up in the country of Eritrea, Yordan used to go to his favorite café called Tre Stelle during his adolescent years. The country of Eritrea has plenty of Italian influence, even the name Tre Stelle translates to &quot;Three Stars&quot; in the Italian language.
+                The name &quot;Tre Stelle&quot; draws inspiration from Yordan&apos;s youth in Eritrea, where he frequently visited his favorite café called Tre Stelle. Eritrea has rich Italian cultural influences, and &quot;Tre Stelle&quot; translates to &quot;Three Stars&quot; in Italian.
             </p>
             <p className="text-gray-700 text-lg">
-                In the Summer of 2019, Jonathan went back to Eritrea and was able to visit the café, which gave inspiration for the name of the business.
+                In Summer 2019, Jonathan traveled to Eritrea and visited this café, which inspired him to adopt the name for our business.
             </p>
             </ScrollReveal>
             
@@ -119,10 +119,10 @@ return (
                 Sourcing
             </h2>
             <p className="text-gray-700 mb-4 text-lg">
-                Our green coffee supplier sources coffees from farms around the world to ensure we receive the best coffee. Also, this guarantees that farmers are given a fair price in order to more adequately reward their hard work to generate a quality product.
+                We work with green coffee suppliers who source beans from farms worldwide, ensuring we access only the highest quality coffee. This approach guarantees that farmers receive fair compensation for their hard work in producing exceptional beans.
             </p>
             <p className="text-gray-700 text-lg">
-                Also, this arrangement creates more transparency between the farmer, importer/dealer, and us as a direct line of communication has been created between the three parties.
+                This arrangement also creates greater transparency in the supply chain, establishing a direct line of communication between farmers, importers, and our roastery.
             </p>
             </ScrollReveal>
         </div>
