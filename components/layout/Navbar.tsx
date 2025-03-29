@@ -13,7 +13,7 @@ export default function Navbar() {
     { name: 'Press', path: '/press' },
     { name: 'Book Event', path: '/events' },
     { name: 'Wholesale', path: '/wholesale' },
-    { name: 'Find Us', path: '/location' },
+    { name: 'Find Us', path: '/find-us' },
     { name: 'Order Ahead', path: 'https://trestellecoffeeco.square.site/' }
   ];
   
