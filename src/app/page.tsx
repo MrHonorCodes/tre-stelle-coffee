@@ -1,90 +1,67 @@
-import { motion } from 'framer-motion'; // Install this: npm install framer-motion
-
+'use client'
 export default function Home() {
+
   return (
-    <>
+    <main className="min-h-screen bg-soft-white">
+
       {/* Hero Section */}
-      <section className="pt-16 md:pt-0 min-h-screen bg-primary relative overflow-hidden">
-        <div className="container mx-auto px-4 md:min-h-screen flex flex-col md:flex-row items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="md:w-1/2 text-soft-white z-10 py-16 md:py-0"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+      <section className="relative h-screen overflow-hidden bg-primary pt-16">
+        <div className="container mx-auto px-4 h-[calc(100%-80px)] flex items-center">
+          <div className="w-full md:w-1/2 lg:w-2/5 text-light-text relative z-10 md:pl-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
               Bridging the gap between modern & traditional coffee!
             </h1>
-            <p className="text-lg mb-8 max-w-xl">
+            <p className="text-base md:text-lg mb-8 max-w-lg">
               Our green coffee supplier sources coffees from farms around the world to ensure we receive the best coffee. Experience the perfect blend of quality and tradition.
             </p>
             <div className="flex flex-wrap gap-4">
-              <a href="/shop" className="bg-secondary text-dark-text px-8 py-3 rounded-full font-semibold transition-all hover:bg-opacity-80 inline-block">
+              <a href="/shop" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Shop Now
               </a>
-              <a href="/about-us" className="border-2 border-soft-white text-soft-white px-8 py-3 rounded-full font-semibold transition-all hover:bg-soft-white hover:text-primary inline-block">
+              <a href="/about" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-primary border-2 border-light-text">
                 Learn More
               </a>
             </div>
-          </motion.div>
-          
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="md:w-1/2 mt-8 md:mt-0 relative z-10"
-          >
-            <div className="bg-tertiary rounded-lg overflow-hidden shadow-2xl">
-              {/* Replace with actual video */}
-              <div className="aspect-w-16 aspect-h-9 bg-tertiary flex items-center justify-center">
-                <span className="text-soft-white">Video Player</span>
-              </div>
-            </div>
-          </motion.div>
+          </div>
+          {/* Video background - replace src with your actual video */}
+          <div className="absolute right-0 top-0 w-full md:w-3/5 h-full z-0 hidden md:block">
+            <div className="w-full h-full bg-tertiary opacity-50 md:opacity-100"></div>
+            {/* Uncomment when you have a video */}
+            {/* <video className="w-full h-full object-cover" autoPlay muted loop>
+              <source src="/your-video.mp4" type="video/mp4" />
+            </video> */}
+          </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section className="py-20 bg-soft-white">
+      <section className="py-24 bg-soft-white">
         <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="md:w-1/2"
-            >
-              <span className="text-secondary uppercase tracking-wider font-semibold text-sm block mb-3">Since 2019</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-6">Coffee Roasting Company</h2>
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="lg:w-1/2">
+              <span className="text-sm text-secondary uppercase tracking-wider font-semibold mb-4 block">
+                Since 2019
+              </span>
+              <h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
+                Coffee Roasting Company
+              </h2>
               <p className="text-gray-700 mb-4">
                 Originally beginning the business in late 2019 as solely a Roasting company with the help of his Father, the business has now expanded to a Coffee Shop & Roastery. Along with serving high quality coffee, our main objective is to build a coffee business with the intentions of inclusion of all individuals from various walks of life.
               </p>
               <p className="text-gray-700 mb-6">
                 We take pride in sourcing the finest beans from around the world and roasting them to perfection, creating unique flavor profiles that highlight each coffee&apos;s natural characteristics.
               </p>
-              <a href="/about-us" className="bg-secondary text-dark-text px-8 py-3 rounded-full font-semibold transition-all hover:bg-opacity-80 inline-block">
+              <a href="/about" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-secondary">
                 About Us
               </a>
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="md:w-1/2"
-            >
-              <div className="rounded-lg overflow-hidden shadow-2xl">
-                {/* Replace with actual video */}
-                <div className="aspect-w-16 aspect-h-9 bg-tertiary flex items-center justify-center">
-                  <span className="text-soft-white">About Video</span>
-                </div>
-              </div>
-            </motion.div>
+            </div>
+            <div className="lg:w-1/2 rounded-lg overflow-hidden shadow-xl">
+              {/* Replace with your video component */}
+              <div className="aspect-video bg-tertiary"></div>
+            </div>
           </div>
         </div>
       </section>
-    </>
+    </main>
   );
 }
