@@ -78,8 +78,12 @@ export default function Navbar() {
         </nav>
       </div>
       
-      {/* Mobile menu */}
-      <div className={`${isOpen ? 'block' : 'hidden'} md:hidden absolute top-full left-0 w-full bg-primary shadow-lg`}>
+      {/* Mobile menu with animation */}
+      <div 
+        className={`md:hidden absolute top-full left-0 w-full bg-primary shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
+          isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
         <div className="py-3 space-y-1 px-4">
           {navLinks.map((link) => (
             <Link
