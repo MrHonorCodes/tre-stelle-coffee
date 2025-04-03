@@ -193,8 +193,8 @@ export default function Home() {
       <ScrollReveal direction="left">
         <div>
           <h3 className="text-2xl font-bold mb-8">Business Hours:</h3>
-          <p className="text-xl mb-2">Weekdays: 7 am – 5 pm</p>
-          <p className="text-xl mb-8">Weekends: 7 am – 6 pm</p>
+            <p className="text-xl mb-2">Mon-Fri: 7 am – 5 pm</p>
+            <p className="text-xl mb-8">Sat-Sun: 7 am – 6 pm</p>
           
           <h3 className="text-3xl font-bold mb-4">Contact us</h3>
           <div className="w-16 h-1 bg-secondary mb-8"></div>
