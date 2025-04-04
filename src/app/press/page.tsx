@@ -86,9 +86,9 @@ return (
         <div className="absolute inset-0 z-0">
         {/* Overlay with coffee beans background */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-40" 
+            className="absolute inset-0 bg-cover bg-center" 
             style={{ 
-            backgroundImage: "url('/images/coffee-beans-bg.jpg')", 
+            backgroundImage: "url('/images/press/press-banner.png')", 
             backgroundSize: 'cover'
             }}
         />
@@ -97,7 +97,7 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-light-text">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary-fix">
             Press
             </h1>
         </FadeIn>
@@ -139,41 +139,42 @@ return (
                         />
                     </div>
                     <h3 className="text-2xl md:text-3xl text-primary font-bold mb-4">
-                        {featuredPress.headline}
+                        {featuredPress.headline || "Tre Stelle Coffee Featured on WFAA"}
                     </h3>
                     <p className="text-gray-700 mb-4">
-                        {featuredPress.excerpt}
+                        {featuredPress.excerpt || "Watch how Tre Stelle Coffee brings Eritrean coffee culture to Dallas, featuring our owner Jonathan Ghebreamlak sharing his story and passion for coffee."}
                     </p>
                     <div className="flex justify-between items-center">
-                        <span className="text-gray-500">{featuredPress.date}</span>
+                        <span className="text-gray-500">{featuredPress.date || "April 2023"}</span>
+                        {featuredPress.link ? (
                         <a 
-                        href={featuredPress.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+                            href={featuredPress.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
                         >
-                        Read Article
+                            Read Article
                         </a>
+                        ) : (
+                        <a 
+                            href="https://www.wfaa.com" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+                        >
+                            Visit WFAA
+                        </a>
+                        )}
                     </div>
                     </div>
-                    <div className="bg-gray-100 relative">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 bg-primary/80 rounded-full flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        </div>
-                    </div>
-                    <img 
-                        src="/images/press/tv-interview.jpg" 
-                        alt="Television Interview" 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                        (e.target as HTMLImageElement).onerror = null;
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x400?text=TV+Interview';
-                        }}
-                    />
+                    <div className="relative pb-[56.25%] h-0">
+                    <iframe 
+                        className="absolute top-0 left-0 w-full h-full"
+                        src="https://www.wfaa.com/embeds/video/responsive/287-af38153a-df57-45d8-a8e5-82c465b83f9a/iframe" 
+                        title="Tre Stelle Coffee Featured on WFAA"
+                        allowFullScreen={true} 
+                        loading="lazy"
+                    ></iframe>
                     </div>
                 </div>
                 </div>
@@ -325,8 +326,8 @@ return (
                 
                 <div className="text-center mb-8">
                     <p className="text-lg md:text-xl italic text-gray-700 mb-6 relative z-10">
-                    &quot;Tre Stelle Coffee Co. has brought a fresh energy to the Dallas coffee scene with their 
-                    dedication to quality beans and inclusive community space.&quot;
+                    &quot;In Jonathan Ghebreamlak&apos;s home, &apos;we drink coffee like water.&apos; His shop is designed for all kinds of coffee drinkers. For anyone who knows the &apos;coffee language,&apos; they&apos;re happy to oblige.&quot;
+
                     </p>
                     <div className="h-12 flex items-center justify-center">
                     <img 
@@ -343,8 +344,7 @@ return (
                 
                 <div className="text-center mb-8">
                     <p className="text-lg md:text-xl italic text-gray-700 mb-6">
-                    &quot;A coffee shop with a mission – Tre Stelle blends Eritrean tradition with 
-                    contemporary coffee culture in a way that feels both authentic and innovative.&quot;
+                    &quot;Really every part of it is done in shop, from raw green coffee beans all the way to a cup of drinkable coffee. You can taste and smell the freshness in the coffee. That&apos;s what makes us different.&quot;
                     </p>
                     <div className="h-12 flex items-center justify-center">
                     <img 
@@ -375,7 +375,7 @@ return (
             We&apos;d love to share our story with you.
             </p>
             <a 
-            href="mailto:press@trestellecoffeeco.com" 
+            href="mailto:contact@trestellecoffeeco.com" 
             className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
             >
             Contact For Press Inquiries

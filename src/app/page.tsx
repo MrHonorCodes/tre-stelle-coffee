@@ -4,6 +4,13 @@ import { useEffect } from 'react';
 import FadeIn from '../../components/ui/FadeIn';
 import ScrollReveal from '../../components/ui/ScrollReveal';
 
+import dynamic from 'next/dynamic';
+
+// Use Next.js dynamic import with SSR disabled
+const VideoSection = dynamic(() => import('../../components/ui/VideoSection'), { 
+  ssr: false 
+});
+
 export default function Home() {
   // Add smooth scrolling effect
   useEffect(() => {
@@ -16,38 +23,36 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-soft-white">
       {/* Hero Section with maroon background */}
-      <section className="relative h-screen overflow-hidden bg-primary pt-16">
-        <div className="container mx-auto px-4 h-[calc(100%-80px)] flex items-center">
-          <div className="w-full md:w-1/2 lg:w-2/5 text-light-text relative z-10 md:pl-8">
-            <FadeIn delay={0.2}>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
-                Bridging the gap between modern & traditional coffee!
-              </h1>
-            </FadeIn>
-            <FadeIn delay={0.4}>
-                <p className="text-base md:text-lg mb-8 max-w-lg">
-                We partner with trusted suppliers to bring you the finest coffee beans, carefully selected from farms worldwide. Discover the harmony of tradition and quality in every cup.
-                </p>
-            </FadeIn>
-            <FadeIn delay={0.6}>
-              <div className="flex flex-wrap gap-4">
-                <a href="/shop" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
-                  Shop Now
-                </a>
-                <a href="/about" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-primary border-2 border-light-text">
-                  Learn More
-                </a>
-              </div>
-            </FadeIn>
-          </div>
-          {/* Add a tertiary color accent element */}
-          <FadeIn delay={0.3} direction="left">
-            <div className="absolute right-0 top-0 w-full md:w-3/5 h-full z-0 hidden md:block">
-              <div className="w-full h-full bg-tertiary opacity-90"></div>
+    <section className="relative h-screen overflow-hidden bg-primary pt-16">
+      <div className="container mx-auto px-4 h-[calc(100%-80px)] flex items-center">
+        <div className="w-full md:w-1/2 lg:w-2/5 text-light-text relative z-10 md:pl-8">
+          <FadeIn delay={0.2}>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
+              Bridging the gap between modern & traditional coffee!
+            </h1>
+          </FadeIn>
+          <FadeIn delay={0.4}>
+            <p className="text-base md:text-lg mb-8 max-w-lg">
+              We partner with trusted suppliers to bring you the finest coffee beans, carefully selected from farms worldwide. Discover the harmony of tradition and quality in every cup.
+            </p>
+          </FadeIn>
+          <FadeIn delay={0.6}>
+            <div className="flex flex-wrap gap-4">
+              <a href="/shop" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
+                Shop Now
+              </a>
+              <a href="/about" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-primary border-2 border-light-text">
+                Learn More
+              </a>
             </div>
           </FadeIn>
         </div>
-      </section>
+
+        {/* Video Embed Section */}
+          <VideoSection />
+
+      </div>
+    </section>
 
       {/* About Section with tertiary color accents */}
       <section className="py-24 bg-soft-white">

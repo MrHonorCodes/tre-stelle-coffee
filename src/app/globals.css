@@ -53,6 +53,9 @@ body {
 .border-primary-fix {
   border-color: var(--color-primary);
 }
+.text-light{
+  color: var(--color-light-text);
+}
 
 
 

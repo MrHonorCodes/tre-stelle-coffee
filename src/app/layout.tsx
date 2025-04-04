@@ -2,7 +2,7 @@ import './globals.css';
 import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
-import SmoothScroller from '../../components/ui/SmoothScroller';
+// import SmoothScroller from '../../components/ui/SmoothScroller';
 import BackToTop from "../../components/ui/BackToTop";
 
 export const metadata = {
@@ -19,14 +19,14 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning={true} className="flex flex-col min-h-screen bg-soft-white text-dark-text">
         <Navbar />
-        <SmoothScroller>
+        {/* <SmoothScroller> */}
         <ClientLayout>
           <div className="flex-grow">
             {children}
           </div>
         </ClientLayout>
         <Footer />
-        </SmoothScroller>
+        {/* </SmoothScroller> */}
         <BackToTop />
       </body>
     </html>

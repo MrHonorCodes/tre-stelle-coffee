@@ -19,7 +19,7 @@ return (
         <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
             <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-secondary-fix">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary-fix">
                 Find Us
             </h1>
             </FadeIn>
