@@ -30,7 +30,7 @@ return (
         <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-primary-fix/90"></div>
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-50 bg-maroon" 
+            className="absolute inset-0 bg-cover bg-top opacity-50 bg-maroon rounded-2xl" 
             style={{ 
             backgroundImage: "url('/images/Tre-Stelle-Co-Coffee-Shop.jpg')", 
             backgroundSize: 'cover',

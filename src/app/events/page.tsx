@@ -93,14 +93,15 @@ const handleSubmit = (e: React.FormEvent) => {
 return (
     <main className="min-h-screen bg-soft-white">
     {/* Hero Section with maroon background */}
-    <section className="relative h-[60vh] overflow-hidden bg-primary pt-16 flex items-center justify-center">
+    <section className="relative h-[60vh] overflow-hidden bg-primary-fix pt-16 flex items-center justify-center">
         <div className="absolute inset-0 z-0">
         {/* Overlay with coffee event background */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-30" 
+            className="absolute inset-0 bg-cover bg-center opacity-50" 
             style={{ 
-            backgroundImage: "url('/images/coffee-event.jpg')", 
-            backgroundSize: 'cover'
+            backgroundImage: "url('/images/events-banner.jpg')", 
+            backgroundSize: 'cover',
+            filter: 'brightness(0.4)',
             }}
         />
         <div className="absolute inset-0 bg-primary/70"></div>
@@ -108,10 +109,10 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-light-text">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-secondary-fix">
             Event Booking
             </h1>
-            <p className="text-xl text-light-text max-w-2xl mx-auto">
+            <p className="text-xl text-light max-w-2xl mx-auto">
             Host your next special occasion in our welcoming coffee shop space
             </p>
         </FadeIn>

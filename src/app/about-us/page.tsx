@@ -16,20 +16,21 @@ useEffect(() => {
 return (
     <main className="min-h-screen bg-soft-white">
     {/* Hero Section with maroon background */}
-    <section className="relative h-[60vh] overflow-hidden bg-primary pt-16 flex items-center justify-center">
+    <section className="relative h-[60vh] overflow-hidden bg-primary-fix pt-16 flex items-center justify-center">
         <div className="absolute inset-0 z-0">
         {/* Overlay with coffee beans background */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-30" 
+            className="absolute inset-0 bg-cover bg-center opacity-50" 
             style={{ 
-            backgroundImage: "url('/images/coffee-beans-bg.jpg')", 
-            backgroundSize: 'cover'
+            backgroundImage: "url('/images/about-us-banner.jpg')", 
+            backgroundSize: 'cover',
+            filter: 'brightness(0.4)',
             }}
         />
         <div className="absolute inset-0 bg-primary/70"></div>
         </div>
         
-        <div className="container mx-auto px-4 relative z-10 text-center">
+        <div className="container mx-auto px-4 relative z-10 text-center text-secondary-fix">
         <FadeIn delay={0.2}>
             <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight text-light-text">
             About Us
