@@ -336,7 +336,7 @@ return (
         <ScrollReveal>
             <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl text-primary font-bold mb-2 text-center">
-                Ready to make your event a memory?
+                Let’s make your event unforgettable!
             </h2>
             <p className="text-gray-600 text-center mb-12">
                 Fill out the form below to book your slot. We&apos;ll get back to you within 24 hours to confirm details.
