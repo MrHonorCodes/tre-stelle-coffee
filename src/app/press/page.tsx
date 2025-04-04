@@ -30,48 +30,48 @@ const pressFeatures: PressFeature[] = [
     {
     id: 1,
     outlet: 'WFAA Good Morning Texas',
-    logo: '/images/press/wfaa-logo.png',
-    headline: 'Local Coffee Shop Brings Global Tastes to Dallas',
+    logo: '/images/press/wfaa-logo.jpg',
+    headline: 'Cozy up with fall-inspired coffee drinks at Tre Stelle Coffee Co.',
     excerpt: 'Tre Stelle Coffee Co. features beans sourced from around the world, roasted locally in Dallas.',
-    date: 'September 15, 2023',
-    link: 'https://www.wfaa.com',
+    date: 'September 26, 2022',
+    link: 'https://www.wfaa.com/video/entertainment/television/programs/good-morning-texas/cozy-up-with-fall-inspired-coffee-drinks-at-tre-stelle-coffee-co/287-af38153a-df57-45d8-a8e5-82c465b83f9a',
     featured: true
     },
     {
     id: 2,
     outlet: 'Dallas Morning News',
     logo: '/images/press/dallas-morning-news-logo.png',
-    headline: 'Tre Stelle Creates Community Through Coffee',
+    headline: 'East African-inspired coffee shop Tre Stelle opens in Dallas',
     excerpt: 'The local roastery is building bridges between cultures and neighborhoods through their inclusive approach.',
-    date: 'July 3, 2023',
-    link: 'https://www.dallasnews.com'
+    date: 'August 18, 2022',
+    link: 'https://www.dallasnews.com/food/restaurant-news/2022/08/18/east-african-inspired-coffee-shop-tre-stelle-opens-in-dallas/'
     },
     {
     id: 3,
     outlet: 'Dallas Weekly',
-    logo: '/images/press/dallas-weekly-logo.png',
-    headline: 'Eritrean Roots Inspire Dallas Coffee Shop',
-    excerpt: 'How a summer trip to East Africa led to one of Dallas\'s most promising coffee businesses.',
-    date: 'May 21, 2023',
-    link: 'https://www.dallasweekly.com'
+    logo: '/images/press/dallas-weekly-logo.jpg',
+    headline: 'The Stars Align for Coffee Lover in North Texas with Opening of Tre Selle Coffee Co. in North Dallas',
+    excerpt: 'Entrepreneur Jonathan has gone from running from the smell of coffee to running Dallas’ newest specialty coffee house.',
+    date: 'August 9, 2022',
+    link: 'https://dallasweekly.com/tag/tre-stelle/'
     },
     {
     id: 4,
     outlet: 'Daily Coffee News',
-    logo: '/images/press/daily-coffee-news-logo.png',
-    headline: 'Tre Stelle Focuses on Ethical Sourcing and Inclusion',
-    excerpt: 'The Dallas-based roaster is setting a new standard for sustainable relationships with coffee farmers.',
-    date: 'April 8, 2023',
-    link: 'https://www.dailycoffeenews.com'
+    logo: '/images/press/DCN_Logo.png',
+    headline: 'Coffee, Culture and Community Are Co-Stars at Tre Stelle’s First Cafe in Dallas',
+    excerpt: 'The stars have aligned for specialty coffee in Far North Dallas as Eritrean family-run roasting company Tre Stelle Coffee has opened its first cafe.',
+    date: 'August 17, 2022',
+    link: 'https://dailycoffeenews.com/2022/08/17/coffee-culture-and-community-are-co-stars-at-tre-stelles-first-cafe-in-dallas/'
     },
     {
     id: 5,
     outlet: 'DALLAS OBSERVER',
     logo: '/images/press/dallas-observer-logo.png',
-    headline: 'The Best New Coffee Shops in North Dallas',
-    excerpt: 'Tre Stelle Coffee Co. making waves with its unique atmosphere and commitment to quality.',
-    date: 'February 12, 2023',
-    link: 'https://www.dallasobserver.com'
+    headline: 'Tre Stelle Is a 20-Year-Old\'s Dream Coffee Shop Made Reality',
+    excerpt: 'The shop is inspired by the traditions of Eritrea, homeland of the proprietor\'s parents.',
+    date: 'October 16, 2023',
+    link: 'https://www.dallasobserver.com/restaurants/tre-stelle-is-a-20-year-olds-dream-coffee-shop-made-reality-17650978'
     }
 ];
 

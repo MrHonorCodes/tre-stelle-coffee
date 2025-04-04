@@ -38,7 +38,7 @@ return (
         <div 
             className="absolute inset-0 bg-cover bg-center opacity-30" 
             style={{ 
-            backgroundImage: "url('/images/coffee-roasting.jpg')", 
+            backgroundImage: "url('/images/wholesale.jpg')", 
             backgroundSize: 'cover'
             }}
         ></div>

@@ -108,9 +108,9 @@ return (
         <div className="absolute inset-0 z-0">
         {/* Overlay with coffee brewing background */}
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-40" 
+            className="absolute inset-0 bg-cover bg-center rounded-2xl" 
             style={{ 
-            backgroundImage: "url('/images/coffee-brewing.jpg')", 
+            backgroundImage: "url('/images/Products-Banner.png')", 
             backgroundSize: 'cover'
             }}
         />
@@ -119,7 +119,7 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-light-text">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary-fix">
             Shop
             </h1>
         </FadeIn>

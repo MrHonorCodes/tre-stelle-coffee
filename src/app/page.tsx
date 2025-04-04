@@ -25,9 +25,9 @@ export default function Home() {
               </h1>
             </FadeIn>
             <FadeIn delay={0.4}>
-              <p className="text-base md:text-lg mb-8 max-w-lg">
-                Our green coffee supplier sources coffees from farms around the world to ensure we receive the best coffee. Experience the perfect blend of quality and tradition.
-              </p>
+                <p className="text-base md:text-lg mb-8 max-w-lg">
+                We partner with trusted suppliers to bring you the finest coffee beans, carefully selected from farms worldwide. Discover the harmony of tradition and quality in every cup.
+                </p>
             </FadeIn>
             <FadeIn delay={0.6}>
               <div className="flex flex-wrap gap-4">
@@ -60,9 +60,9 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
                 Coffee Roasting Company
               </h2>
-              <p className="text-gray-700 mb-4">
-                Originally beginning the business in late 2019 as solely a Roasting company with the help of his Father, the business has now expanded to a Coffee Shop & Roastery. Along with serving high quality coffee, our main objective is to build a coffee business with the intentions of inclusion of all individuals from various walks of life.
-              </p>
+                <p className="text-gray-700 mb-4">
+                Founded in late 2019 as a dedicated roasting company with the support of his father, Jonathan&apos;s business has since grown into a full-fledged Coffee Shop & Roastery. Beyond serving exceptional coffee, our mission is to create an inclusive space that welcomes individuals from all walks of life.
+                </p>
               <p className="text-gray-700 mb-6">
                 We take pride in sourcing the finest beans from around the world and roasting them to perfection, creating unique flavor profiles that highlight each coffee&apos;s natural characteristics.
               </p>
@@ -141,17 +141,17 @@ export default function Home() {
     
     <div className="bg-soft-white rounded-lg shadow-xl overflow-hidden max-w-4xl mx-auto">
       <ScrollReveal delay={0.1}>
-        <div className="relative">
+        <div className="relative rounded-full p-4 bg-white">
           <img 
-            src="/images/storefront.jpg" 
+            src="/images/Tre-Stelle-Co-Coffee-Shop.jpg" 
             alt="Tre Stelle Coffee Shop Storefront" 
-            className="w-full h-80 object-cover"
+            className="w-full object-cover rounded"
             onError={(e) => {
               (e.target as HTMLImageElement).onerror = null;
               (e.target as HTMLImageElement).src = 'https://via.placeholder.com/800x400?text=Tre+Stelle+Coffee+Storefront';
             }}
           />
-          <div className="absolute inset-0 bg-primary/20"></div>
+          <div className="absolute inset-0 bg-primary/20 rounded-full"></div>
         </div>
         
         <div className="p-8 text-center">
@@ -177,12 +177,12 @@ export default function Home() {
 {/* Contact and Follow Section */}
 <section className="relative py-20 bg-tertiary text-light-text overflow-hidden">
   <div className="absolute inset-0 z-0">
-    <div className="absolute inset-0 bg-primary/80"></div>
+    <div className="absolute inset-0 bg-primary-fix/80"></div>
     <div 
-      className="absolute inset-0 bg-cover bg-center opacity-30" 
+      className="absolute inset-0 bg-primary-fix text-white bg-cover bg-center opacity-30 rounded-lg" 
       style={{ 
-        backgroundImage: "url('/images/coffee-bean-1.jpg')", 
-        backgroundSize: 'cover'
+      backgroundImage: "url('/images/coffee-bean-1.jpg')", 
+      backgroundSize: 'cover'
       }}
     ></div>
   </div>
@@ -193,16 +193,15 @@ export default function Home() {
       <ScrollReveal direction="left">
         <div>
           <h3 className="text-2xl font-bold mb-8">Business Hours:</h3>
-            <p className="text-xl mb-2">Mon-Fri: 7 am – 5 pm</p>
-            <p className="text-xl mb-8">Sat-Sun: 7 am – 6 pm</p>
+            <p className="text-xl mb-2 font-bold">Mon-Fri: 7am – 5pm</p>
+            <p className="text-xl mb-8 font-bold">Sat-Sun: 7am – 6pm</p>
           
           <h3 className="text-3xl font-bold mb-4">Contact us</h3>
           <div className="w-16 h-1 bg-secondary mb-8"></div>
           
-          <p className="mb-6">
-            Contact TRE STELLE COFFEE CO. for your queries or if you have any question,
-            message us right away
-          </p>
+            <p className="mb-6">
+            Have questions or need assistance? Reach out to Tre Stelle Coffee Co. — We&apos;re here to help!
+            </p>
           
           <div className="flex items-start mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary mr-3 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">

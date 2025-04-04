@@ -46,7 +46,7 @@ return (
             <ScrollReveal>
             <div className="rounded-lg overflow-hidden shadow-xl">
                 <img 
-                src="/images/coffee-roasting.jpg" 
+                src="/images/coffee-roasting-process.jpg" 
                 alt="Coffee Roasting Process" 
                 className="w-full aspect-video object-cover"
                 onError={(e) => {

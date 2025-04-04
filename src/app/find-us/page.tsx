@@ -15,11 +15,11 @@ useEffect(() => {
 return (
     <main className="min-h-screen bg-soft-white">
     {/* Hero Section with dark overlay */}
-    <section className="relative h-[60vh] overflow-hidden bg-primary pt-16 flex items-center">
+    <section className="relative h-[60vh] overflow-hidden pt-16 flex items-center bg-primary-fix">
         <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
             <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-light-text">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-secondary-fix">
                 Find Us
             </h1>
             </FadeIn>
@@ -28,12 +28,13 @@ return (
         
         {/* Background overlay */}
         <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-primary/90"></div>
+        <div className="absolute inset-0 bg-primary-fix/90"></div>
         <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20" 
+            className="absolute inset-0 bg-cover bg-center opacity-50 bg-maroon" 
             style={{ 
-            backgroundImage: "url('/images/coffee-shop-interior.jpg')", 
-            backgroundSize: 'cover'
+            backgroundImage: "url('/images/Tre-Stelle-Co-Coffee-Shop.jpg')", 
+            backgroundSize: 'cover',
+            filter: 'brightness(0.4)',
             }}
         ></div>
         </div>
@@ -52,8 +53,8 @@ return (
             
             <h2 className="text-2xl font-bold text-primary mb-8">Business Hours:</h2>
             <p className="text-xl text-gray-700 mb-12">
-                Weekdays: 7am-5pm<br/>
-                Weekends: 7am-6pm
+                <span className="font-bold">Mon-Fri:</span> 7am-5pm<br/>
+                <span className="font-bold">Sat-Sun:</span> 7am-6pm
             </p>
             
             <a 

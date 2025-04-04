@@ -26,9 +26,8 @@ body {
   background: rgb(var(--background-rgb));
 }
 
-/* Add this to your globals.css */
 :root {
-  --color-primary: #6D0F0F;
+  --color-primary: #4a0000;
   --color-secondary: #e7c583;
   --color-tertiary: #2E1A13;
   --color-soft-white: #F8F5F2;
@@ -36,7 +35,6 @@ body {
   --color-light-text: #F8F5F2;
 }
 
-/* Then add utility classes that use these variables */
 .bg-primary-fix {
   background-color: var(--color-primary);
 }
@@ -55,3 +53,14 @@ body {
 .border-primary-fix {
   border-color: var(--color-primary);
 }
+
+
+
+a:hover .link-underline {
+  width: 100%;
+}
+
+.group:hover .group-hover\:block {
+  display: block;
+}
+

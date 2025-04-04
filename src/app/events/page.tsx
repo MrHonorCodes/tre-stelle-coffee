@@ -72,6 +72,7 @@ const eventPackages: EventPackage[] = [
     }
 ];
 
+
 // Handle form input changes
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -130,7 +131,7 @@ return (
             <ScrollReveal delay={0.1}>
             <div className="rounded-lg overflow-hidden shadow-md h-64">
                 <img 
-                src="/images/event-space-1.jpg" 
+                src="/images/event1.jpg" 
                 alt="Event Space - Café View" 
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 onError={(e) => {
@@ -143,7 +144,7 @@ return (
             <ScrollReveal delay={0.2}>
             <div className="rounded-lg overflow-hidden shadow-md h-64">
                 <img 
-                src="/images/event-space-2.jpg" 
+                src="/images/event2.jpg" 
                 alt="Event Space - Tables Setup" 
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 onError={(e) => {
@@ -156,7 +157,7 @@ return (
             <ScrollReveal delay={0.3}>
             <div className="rounded-lg overflow-hidden shadow-md h-64">
                 <img 
-                src="/images/event-space-3.jpg" 
+                src="/images/event3.jpg" 
                 alt="Event Space - Coffee Bar" 
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 onError={(e) => {
@@ -171,7 +172,7 @@ return (
         <ScrollReveal>
             <div className="bg-white rounded-xl shadow-md p-8 md:p-10">
             <h3 className="text-2xl text-primary font-bold mb-6 text-center">
-                Great space for group meetings, birthday parties, art shows, and other gatherings!
+                A perfect venue for celebrations, corporate events, and creative showcases!
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -549,7 +550,7 @@ return (
                 (972) 373-4355
             </a>
             <a 
-                href="mailto:events@trestellecoffeeco.com" 
+                href="mailto:contact@trestellecoffeeco.com" 
                 className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
