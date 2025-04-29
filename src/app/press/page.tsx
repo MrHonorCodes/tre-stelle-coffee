@@ -224,7 +224,7 @@ return (
         </div>
     </section>
 
-    {/* Media Kit Section */}
+    {/* Media Kit Section OPTIONAL AND CAN BE ADDED LATER*/}{/* 
     <section className="py-16 bg-tertiary text-light-text">
         <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
@@ -232,7 +232,7 @@ return (
             <div className="text-center mb-10">
                 <h2 className="text-3xl md:text-4xl font-bold mb-6">Media Resources</h2>
                 <p className="text-lg">
-                For press inquiries, please contact us directly. We&apos;ve also prepared a media kit with 
+                For press inquiries, please contact us directly. We&apos;ve also prepared a media kit with   
                 resources for publications and press.
                 </p>
             </div>
@@ -304,7 +304,7 @@ return (
             </ScrollReveal>
         </div>
         </div>
-    </section>
+    </section> */}
     
     {/* Press Quotes */}
     <section className="py-20 bg-soft-white">
