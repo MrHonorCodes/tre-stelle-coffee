@@ -26,7 +26,7 @@ useEffect(() => {
 
 // Sample product data
 const products: Product[] = [
-    {
+    /* {
     id: 1,
     name: 'Ethiopian Yirgacheffe',
     category: 'Coffee',
@@ -82,7 +82,7 @@ const products: Product[] = [
     image: '/images/products/bridging-the-gap-shirt.jpg',
     description: 'Comfortable t-shirt with Tre Stelle logo',
     options: true
-    }
+    } */
 ];
 
 // State for filtered products
@@ -196,8 +196,8 @@ return (
         </div>
     </section>
 
-    {/* Brewing Guide CTA */}
-    <section className="py-16 bg-soft-white">
+    {/* Brewing Guide CTA  OPTIONAL FOR NOW*/}
+  {/*   <section className="py-16 bg-soft-white">
         <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
@@ -232,7 +232,7 @@ return (
             </div>
         </div>
         </div>
-    </section>
+    </section> */}
     </main>
 );
 }

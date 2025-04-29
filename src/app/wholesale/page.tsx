@@ -111,7 +111,7 @@ return (
     <section className="py-24 bg-soft-white">
         <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row gap-12 items-center">
-            <ScrollReveal className="lg:w-1/2">
+{/*             <ScrollReveal className="lg:w-1/2">
             <div className="rounded-lg overflow-hidden shadow-xl">
                 <div className="aspect-video bg-tertiary border-4 border-primary relative">
                 <img 
@@ -125,7 +125,7 @@ return (
                 />
                 </div>
             </div>
-            </ScrollReveal>
+            </ScrollReveal> */}
             <ScrollReveal className="lg:w-1/2" delay={0.2} direction="right">
             <span className="text-sm text-secondary uppercase tracking-wider font-semibold mb-4 block">
                 Why Choose Us

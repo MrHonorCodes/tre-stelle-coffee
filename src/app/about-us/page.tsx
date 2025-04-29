@@ -185,52 +185,7 @@ return (
         </div>
         </div>
     </section>
-    
-    {/* Meet the Team Section */}
-    <section className="py-24 bg-soft-white">
-        <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-            <ScrollReveal>
-            <span className="text-sm text-secondary uppercase tracking-wider font-semibold mb-4 block">
-                The People Behind Our Coffee
-            </span>
-            <h2 className="text-3xl md:text-5xl text-primary font-bold mb-6">
-                Meet Our Team
-            </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto text-lg">
-                Our dedicated team brings passion and expertise to every cup of coffee we serve.
-            </p>
-            </ScrollReveal>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <ScrollReveal delay={0.1}>
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-                <div className="h-80 overflow-hidden">
-                <img 
-                    src="/images/team-member-1.jpg" 
-                    alt="Jonathan - Founder" 
-                    className="w-full h-full object-cover object-center"
-                    onError={(e) => {
-                    (e.target as HTMLImageElement).onerror = null;
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x800?text=Team+Member';
-                    }}
-                />
-                </div>
-                <div className="p-6">
-                <h3 className="text-xl font-bold text-primary mb-1">Jonathan</h3>
-                <p className="text-secondary font-medium mb-4">Founder & Head Roaster</p>
-                <p className="text-gray-600">
-                    With a passion for coffee that began in Eritrea, Jonathan brings global influence and expertise to every roast.
-                </p>
-                </div>
-            </div>
-            </ScrollReveal>
-            
-            {/* Additional team members would go here */}
-        </div>
-        </div>
-    </section>
+
     
     {/* CTA Section */}
     <section className="py-16 bg-tertiary text-light-text">
@@ -240,13 +195,27 @@ return (
             <p className="text-xl mb-8 max-w-3xl mx-auto">
             Come experience our coffee, meet our team, and become part of the Tre Stelle community.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/shop" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
-                Visit Our Coffee Shop
-            </a>
-            <a href="/contact" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-tertiary border-2 border-light-text">
-                Contact Us
-            </a>
+            <div className="flex flex-col items-center gap-4">
+                <a href="/find-us" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
+                    Visit Our Coffee Shop
+                </a>
+                {/* Contact Info from find-us page */}
+                <div className="flex items-center justify-center mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                    <a href="tel:9723734355" className="text-xl hover:text-secondary transition-colors">
+                    (972) 373-4355
+                    </a>
+                </div>
+                <div className="flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <a href="mailto:contact@trestellecoffeeco.com" className="text-xl hover:text-secondary transition-colors">
+                    contact@trestellecoffeeco.com
+                    </a>
+                </div>
             </div>
         </ScrollReveal>
         </div>

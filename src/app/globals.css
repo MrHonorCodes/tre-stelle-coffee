@@ -57,7 +57,17 @@ body {
   color: var(--color-light-text);
 }
 
+.text-dark-fix {
+  color: var(--color-dark-text);
+}
 
+.bg-soft-white-fix {
+  background-color: var(--color-soft-white);
+}
+
+.border-tertiary-fix {
+  border-color: var(--color-tertiary);
+}
 
 a:hover .link-underline {
   width: 100%;

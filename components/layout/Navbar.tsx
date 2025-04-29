@@ -3,6 +3,13 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 // import Image from 'next/image';
 
+// Simple external link icon
+const ExternalLinkIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+  </svg>
+);
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,7 +23,7 @@ export default function Navbar() {
     { name: 'Book Event', path: '/events' },
     { name: 'Wholesale', path: '/wholesale' },
     { name: 'Find Us', path: '/find-us' },
-    { name: 'Order Ahead', path: 'https://trestellecoffeeco.square.site/' }
+    { name: 'Order Ahead', path: 'https://trestellecoffeeco.square.site/', external: true }
   ];
 
   // Close dropdown when clicking outside
@@ -33,13 +40,13 @@ export default function Navbar() {
   }, [dropdownRef]);
   
   return (
-    <header className="fixed w-full z-50 shadow-md py-4" style={{ backgroundColor: '#F8F5F2' }}>
+    <header className="fixed w-full z-50 shadow-md py-4 bg-soft-white-fix">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex-shrink-0">
             {/* Replace with your actual logo */}
-            <div className="h-10 w-28 bg-soft-white/10 flex items-center justify-center" style={{ backgroundColor: 'var(--color-primary)' }}>
-              <span className="text-light-text font-bold" style={{ color: '#F8F5F2' }}>Tre Stelle</span>
+            <div className="h-10 w-28 flex items-center justify-center bg-primary-fix">
+              <span className="font-bold text-light">Tre Stelle</span>
             </div>
             {/* Uncomment when you have a logo */}
             {/* <Image 
@@ -52,46 +59,54 @@ export default function Navbar() {
           </Link>
           
           {/* Desktop and Large Tablet Navigation */}
-          <div className="hidden lg:flex space-x-8">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name}
-                href={link.path}
-                className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative"
-                style={{
-                  position: 'relative',
-                  color: 'var(--color-primary)'
-                }}
-              >
-                <span>{link.name}</span>
-                <span 
-                  style={{
-                    content: "''",
-                    position: 'absolute',
-                    height: '2px',
-                    width: '0',
-                    left: '0',
-                    bottom: '-4px',
-                    backgroundColor: 'var(--color-secondary)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  className="link-underline"
-                ></span>
-              </Link>
-            ))}
+          <div className="hidden lg:flex items-center space-x-6"> {/* Adjusted spacing slightly */}
+            {navLinks.map((link) => {
+              if (link.external) {
+                return (
+                  <Link 
+                    key={link.name}
+                    href={link.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-secondary-fix text-primary-fix font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center hover:-translate-y-1 transform"
+                  >
+                    <span>{link.name}</span>
+                    <ExternalLinkIcon />
+                  </Link>
+                );
+              }
+              return (
+                <Link 
+                  key={link.name}
+                  href={link.path}
+                  className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative group text-primary-fix"
+                >
+                  <span>{link.name}</span>
+                  <span 
+                    style={{
+                      content: "''",
+                      position: 'absolute',
+                      height: '2px',
+                      width: '0',
+                      left: '0',
+                      bottom: '-4px',
+                      backgroundColor: 'var(--color-secondary)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    className="link-underline group-hover:w-full"
+                  ></span>
+                </Link>
+              );
+            })}
           </div>
           
           {/* Mid-sized device navigation (fewer items) */}
-          <div className="hidden md:flex lg:hidden space-x-4">
-            {navLinks.slice(0, 4).map((link) => (
+          <div className="hidden md:flex lg:hidden items-center space-x-4">
+            {navLinks.slice(0, 4).map((link) => ( // Show first 4 links normally
               <Link 
                 key={link.name}
                 href={link.path}
-                className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative"
-                style={{
-                  position: 'relative',
-                  color: 'var(--color-primary)'
-                }}
+                className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative group text-primary-fix"
               >
                 <span>{link.name}</span>
                 <span 
@@ -105,16 +120,15 @@ export default function Navbar() {
                     backgroundColor: 'var(--color-secondary)',
                     transition: 'all 0.3s ease'
                   }}
-                  className="link-underline"
+                  className="link-underline group-hover:w-full"
                 ></span>
               </Link>
             ))}
-            {/* Dropdown for additional menu items on mid-sized devices with click instead of hover */}
+            {/* Dropdown for additional menu items on mid-sized devices */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="font-medium text-sm flex items-center transition-colors duration-300"
-                style={{ color: isDropdownOpen ? 'var(--color-secondary)' : 'var(--color-primary)' }}
+                className={`font-medium text-sm flex items-center transition-colors duration-300 ${isDropdownOpen ? 'text-secondary-fix' : 'text-primary-fix'}`}
               >
                 <span>More</span>
                 <svg 
@@ -129,44 +143,59 @@ export default function Navbar() {
               </button>
               {isDropdownOpen && (
                 <div 
-                  className="absolute left-0 mt-2 w-48 rounded-md shadow-lg"
-                  style={{ backgroundColor: '#F8F5F2', zIndex: 50 }}
+                  className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-soft-white-fix"
+                  style={{ zIndex: 50 }}
                 >
-                  <div className="py-1">
-                    {navLinks.slice(4).map((link) => (
+                  {navLinks.slice(4).map((link) => { // Remaining links in dropdown
+                    if (link.external) {
+                      return (
+                        <Link
+                          key={link.name}
+                          href={link.path}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full text-left px-4 py-2 my-1 bg-secondary-fix text-primary-fix font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
+                          onClick={() => setIsDropdownOpen(false)}
+                        >
+                          <span>{link.name}</span>
+                          <ExternalLinkIcon />
+                        </Link>
+                      );
+                    }
+                    return (
                       <Link
                         key={link.name}
                         href={link.path}
-                        className="block px-4 py-3 hover:text-secondary-fix transition-colors duration-200"
-                        style={{ color: 'var(--color-primary)' }}
+                        className="block px-4 py-3 hover:text-secondary-fix transition-colors duration-200 text-sm text-primary-fix"
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         {link.name}
                       </Link>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
           </div>
           
+          {/* Icons - Kept separate for clarity, shown on md+ */}
           <div className="hidden md:flex items-center space-x-4">
-            <button style={{ color: 'var(--color-primary)' }} className="hover:text-secondary-fix transition-colors">
+            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
-            <button style={{ color: 'var(--color-primary)' }} className="hover:text-secondary-fix transition-colors">
+            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
             </button>
           </div>
           
+          {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            style={{ color: 'var(--color-primary)' }}
-            className="md:hidden hover:text-secondary-fix transition-colors"
+            className="md:hidden text-primary-fix hover:text-secondary-fix transition-colors"
           >
             {isOpen ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -183,30 +212,44 @@ export default function Navbar() {
       
       {/* Mobile menu with animation - centered items */}
       <div 
-        className={`md:hidden absolute top-full left-0 w-full shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
-        }`}
-        style={{ backgroundColor: '#F8F5F2' }}
+        className={`md:hidden absolute top-full left-0 w-full shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} bg-soft-white-fix`}
       >
-        <div className="py-3 space-y-3 px-4 flex flex-col items-center text-center">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.path}
-              className="block py-2 text-lg hover:text-secondary-fix transition-colors w-full"
-              style={{ color: 'var(--color-primary)' }}
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10" style={{ borderColor: 'var(--color-tertiary)' }}>
-            <button style={{ color: 'var(--color-primary)' }} className="hover:text-secondary-fix transition-colors">
+        <div className="py-3 space-y-1 px-4 flex flex-col items-center text-center"> {/* Reduced space-y */}
+          {navLinks.map((link) => {
+            if (link.external) {
+              return (
+                <Link
+                  key={link.name}
+                  href={link.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 my-1 bg-secondary-fix text-primary-fix font-semibold rounded-md text-base transition-all duration-300 hover:bg-secondary/80 flex items-center justify-center hover:-translate-y-1 transform"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span>{link.name}</span>
+                  <ExternalLinkIcon />
+                </Link>
+              );
+            }
+            return (
+              <Link
+                key={link.name}
+                href={link.path}
+                className="block py-2 text-lg hover:text-secondary-fix transition-colors w-full text-primary-fix"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+          {/* Mobile Icons */}
+          <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10 border-tertiary-fix">
+            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
-            <button style={{ color: 'var(--color-primary)' }} className="hover:text-secondary-fix transition-colors">
+            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
