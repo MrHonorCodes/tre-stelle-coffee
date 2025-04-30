@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useCart } from '../../src/context/CartContext';
 
 // Simple external link icon
 const ExternalLinkIcon = () => (
@@ -16,6 +17,8 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const { getItemCount } = useCart();
+  const itemCount = getItemCount();
   
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -45,7 +48,7 @@ export default function Navbar() {
     <header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0 relative h-10">
             <div className="p-1 bg-primary rounded-md inline-block">
               <Image
                 src="/images/white-logo.png"
@@ -102,15 +105,17 @@ export default function Navbar() {
           
           {/* Icons - Kept separate for clarity, shown on md+ - Only Cart */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Profile button removed */}
-            {/* <button className="text-primary hover:text-secondary transition-colors"> ... </button> */}
-            
-            {/* Cart button restored */}
-            <button className="text-primary hover:text-secondary transition-colors">
+            {/* Wrap Cart button in Link and add badge */}
+            <Link href="/cart" className="relative text-primary hover:text-secondary transition-colors p-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-            </button>
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
           
           {/* Mid-sized device navigation (fewer items) */}
@@ -246,15 +251,17 @@ export default function Navbar() {
           })}
           {/* Mobile Icons - Only Cart */}
           <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10 border-tertiary">
-            {/* Profile button removed */}
-            {/* <button className="text-primary hover:text-secondary transition-colors"> ... </button> */}
-            
-            {/* Cart button restored */}
-            <button className="text-primary hover:text-secondary transition-colors">
+            {/* Wrap Cart button in Link and add badge */}
+            <Link href="/cart" className="relative text-primary hover:text-secondary transition-colors p-1" onClick={() => setIsOpen(false)}> {/* Close menu on click */}
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-            </button>
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </div>
         </div>
       </div>

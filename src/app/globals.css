@@ -89,7 +89,9 @@ a:hover .link-underline {
 /* Manual Hover Styles */
 
 /* Buttons: Secondary bg -> Transparent bg, Secondary text/border */
-a.bg-secondary.text-dark-text:hover {
+/* Target both a and button elements */
+a.bg-secondary.text-dark-text:hover, 
+button.bg-secondary.text-dark-text:hover {
   background-color: transparent !important; /* Use !important to override specificity if needed */
   color: var(--color-secondary) !important;
   border-color: var(--color-secondary) !important; 

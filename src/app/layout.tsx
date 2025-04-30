@@ -4,6 +4,7 @@ import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
 // import SmoothScroller from '../../components/ui/SmoothScroller';
 import BackToTop from "../../components/ui/BackToTop";
+import { CartProvider } from "../context/CartContext";
 
 export const metadata = {
   title: 'Tre Stelle Coffee Co. | Premium Coffee Roastery',
@@ -18,16 +19,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className="flex flex-col min-h-screen bg-soft-white text-dark-text">
-        <Navbar />
-        {/* <SmoothScroller> */}
-        <ClientLayout>
-          <div className="flex-grow">
-            {children}
-          </div>
-        </ClientLayout>
-        <Footer />
-        {/* </SmoothScroller> */}
-        <BackToTop />
+        <CartProvider>
+          <Navbar />
+          {/* <SmoothScroller> */}
+          <ClientLayout>
+            <div className="flex-grow">
+              {children}
+            </div>
+          </ClientLayout>
+          <Footer />
+          {/* </SmoothScroller> */}
+          <BackToTop />
+        </CartProvider>
       </body>
     </html>
   );
