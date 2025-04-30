@@ -7,6 +7,9 @@ import productsData from '../../../data/products.json';
 import FadeIn from '../../../../components/ui/FadeIn';
 import { useCart } from '../../../context/CartContext';
 
+// --- Configuration ---
+const MAX_QUANTITY_PER_ORDER = 5;
+
 // Type definition (should match the one in products/page.tsx and products.json)
 type Product = {
   id: number;
@@ -98,8 +101,17 @@ export default function ProductDetailPage() {
   }
 
   const handleQuantityChange = (amount: number) => {
-    const maxQuantity = currentOptionStock; // Max quantity is based on the selected option's stock
-    setQuantity(prev => Math.max(1, Math.min(maxQuantity > 0 ? maxQuantity : 1, prev + amount)));
+    // Determine the real maximum based on stock AND the order limit
+    const maxAllowedByStock = currentOptionStock; 
+    // Ensure stock check considers if it's a valid number > 0
+    const effectiveStockLimit = (typeof maxAllowedByStock === 'number' && maxAllowedByStock > 0) ? maxAllowedByStock : Infinity;
+    const effectiveMaxQuantity = Math.min(effectiveStockLimit, MAX_QUANTITY_PER_ORDER); 
+
+    setQuantity(prev => {
+      const newQuantity = prev + amount;
+      // Ensure quantity is between 1 and the effective maximum
+      return Math.max(1, Math.min(effectiveMaxQuantity, newQuantity));
+    });
   };
 
   const isSelectedOptionOutOfStock = hasOptions && requiredOptionSelected && currentOptionStock === 0;
@@ -221,23 +233,35 @@ export default function ProductDetailPage() {
 
               {/* Quantity Selector */} 
               {!isOutOfStock && (
-                <div className={`flex items-center mb-6 ${hasOptions && !requiredOptionSelected ? 'opacity-50' : ''}`}>
-                  <span className="mr-4 text-sm font-medium text-gray-700">Quantity:</span>
-                  <div className="flex items-center border border-gray-300 rounded-md">
-                    <button 
-                      onClick={() => handleQuantityChange(-1)} 
-                      className="px-3 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={Boolean(quantity <= 1 || (hasOptions && !requiredOptionSelected) || isSelectedOptionOutOfStock) }
-                      aria-label="Decrease quantity"
-                    >-</button>
-                    <span className="px-4 py-1 border-l border-r border-gray-300 text-center w-12">{quantity}</span>
-                    <button 
-                     onClick={() => handleQuantityChange(1)} 
-                      className="px-3 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed"
-                      disabled={Boolean((hasOptions && !requiredOptionSelected) || quantity >= currentOptionStock || isSelectedOptionOutOfStock)}
-                      aria-label="Increase quantity"
-                    >+</button>
+                <div className={`mb-6 ${hasOptions && !requiredOptionSelected ? 'opacity-50' : ''}`}>
+                  <div className="flex items-center">
+                    <span className="mr-4 text-sm font-medium text-gray-700">Quantity:</span>
+                    <div className="flex items-center border border-gray-300 rounded-md">
+                      {/* Decrease button */}
+                      <button 
+                        onClick={() => handleQuantityChange(-1)} 
+                        className="px-3 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-l-md disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={Boolean(quantity <= 1 || (hasOptions && !requiredOptionSelected) || isSelectedOptionOutOfStock) }
+                        aria-label="Decrease quantity"
+                      >-</button>
+                      {/* Quantity display */}
+                      <span className="px-4 py-1 border-l border-r border-gray-300 text-center w-12">{quantity}</span>
+                      {/* Increase button */}
+                      <button 
+                      onClick={() => handleQuantityChange(1)} 
+                        className="px-3 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={Boolean(
+                          (hasOptions && !requiredOptionSelected) || // Option not selected
+                          quantity >= currentOptionStock ||         // Reached stock limit
+                          quantity >= MAX_QUANTITY_PER_ORDER ||     // Reached order limit
+                          isSelectedOptionOutOfStock                // Selected option is OOS
+                        )}
+                        aria-label="Increase quantity"
+                      >+</button>
+                    </div>
                   </div>
+                  {/* Max Quantity Note */}
+                  <p className="text-xs text-gray-500 mt-1 ml-1">Max {MAX_QUANTITY_PER_ORDER} per order</p>
                 </div>
               )}
 

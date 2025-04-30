@@ -47,7 +47,7 @@ return (
             <ScrollReveal>
             <h2 className="text-2xl font-bold text-primary mb-8">Address:</h2>
             <p className="text-xl text-gray-700 mb-12">
-                17390 Preston road suite 210<br/>
+                17390 Preston Road, suite 210<br/>
                 Dallas, Texas 75252
             </p>
             

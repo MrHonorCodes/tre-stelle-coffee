@@ -15,6 +15,7 @@ const ExternalLinkIcon = () => (
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { getItemCount } = useCart();
@@ -30,6 +31,11 @@ export default function Navbar() {
     { name: 'Find Us', path: '/find-us' },
     { name: 'Order Ahead', path: 'https://trestellecoffeeco.square.site/', external: true }
   ];
+
+  // Effect to set isClient to true only on the client after mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -105,12 +111,13 @@ export default function Navbar() {
           
           {/* Icons - Kept separate for clarity, shown on md+ - Only Cart */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Cart button for md+ screens */}
+            {/* Cart button for md+ screens - Conditional render based on isClient */}
             <Link href="/cart" className="relative text-primary hover:text-secondary transition-colors p-1">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              {itemCount > 0 && (
+              {/* Only render badge on client AND if itemCount > 0 */}
+              {isClient && itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
                   {itemCount}
                 </span>
@@ -201,12 +208,13 @@ export default function Navbar() {
           
           {/* Mobile Menu Toggle + Cart Icon */}
           <div className="flex items-center space-x-4 md:hidden"> 
-            {/* Cart Icon for Mobile (visible always) */}
+            {/* Cart Icon for Mobile - Conditional render based on isClient */}
              <Link href="/cart" className="relative text-primary hover:text-secondary transition-colors p-1">
                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                </svg>
-               {itemCount > 0 && (
+               {/* Only render badge on client AND if itemCount > 0 */}
+               {isClient && itemCount > 0 && (
                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
                    {itemCount}
                  </span>
