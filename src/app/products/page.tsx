@@ -186,8 +186,8 @@ return (
                     {/* Remove flex container, center price, move button below */}
                     <div> 
                       <span className="text-2xl font-bold text-primary mt-4 block">${product.price.toFixed(2)}</span>
-                      <button className={`mt-2 px-4 py-2 bg-secondary text-dark-text border-secondary font-medium rounded-md border-2 transition-all duration-300 hover:bg-transparent hover:text-secondary`}>
-                          {product.options ? 'SELECT OPTIONS' : 'ADD TO CART'}
+                      <button className={`mt-2 px-4 py-2 bg-secondary text-dark-text border-secondary rounded-md border-2 transition-all duration-300 hover:bg-transparent hover:text-secondary font-semibold`}>
+                          {product.options ? 'Select Size' : 'Add To Cart'}
                       </button>
                     </div>
                 </div>
@@ -213,7 +213,7 @@ return (
                 </p>
                 <a 
                     href="/brewing-guides" 
-                    className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary w-fit"
+                    className="px-6 py-2 bg-primary text-light font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary w-fit"
                 >
                     Brewing Guides
                 </a>

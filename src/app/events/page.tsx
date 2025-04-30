@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
 
-// Event Package Type
+// Event Package Type - Commented out as the section using it is also commented out
+/*
 type EventPackage = {
 id: number;
 name: string;
@@ -13,6 +14,7 @@ description: string;
 features: string[];
 popular?: boolean;
 };
+*/
 
 export default function EventBooking() {
 // Add smooth scrolling effect
@@ -34,7 +36,8 @@ const [formData, setFormData] = useState({
     message: ''
 });
 
-// Event packages
+// Event packages - Commented out as the section using it is also commented out
+/*
 const eventPackages: EventPackage[] = [
     {
     id: 1,
@@ -71,7 +74,7 @@ const eventPackages: EventPackage[] = [
     ]
     }
 ];
-
+*/
 
 // Handle form input changes
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -93,7 +96,7 @@ const handleSubmit = (e: React.FormEvent) => {
 return (
     <main className="min-h-screen bg-soft-white">
     {/* Hero Section with maroon background */}
-    <section className="relative h-[60vh] overflow-hidden bg-primary-fix pt-16 flex items-center justify-center">
+    <section className="relative h-[60vh] overflow-hidden bg-primary pt-16 flex items-center justify-center">
         <div className="absolute inset-0 z-0">
         {/* Overlay with coffee event background */}
         <div 
@@ -109,7 +112,7 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-secondary-fix">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-secondary">
             Event Booking
             </h1>
             <p className="text-xl text-light max-w-2xl mx-auto">
@@ -186,8 +189,8 @@ return (
                     </svg>
                     <div>
                         <span className="font-medium">Timing:</span><br />
-                        Weekdays: 5:30pm-12am<br />
-                        Weekends: 6:30pm-12am
+                        Mon-Fri: 5:30pm-12am<br />
+                        Sat-Sun: 6:30pm-12am
                     </div>
                     </li>
                     <li className="flex items-start">
@@ -285,7 +288,7 @@ return (
     </section>
     
     {/* Event Packages */}
-    <section className="py-16 bg-tertiary text-light-text">
+   {/*  <section className="py-16 bg-tertiary text-light-text">
         <div className="container mx-auto px-4">
         <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
@@ -331,14 +334,14 @@ return (
         </div>
         </div>
     </section>
-
+ */}
     {/* Booking Form Section */}
     <section id="booking-form" className="py-16 bg-white">
         <div className="container mx-auto px-4">
         <ScrollReveal>
             <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl text-primary font-bold mb-2 text-center">
-                Let’s make your event unforgettable!
+                Let&apos;s make your event unforgettable!
             </h2>
             <p className="text-gray-600 text-center mb-12">
                 Fill out the form below to book your slot. We&apos;ll get back to you within 24 hours to confirm details.
@@ -464,7 +467,7 @@ return (
                 <div className="flex justify-center">
                 <button
                     type="submit"
-                    className="px-8 py-4 bg-primary text-light-text font-semibold rounded-lg text-lg transition-all duration-300 hover:bg-primary/80 focus:outline-none focus:ring-4 focus:ring-primary/30"
+                    className="px-8 py-4 bg-secondary text-dark-text border-2 border-secondary font-semibold rounded-lg text-lg transition-all duration-300 hover:bg-transparent hover:text-secondary hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-secondary/30 cursor-pointer"
                 >
                     Submit Booking Request
                 </button>
@@ -543,7 +546,7 @@ return (
             <div className="flex flex-wrap gap-4 justify-center">
             <a 
                 href="tel:9723734355" 
-                className="px-8 py-3 bg-primary text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-primary/80 flex items-center"
+                className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary flex items-center"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -552,7 +555,7 @@ return (
             </a>
             <a 
                 href="mailto:contact@trestellecoffeeco.com" 
-                className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center"
+                className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary flex items-center"
             >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

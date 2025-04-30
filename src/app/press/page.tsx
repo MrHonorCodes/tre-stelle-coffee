@@ -51,7 +51,7 @@ const pressFeatures: PressFeature[] = [
     outlet: 'Dallas Weekly',
     logo: '/images/press/dallas-weekly-logo.jpg',
     headline: 'The Stars Align for Coffee Lover in North Texas with Opening of Tre Selle Coffee Co. in North Dallas',
-    excerpt: 'Entrepreneur Jonathan has gone from running from the smell of coffee to running Dallas’ newest specialty coffee house.',
+    excerpt: 'Entrepreneur Jonathan has gone from running from the smell of coffee to running Dallas\' newest specialty coffee house.',
     date: 'August 9, 2022',
     link: 'https://dallasweekly.com/tag/tre-stelle/'
     },
@@ -59,7 +59,7 @@ const pressFeatures: PressFeature[] = [
     id: 4,
     outlet: 'Daily Coffee News',
     logo: '/images/press/DCN_Logo.png',
-    headline: 'Coffee, Culture and Community Are Co-Stars at Tre Stelle’s First Cafe in Dallas',
+    headline: 'Coffee, Culture and Community Are Co-Stars at Tre Stelle\'s First Cafe in Dallas',
     excerpt: 'The stars have aligned for specialty coffee in Far North Dallas as Eritrean family-run roasting company Tre Stelle Coffee has opened its first cafe.',
     date: 'August 17, 2022',
     link: 'https://dailycoffeenews.com/2022/08/17/coffee-culture-and-community-are-co-stars-at-tre-stelles-first-cafe-in-dallas/'
@@ -97,7 +97,7 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary-fix">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary">
             Press
             </h1>
         </FadeIn>
@@ -151,7 +151,7 @@ return (
                             href={featuredPress.link} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+                            className="px-6 py-2 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
                         >
                             Read Article
                         </a>
@@ -160,7 +160,7 @@ return (
                             href="https://www.wfaa.com" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="px-6 py-2 bg-primary text-light-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+                            className="px-6 py-2 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
                         >
                             Visit WFAA
                         </a>
@@ -211,7 +211,7 @@ return (
                         href={press.link} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="px-4 py-1 bg-primary text-light-text font-medium rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+                        className="px-4 py-1 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
                     >
                         Read News
                     </a>
@@ -366,7 +366,7 @@ return (
     </section>
     
     {/* Press Contact CTA */}
-    <section className="py-16 bg-primary text-light-text">
+    <section className="py-16 bg-soft-white text-primary">
         <div className="container mx-auto px-4 text-center">
         <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold mb-6">Write About Us</h2>

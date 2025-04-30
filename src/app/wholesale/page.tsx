@@ -16,11 +16,11 @@ useEffect(() => {
 return (
     <main className="min-h-screen bg-soft-white">
     {/* Hero Section with image background */}
-    <section className="relative h-[60vh] overflow-hidden bg-primary-fix pt-16 flex items-center">
+    <section className="relative h-[60vh] overflow-hidden bg-primary pt-16 flex items-center">
         <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
             <FadeIn delay={0.2}>
-            <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight text-secondary-fix">
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight text-secondary">
                 Wholesale Partnerships
             </h1>
             </FadeIn>
@@ -51,7 +51,7 @@ return (
         <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
             <ScrollReveal>
-            <span className="text-sm text-secondary uppercase tracking-wider font-semibold">Partner With Us</span>
+            <span className="text-sm text-tertiary uppercase tracking-wider font-semibold">Partner With Us</span>
             <h2 className="text-4xl font-bold text-primary mt-4 mb-6">We love partnering up with other local businesses!</h2>
             <p className="text-gray-700">
                 At Tre Stelle Coffee Co., we&apos;re passionate about helping businesses elevate their coffee offerings. As a locally owned roastery established in 2019, we understand the importance of quality, consistency, and personalized service. Our goal is to be more than just a supplier – we aim to be your partner in creating exceptional coffee experiences.
@@ -62,7 +62,7 @@ return (
     </section>
 
     {/* Services Section */}
-    <section className="py-16 bg-tertiary text-light-text">
+    <section className="py-16 bg-primary text-light">
         <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
             <ScrollReveal>
@@ -70,9 +70,9 @@ return (
             </ScrollReveal>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <ScrollReveal delay={0.1}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
+                <div className="bg-white/10 p-8 rounded-xl backdrop-blur-sm h-full hover:bg-white/20 transition-all duration-300">
                 <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
                 </div>
@@ -81,9 +81,9 @@ return (
                 </div>
             </ScrollReveal>
             <ScrollReveal delay={0.2}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
+                <div className="bg-white/10 p-8 rounded-xl backdrop-blur-sm h-full hover:bg-white/20 transition-all duration-300">
                 <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
                 </div>
@@ -92,9 +92,9 @@ return (
                 </div>
             </ScrollReveal>
             <ScrollReveal delay={0.3}>
-                <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
+                <div className="bg-white/10 p-8 rounded-xl backdrop-blur-sm h-full hover:bg-white/20 transition-all duration-300">
                 <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                 </div>
@@ -110,7 +110,7 @@ return (
     {/* Why Choose Us Section */}
     <section className="py-24 bg-soft-white">
         <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
+        <div className="flex flex-col lg:flex-row gap-12 items-center justify-center">
 {/*             <ScrollReveal className="lg:w-1/2">
             <div className="rounded-lg overflow-hidden shadow-xl">
                 <div className="aspect-video bg-tertiary border-4 border-primary relative">
@@ -126,8 +126,8 @@ return (
                 </div>
             </div>
             </ScrollReveal> */}
-            <ScrollReveal className="lg:w-1/2" delay={0.2} direction="right">
-            <span className="text-sm text-secondary uppercase tracking-wider font-semibold mb-4 block">
+            <ScrollReveal className="lg:w-1/2 text-center" delay={0.2} direction="right">
+            <span className="text-sm text-tertiary uppercase tracking-wider font-semibold mb-4 block">
                 Why Choose Us
             </span>
             <h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
@@ -177,7 +177,7 @@ return (
         <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
             <ScrollReveal>
-            <span className="text-sm text-secondary uppercase tracking-wider font-semibold">Get In Touch</span>
+            <span className="text-sm text-tertiary uppercase tracking-wider font-semibold">Get In Touch</span>
             <h2 className="text-4xl font-bold text-primary mt-4 mb-6">Ready to partner with us?</h2>
             <p className="text-gray-700 mb-8">
                 If interested in partnering up with us, please reach us on the following email: 

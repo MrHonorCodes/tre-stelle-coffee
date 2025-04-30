@@ -23,7 +23,7 @@ export default function Home() {
       {/* Hero Section with maroon background */}
     <section className="relative h-screen overflow-hidden bg-primary pt-16">
       <div className="container mx-auto px-4 h-[calc(100%-80px)] flex items-center">
-        <div className="w-full md:w-1/2 lg:w-2/5 text-light-text relative z-10 md:pl-8">
+        <div className="w-full md:w-1/2 lg:w-2/5 text-light relative z-10 md:pl-8">
           <FadeIn delay={0.2}>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
               Bridging the gap between modern & traditional coffee!
@@ -39,7 +39,7 @@ export default function Home() {
               <a href="https://trestellecoffeeco.square.site/" target="_blank" rel="noopener noreferrer" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Shop Now
               </a>
-              <a href="/about" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-primary border-2 border-light-text">
+              <a href="/about" className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light">
                 Learn More
               </a>
             </div>
@@ -69,7 +69,7 @@ export default function Home() {
               <p className="text-gray-700 mb-6">
                 We take pride in sourcing the finest beans from around the world and roasting them to perfection, creating unique flavor profiles that highlight each coffee&apos;s natural characteristics.
               </p>
-              <a href="/about" className="px-8 py-3 bg-tertiary text-light-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-tertiary border-2 border-tertiary">
+              <a href="/about" className="px-8 py-3 bg-tertiary text-light font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-tertiary border-2 border-tertiary">
                 About Us
               </a>
             </ScrollReveal>
@@ -84,7 +84,7 @@ export default function Home() {
       </section>
 
       {/* New Feature Section with primary/tertiary color combination */}
-      <section className="py-16 bg-tertiary text-light-text">
+      <section className="py-16 bg-tertiary text-light">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <ScrollReveal>
@@ -94,7 +94,7 @@ export default function Home() {
               <ScrollReveal delay={0.1}>
                 <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
                   <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
                     </svg>
                   </div>
@@ -105,7 +105,7 @@ export default function Home() {
               <ScrollReveal delay={0.2}>
                 <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
                   <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                     </svg>
                   </div>
@@ -116,7 +116,7 @@ export default function Home() {
               <ScrollReveal delay={0.3}>
                 <div className="bg-primary/20 p-6 rounded-lg hover:bg-primary/30 transition-all duration-300 h-full">
                   <div className="bg-primary w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light-text" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </div>
@@ -139,7 +139,7 @@ export default function Home() {
   
   <div className="container mx-auto px-4">
     <ScrollReveal>
-      <h2 className="text-4xl font-bold text-center text-light-text mb-16">Where to Find us?</h2>
+      <h2 className="text-4xl font-bold text-center text-light mb-16">Where to Find us?</h2>
     </ScrollReveal>
     
     <div className="bg-soft-white rounded-lg shadow-xl overflow-hidden max-w-4xl mx-auto">
@@ -167,7 +167,7 @@ export default function Home() {
             href="https://maps.google.com/?q=17390+Preston+Road+suite+210+Dallas+Texas+75252" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="inline-block px-8 py-3 bg-primary text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
+            className="inline-block px-8 py-3 bg-primary text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-primary border-2 border-primary"
           >
             VIEW LOCATION
           </a>
@@ -178,7 +178,7 @@ export default function Home() {
 </section>
 
 {/* Contact and Follow Section */}
-<section className="relative py-20 bg-tertiary text-light-text overflow-hidden">
+<section className="relative py-20 bg-tertiary text-light overflow-hidden">
   <div className="absolute inset-0 z-0">
     <div className="absolute inset-0 bg-primary-fix/80"></div>
     <div 

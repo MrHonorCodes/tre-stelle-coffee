@@ -49,7 +49,7 @@ body {
 .border-primary {
   border-color: var(--color-primary);
 }
-.text-light{
+.text-light {
   color: var(--color-light-text);
 }
 
