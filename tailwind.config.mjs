@@ -1,3 +1,5 @@
+// import defaultTheme from 'tailwindcss/defaultTheme';
+
 // /** @type {import('tailwindcss').Config} */
 // const config = {
 //   content: [
@@ -9,13 +11,17 @@
 //   theme: {
 //     extend: {
 //       colors: {
-//         'primary': "rgb(74, 0, 0)", // #4A0000 in RGB
-//         'secondary': "rgb(231, 197, 131)", // #e7c583 in RGB (updated)
-//         'secondary-light': "rgb(243, 226, 191)", // #f3e2bf - Added lighter secondary
-//         'tertiary': "rgb(46, 26, 19)", // #2E1A13 in RGB
-//         "soft-white": "rgb(248, 245, 242)",
-//         "dark-text": "rgb(26, 26, 26)",
-//         "light-text": "rgb(248, 245, 242)",
+//         'primary': '#4a0000',        // Added from globals.css
+//         'secondary': '#e7c583',      // Added from globals.css
+//         'secondary-light': '#f3e2bf', // Added from globals.css
+//         'tertiary': '#2E1A13',       // Added from globals.css
+//         'soft-white': '#F8F5F2',     // Added from globals.css
+//         'dark-text': '#1A1A1A',       // Added from globals.css
+//         'light-text': '#F8F5F2',      // Added from globals.css
+//       },
+//       fontFamily: {
+//         // Add default sans-serif fonts
+//         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
 //       },
 //     },
 //   },

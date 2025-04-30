@@ -5,7 +5,7 @@
 :root {
   --foreground-rgb: 26, 26, 26;
   --background-rgb: 248, 245, 242;
-  /* Color Palette */
+  /* Color Palette Variables */
   --color-primary: #4a0000;
   --color-secondary: #e7c583;
   --color-secondary-light: #f3e2bf;
@@ -30,6 +30,7 @@ body {
   background: rgb(var(--background-rgb));
 }
 
+/* Restoring manual utility classes */
 .bg-primary{
   background-color: var(--color-primary);
 }
@@ -78,5 +79,48 @@ a:hover .link-underline {
 
 .group:hover .group-hover\:block {
   display: block;
+}
+
+/* Manual Hover Styles */
+
+/* Buttons: Secondary bg -> Transparent bg, Secondary text/border */
+a.bg-secondary.text-dark-text:hover {
+  background-color: transparent !important; /* Use !important to override specificity if needed */
+  color: var(--color-secondary) !important;
+  border-color: var(--color-secondary) !important; 
+}
+
+/* Buttons: Light text -> Light bg, Primary text/border */
+a.text-light.border-light:hover {
+  background-color: var(--color-light-text) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-light-text) !important;
+}
+
+/* Navbar Links & Icons: Primary text -> Secondary text */
+/* Target links/buttons specifically within the header to avoid affecting all primary text */
+header nav a.text-primary:hover,
+header nav button.text-primary:hover {
+  color: var(--color-secondary) !important;
+}
+
+/* Social Icons: Primary bg -> Secondary bg, Primary text */
+/* Assuming these are in a section with bg-tertiary, target links with bg-primary */
+section.bg-tertiary a.bg-primary:hover {
+    background-color: var(--color-secondary) !important;
+    color: var(--color-primary) !important;
+}
+
+/* Button: Transparent bg, Secondary text/border -> Secondary bg, Dark text */
+a.bg-transparent.text-secondary.border-secondary:hover {
+    background-color: var(--color-secondary) !important;
+    color: var(--color-dark-text) !important;
+}
+
+/* Button: Secondary bg, Primary text, Light border -> Transparent bg, Secondary text/border */
+a.bg-secondary.text-primary.border-light:hover {
+    background-color: transparent !important;
+    color: var(--color-secondary) !important;
+    border-color: var(--color-secondary) !important;
 }
 
