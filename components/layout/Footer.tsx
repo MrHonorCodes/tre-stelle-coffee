@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-12">
         {/* Rest of your footer content */}
         
-        <div className="mt-12 pt-8 border-t border-gray-700 text-center text-sm">
+        <div className="mt-12 pt-8 border-t border-gray-700 text-center text-sm text-secondary">
           <p>&copy; {currentYear} All rights reserved - Tre Stelle Coffee Co. Created by <a href="https://mrhonor.com" target="_blank" rel="noopener noreferrer" className="text-secondary hover:underline">Danny Amezquita - Web Developer</a></p>
           <p className="mt-2">
             <Link href="/privacy-policy" className="text-secondary hover:underline mx-2">Privacy Policy</Link> | 

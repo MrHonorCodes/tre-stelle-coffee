@@ -40,12 +40,12 @@ export default function Navbar() {
   }, [dropdownRef]);
   
   return (
-    <header className="fixed w-full z-50 shadow-md py-4 bg-soft-white-fix">
+    <header className="fixed w-full z-50 shadow-md py-4 bg-soft-white">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex-shrink-0">
             {/* Replace with your actual logo */}
-            <div className="h-10 w-28 flex items-center justify-center bg-primary-fix">
+            <div className="h-10 w-28 flex items-center justify-center bg-primary">
               <span className="font-bold text-light">Tre Stelle</span>
             </div>
             {/* Uncomment when you have a logo */}
@@ -68,7 +68,7 @@ export default function Navbar() {
                     href={link.path}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-secondary-fix text-primary-fix font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center hover:-translate-y-1 transform"
+                    className="px-4 py-2 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center hover:-translate-y-1 transform"
                   >
                     <span>{link.name}</span>
                     <ExternalLinkIcon />
@@ -79,7 +79,7 @@ export default function Navbar() {
                 <Link 
                   key={link.name}
                   href={link.path}
-                  className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative group text-primary-fix"
+                  className="font-medium text-sm hover:text-secondary transition-colors duration-300 relative group text-primary"
                 >
                   <span>{link.name}</span>
                   <span 
@@ -106,7 +106,7 @@ export default function Navbar() {
               <Link 
                 key={link.name}
                 href={link.path}
-                className="font-medium text-sm hover:text-secondary-fix transition-colors duration-300 relative group text-primary-fix"
+                className="font-medium text-sm hover:text-secondary transition-colors duration-300 relative group text-primary"
               >
                 <span>{link.name}</span>
                 <span 
@@ -128,7 +128,7 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className={`font-medium text-sm flex items-center transition-colors duration-300 ${isDropdownOpen ? 'text-secondary-fix' : 'text-primary-fix'}`}
+                className={`font-medium text-sm flex items-center transition-colors duration-300 ${isDropdownOpen ? 'text-secondary' : 'text-primary'}`}
               >
                 <span>More</span>
                 <svg 
@@ -143,7 +143,7 @@ export default function Navbar() {
               </button>
               {isDropdownOpen && (
                 <div 
-                  className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-soft-white-fix"
+                  className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-soft-white"
                   style={{ zIndex: 50 }}
                 >
                   {navLinks.slice(4).map((link) => { // Remaining links in dropdown
@@ -154,7 +154,7 @@ export default function Navbar() {
                           href={link.path}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="block w-full text-left px-4 py-2 my-1 bg-secondary-fix text-primary-fix font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
+                          className="block w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
                           onClick={() => setIsDropdownOpen(false)}
                         >
                           <span>{link.name}</span>
@@ -166,7 +166,7 @@ export default function Navbar() {
                       <Link
                         key={link.name}
                         href={link.path}
-                        className="block px-4 py-3 hover:text-secondary-fix transition-colors duration-200 text-sm text-primary-fix"
+                        className="block px-4 py-3 hover:text-secondary transition-colors duration-200 text-sm text-primary"
                         onClick={() => setIsDropdownOpen(false)}
                       >
                         {link.name}
@@ -180,12 +180,12 @@ export default function Navbar() {
           
           {/* Icons - Kept separate for clarity, shown on md+ */}
           <div className="hidden md:flex items-center space-x-4">
-            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
+            <button className="text-primary hover:text-secondary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
-            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
+            <button className="text-primary hover:text-secondary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
@@ -195,7 +195,7 @@ export default function Navbar() {
           {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-primary-fix hover:text-secondary-fix transition-colors"
+            className="md:hidden text-primary hover:text-secondary transition-colors"
           >
             {isOpen ? (
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -212,7 +212,7 @@ export default function Navbar() {
       
       {/* Mobile menu with animation - centered items */}
       <div 
-        className={`md:hidden absolute top-full left-0 w-full shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} bg-soft-white-fix`}
+        className={`md:hidden absolute top-full left-0 w-full shadow-lg overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'} bg-soft-white`}
       >
         <div className="py-3 space-y-1 px-4 flex flex-col items-center text-center"> {/* Reduced space-y */}
           {navLinks.map((link) => {
@@ -223,7 +223,7 @@ export default function Navbar() {
                   href={link.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full py-3 my-1 bg-secondary-fix text-primary-fix font-semibold rounded-md text-base transition-all duration-300 hover:bg-secondary/80 flex items-center justify-center hover:-translate-y-1 transform"
+                  className="block w-full py-3 my-1 bg-secondary text-primary font-semibold rounded-md text-base transition-all duration-300 hover:bg-secondary/80 flex items-center justify-center hover:-translate-y-1 transform"
                   onClick={() => setIsOpen(false)}
                 >
                   <span>{link.name}</span>
@@ -235,7 +235,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.path}
-                className="block py-2 text-lg hover:text-secondary-fix transition-colors w-full text-primary-fix"
+                className="block py-2 text-lg hover:text-secondary transition-colors w-full text-primary"
                 onClick={() => setIsOpen(false)}
               >
                 {link.name}
@@ -243,13 +243,13 @@ export default function Navbar() {
             );
           })}
           {/* Mobile Icons */}
-          <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10 border-tertiary-fix">
-            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
+          <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10 border-tertiary">
+            <button className="text-primary hover:text-secondary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </button>
-            <button className="text-primary-fix hover:text-secondary-fix transition-colors">
+            <button className="text-primary hover:text-secondary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>

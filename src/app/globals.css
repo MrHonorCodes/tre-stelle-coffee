@@ -1,10 +1,6 @@
 @import "tailwindcss";
 @import "tailwindcss/utilities";
 
-/* Other custom CSS */
-.bg-primary-direct {
-  background-color: #6D0F0F !important;
-}
 
 :root {
   --foreground-rgb: 26, 26, 26;
@@ -35,38 +31,42 @@ body {
   --color-light-text: #F8F5F2;
 }
 
-.bg-primary-fix {
+.bg-primary{
   background-color: var(--color-primary);
 }
-.bg-secondary-fix {
+.bg-secondary{
   background-color: var(--color-secondary);
 }
-.bg-tertiary-fix {
+.bg-tertiary {
   background-color: var(--color-tertiary);
 }
-.text-primary-fix {
+.text-primary {
   color: var(--color-primary);
 }
-.text-secondary-fix {
+.text-secondary {
   color: var(--color-secondary);
 }
-.border-primary-fix {
+.border-primary {
   border-color: var(--color-primary);
 }
 .text-light{
   color: var(--color-light-text);
 }
 
-.text-dark-fix {
+.text-dark {
   color: var(--color-dark-text);
 }
 
-.bg-soft-white-fix {
+.bg-soft-white {
   background-color: var(--color-soft-white);
 }
 
-.border-tertiary-fix {
+.border-tertiary {
   border-color: var(--color-tertiary);
+}
+
+.text-tertiary {
+  color: var(--color-tertiary);
 }
 
 a:hover .link-underline {

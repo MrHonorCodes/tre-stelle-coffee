@@ -26,7 +26,7 @@ useEffect(() => {
 
 // Sample product data
 const products: Product[] = [
-    /* {
+    {
     id: 1,
     name: 'Ethiopian Yirgacheffe',
     category: 'Coffee',
@@ -82,7 +82,7 @@ const products: Product[] = [
     image: '/images/products/bridging-the-gap-shirt.jpg',
     description: 'Comfortable t-shirt with Tre Stelle logo',
     options: true
-    } */
+    } 
 ];
 
 // State for filtered products
@@ -119,7 +119,7 @@ return (
         
         <div className="container mx-auto px-4 relative z-10 text-center">
         <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary-fix">
+            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary">
             Shop
             </h1>
         </FadeIn>
@@ -150,7 +150,7 @@ return (
                 onClick={() => setCategory(cat)}
                 className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 
                 ${category === cat 
-                    ? 'bg-primary text-light-text' 
+                    ? 'bg-secondary text-dark-text' 
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
             >
                 {cat}
@@ -158,8 +158,8 @@ return (
             ))}
         </div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Products Grid - Responsive gap */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {filteredProducts.map((product, index) => (
             <ScrollReveal key={product.id} delay={index * 0.1}>
                 <div className="bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
@@ -175,18 +175,20 @@ return (
                     />
                 </div>
                 
-                <div className="p-6">
+                {/* Center text, stack elements vertically */}
+                <div className="p-6 text-center flex flex-col items-center">
                     <span className="text-sm text-gray-500">{product.category}</span>
                     <h3 className="text-xl font-bold text-primary mb-2">{product.name}</h3>
                     {product.description && (
                     <p className="text-gray-600 mb-4 text-sm">{product.description}</p>
                     )}
                     
-                    <div className="flex justify-between items-center">
-                    <span className="text-2xl font-bold text-primary">${product.price.toFixed(2)}</span>
-                    <button className={`px-4 py-2 ${product.options ? 'bg-white' : 'bg-primary'} text-${product.options ? 'primary' : 'light-text'} font-medium rounded-md border-2 border-primary hover:bg-transparent hover:text-primary transition-all duration-300`}>
-                        {product.options ? 'SELECT OPTIONS' : 'ADD TO CART'}
-                    </button>
+                    {/* Remove flex container, center price, move button below */}
+                    <div> 
+                      <span className="text-2xl font-bold text-primary mt-4 block">${product.price.toFixed(2)}</span>
+                      <button className={`mt-2 px-4 py-2 bg-secondary text-dark-text border-secondary font-medium rounded-md border-2 transition-all duration-300 hover:bg-transparent hover:text-secondary`}>
+                          {product.options ? 'SELECT OPTIONS' : 'ADD TO CART'}
+                      </button>
                     </div>
                 </div>
                 </div>

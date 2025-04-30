@@ -4,12 +4,10 @@ import { useEffect } from 'react';
 import FadeIn from '../../components/ui/FadeIn';
 import ScrollReveal from '../../components/ui/ScrollReveal';
 
-import dynamic from 'next/dynamic';
-
 // Use Next.js dynamic import with SSR disabled
-const VideoSection = dynamic(() => import('../../components/ui/VideoSection'), { 
-  ssr: false 
-});
+// const VideoSection = dynamic(() => import('../../components/ui/VideoSection'), { 
+//   ssr: false 
+// });
 
 export default function Home() {
   // Add smooth scrolling effect
@@ -38,7 +36,7 @@ export default function Home() {
           </FadeIn>
           <FadeIn delay={0.6}>
             <div className="flex flex-wrap gap-4">
-              <a href="/shop" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
+              <a href="https://trestellecoffeeco.square.site/" target="_blank" rel="noopener noreferrer" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Shop Now
               </a>
               <a href="/about" className="px-8 py-3 text-light-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light-text hover:text-primary border-2 border-light-text">
@@ -49,7 +47,7 @@ export default function Home() {
         </div>
 
         {/* Video Embed Section */}
-          <VideoSection />
+          {/* <VideoSection /> */}
 
       </div>
     </section>
