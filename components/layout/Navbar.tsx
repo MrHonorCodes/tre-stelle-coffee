@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-// import Image from 'next/image';
+import Image from 'next/image';
 
 // Simple external link icon
 const ExternalLinkIcon = () => (
@@ -46,18 +46,15 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex-shrink-0">
-            {/* Replace with your actual logo */}
-            <div className="h-10 w-28 flex items-center justify-center bg-primary">
-              <span className="font-bold text-light">Tre Stelle</span>
+            <div className="p-1 bg-primary rounded-md inline-block">
+              <Image
+                src="/images/white-logo.png"
+                alt="Tre Stelle Coffee Co. Logo"
+                width={120}
+                height={40}
+                className="h-10 w-auto"
+              />
             </div>
-            {/* Uncomment when you have a logo */}
-            {/* <Image 
-              src="/logo.png" 
-              alt="Tre Stelle Coffee Co. Logo" 
-              width={120} 
-              height={40} 
-              className="h-10 w-auto" 
-            /> */}
           </Link>
           
           {/* Desktop and Large Tablet Navigation */}

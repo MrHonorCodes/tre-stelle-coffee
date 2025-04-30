@@ -79,7 +79,7 @@ const products: Product[] = [
     name: 'Bridging The Gap',
     category: 'Merchandise',
     price: 25.00,
-    image: '/images/products/bridging-the-gap-shirt.jpg',
+    image: '/images/products/bridging-the-gap-shirt-front.jpg',
     description: 'Comfortable t-shirt with Tre Stelle logo',
     options: true
     } 
