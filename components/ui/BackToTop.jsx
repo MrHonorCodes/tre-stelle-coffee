@@ -37,7 +37,7 @@ return (
     {isVisible && (
         <button
         onClick={scrollToTop}
-        className="fixed bottom-6 right-6 bg-secondary-fix hover:bg-secondary-fix text-light-text p-3 rounded-full shadow-lg transition-opacity transform duration-300 z-50 focus:outline-none"
+        className="fixed bottom-6 right-6 bg-secondary hover:bg-secondary-fix text-light-text p-3 rounded-full shadow-lg transition-opacity transform duration-300 z-50 focus:outline-none"
         aria-label="Back to top"
         >
         <svg 
