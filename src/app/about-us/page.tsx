@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { useEffect } from 'react';
+import Link from 'next/link';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
 
@@ -68,9 +69,9 @@ return (
             <p className="text-gray-700 mb-6 text-lg">
                 Tre Stelle Coffee Co. was founded in late 2019, initially as a specialized roasting company. Jonathan established the business with support from his father, and we&apos;ve since expanded into a full-service Coffee Shop & Roastery. Beyond serving exceptional coffee, our core mission is to create an inclusive coffee business that welcomes individuals from all backgrounds and walks of life.
             </p>
-            <a href="/products" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
+            <Link href="/products" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Our Products
-            </a>
+            </Link>
             </ScrollReveal>
         </div>
         
