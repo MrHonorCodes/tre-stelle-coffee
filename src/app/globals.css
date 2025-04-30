@@ -9,6 +9,7 @@
   --color-primary: #4a0000;
   --color-secondary: #e7c583;
   --color-secondary-light: #f3e2bf;
+  --color-secondary-darker: #c5a366;
   --color-tertiary: #2E1A13;
   --color-soft-white: #F8F5F2;
   --color-dark-text: #1A1A1A;
@@ -73,6 +74,10 @@ body {
   background-color: var(--color-secondary-light);
 }
 
+.text-secondary-darker {
+  color: var(--color-secondary-darker);
+}
+
 a:hover .link-underline {
   width: 100%;
 }
@@ -122,5 +127,11 @@ a.bg-secondary.text-primary.border-light:hover {
     background-color: transparent !important;
     color: var(--color-secondary) !important;
     border-color: var(--color-secondary) !important;
+}
+
+/* Button: Secondary bg, Primary text -> Secondary-light text on hover */
+a.bg-secondary.text-primary:hover {
+    background-color: var(--color-secondary) !important; /* Explicitly keep background */
+    color: var(--color-secondary-light) !important; /* Change text color */
 }
 

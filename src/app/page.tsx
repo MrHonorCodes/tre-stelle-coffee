@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import FadeIn from '../../components/ui/FadeIn';
 import ScrollReveal from '../../components/ui/ScrollReveal';
 
@@ -10,6 +10,16 @@ import ScrollReveal from '../../components/ui/ScrollReveal';
 // });
 
 export default function Home() {
+  // Ref for the video element
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Effect to set initial volume
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = 0.5; // Set volume to 50%
+    }
+  }, []); // Empty dependency array means this runs once on mount
+
   // Add smooth scrolling effect
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth';
@@ -60,7 +70,7 @@ export default function Home() {
               >
                 Order Now 
               </a>
-              <a href="/about" className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light">
+              <a href="/about-us" className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light">
                 Learn More
               </a>
             </div>
@@ -92,9 +102,18 @@ export default function Home() {
               </p>
             </ScrollReveal>
             <ScrollReveal className="lg:w-1/2" delay={0.2} direction="right">
-              {/* Add border with primary color */}
-              <div className="rounded-lg overflow-hidden shadow-xl">
-                <div className="aspect-video bg-tertiary border-4 border-primary"></div>
+              {/* Container for the video */}
+              <div className="rounded-lg overflow-hidden shadow-xl border-4 border-primary">
+                {/* Replaced placeholder div with video element - Added ref */}
+                <video 
+                  ref={videoRef}
+                  controls 
+                  preload="metadata" 
+                  className="w-full h-full aspect-video object-cover"
+                  src="/videos/Introduction.mp4"
+                >
+                  Your browser does not support the video tag.
+                </video>
               </div>
             </ScrollReveal>
           </div>

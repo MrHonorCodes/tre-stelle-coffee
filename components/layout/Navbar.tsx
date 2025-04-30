@@ -1,6 +1,7 @@
 "use client"
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 // import Image from 'next/image';
 
 // Simple external link icon
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
   
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -75,11 +77,12 @@ export default function Navbar() {
                   </Link>
                 );
               }
+              const isActive = pathname === link.path;
               return (
                 <Link 
                   key={link.name}
                   href={link.path}
-                  className="font-medium text-sm hover:text-secondary transition-colors duration-300 relative group text-primary"
+                  className={`font-medium text-sm transition-colors duration-300 relative group ${isActive ? 'text-secondary-darker' : 'text-primary hover:text-secondary'}`}
                 >
                   <span>{link.name}</span>
                   <span 
@@ -87,43 +90,59 @@ export default function Navbar() {
                       content: "''",
                       position: 'absolute',
                       height: '2px',
-                      width: '0',
+                      width: isActive ? '100%' : '0',
                       left: '0',
                       bottom: '-4px',
-                      backgroundColor: 'var(--color-secondary)',
+                      backgroundColor: isActive ? 'var(--color-secondary-darker)' : 'var(--color-secondary)',
                       transition: 'all 0.3s ease'
                     }}
-                    className="link-underline group-hover:w-full"
+                    className={`link-underline ${!isActive ? 'group-hover:w-full' : ''}`}
                   ></span>
                 </Link>
               );
             })}
           </div>
           
+          {/* Icons - Kept separate for clarity, shown on md+ - Only Cart */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Profile button removed */}
+            {/* <button className="text-primary hover:text-secondary transition-colors"> ... </button> */}
+            
+            {/* Cart button restored */}
+            <button className="text-primary hover:text-secondary transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </button>
+          </div>
+          
           {/* Mid-sized device navigation (fewer items) */}
           <div className="hidden md:flex lg:hidden items-center space-x-4">
-            {navLinks.slice(0, 4).map((link) => ( // Show first 4 links normally
-              <Link 
-                key={link.name}
-                href={link.path}
-                className="font-medium text-sm hover:text-secondary transition-colors duration-300 relative group text-primary"
-              >
-                <span>{link.name}</span>
-                <span 
-                  style={{
-                    content: "''",
-                    position: 'absolute',
-                    height: '2px',
-                    width: '0',
-                    left: '0',
-                    bottom: '-4px',
-                    backgroundColor: 'var(--color-secondary)',
-                    transition: 'all 0.3s ease'
-                  }}
-                  className="link-underline group-hover:w-full"
-                ></span>
-              </Link>
-            ))}
+            {navLinks.slice(0, 4).map((link) => { // Show first 4 links normally
+               const isActive = pathname === link.path;
+               return (
+                  <Link 
+                    key={link.name}
+                    href={link.path}
+                    className={`font-medium text-sm transition-colors duration-300 relative group ${isActive ? 'text-secondary-darker' : 'text-primary hover:text-secondary'}`}
+                  >
+                    <span>{link.name}</span>
+                    <span 
+                      style={{
+                        content: "''",
+                        position: 'absolute',
+                        height: '2px',
+                        width: isActive ? '100%' : '0',
+                        left: '0',
+                        bottom: '-4px',
+                        backgroundColor: isActive ? 'var(--color-secondary-darker)' : 'var(--color-secondary)',
+                        transition: 'all 0.3s ease'
+                      }}
+                      className={`link-underline ${!isActive ? 'group-hover:w-full' : ''}`}
+                    ></span>
+                  </Link>
+               );
+            })}
             {/* Dropdown for additional menu items on mid-sized devices */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -178,20 +197,6 @@ export default function Navbar() {
             </div>
           </div>
           
-          {/* Icons - Kept separate for clarity, shown on md+ */}
-          <div className="hidden md:flex items-center space-x-4">
-            <button className="text-primary hover:text-secondary transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-            <button className="text-primary hover:text-secondary transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </button>
-          </div>
-          
           {/* Mobile Menu Toggle */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
@@ -242,13 +247,12 @@ export default function Navbar() {
               </Link>
             );
           })}
-          {/* Mobile Icons */}
+          {/* Mobile Icons - Only Cart */}
           <div className="pt-4 mt-4 border-t w-full flex justify-center space-x-10 border-tertiary">
-            <button className="text-primary hover:text-secondary transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
+            {/* Profile button removed */}
+            {/* <button className="text-primary hover:text-secondary transition-colors"> ... </button> */}
+            
+            {/* Cart button restored */}
             <button className="text-primary hover:text-secondary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
