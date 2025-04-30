@@ -11,6 +11,7 @@
 //       colors: {
 //         'primary': "rgb(74, 0, 0)", // #4A0000 in RGB
 //         'secondary': "rgb(231, 197, 131)", // #e7c583 in RGB (updated)
+//         'secondary-light': "rgb(243, 226, 191)", // #f3e2bf - Added lighter secondary
 //         'tertiary': "rgb(46, 26, 19)", // #2E1A13 in RGB
 //         "soft-white": "rgb(248, 245, 242)",
 //         "dark-text": "rgb(26, 26, 26)",

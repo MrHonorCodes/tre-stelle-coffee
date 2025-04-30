@@ -5,6 +5,14 @@
 :root {
   --foreground-rgb: 26, 26, 26;
   --background-rgb: 248, 245, 242;
+  /* Color Palette */
+  --color-primary: #4a0000;
+  --color-secondary: #e7c583;
+  --color-secondary-light: #f3e2bf;
+  --color-tertiary: #2E1A13;
+  --color-soft-white: #F8F5F2;
+  --color-dark-text: #1A1A1A;
+  --color-light-text: #F8F5F2;
 }
 
 html {
@@ -20,15 +28,6 @@ html {
 body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
-}
-
-:root {
-  --color-primary: #4a0000;
-  --color-secondary: #e7c583;
-  --color-tertiary: #2E1A13;
-  --color-soft-white: #F8F5F2;
-  --color-dark-text: #1A1A1A;
-  --color-light-text: #F8F5F2;
 }
 
 .bg-primary{
@@ -67,6 +66,10 @@ body {
 
 .text-tertiary {
   color: var(--color-tertiary);
+}
+
+.bg-secondary-light {
+  background-color: var(--color-secondary-light);
 }
 
 a:hover .link-underline {

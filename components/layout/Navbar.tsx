@@ -40,7 +40,7 @@ export default function Navbar() {
   }, [dropdownRef]);
   
   return (
-    <header className="fixed w-full z-50 shadow-md py-4 bg-soft-white">
+    <header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex-shrink-0">
