@@ -60,6 +60,13 @@ export const pressArticleType = defineType({
       },
       description: 'Optional. E.g., publication logo or a relevant photo.',
     }),
+    defineField({
+      name: 'isFeatured',
+      title: 'Featured Article',
+      type: 'boolean',
+      description: 'Mark this article as a featured item on the press page.',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {

@@ -196,7 +196,7 @@ export default function CheckoutPage() {
                       return (
                           <div key={itemKey} className="flex justify-between items-center text-sm">
                               <div>
-                                  <span className="font-medium">Product ID: {item.productId}</span> {item.options && `(${Object.values(item.options).join(', ')})`} {/* Changed item.id to item.productId */}
+                                  <span className="font-medium">{item.name}</span> {item.options && `(${Object.values(item.options).join(', ')})`} {/* Changed to display item.name */}
                                   <span className="block text-xs text-gray-500">Qty: {item.quantity}</span>
                               </div>
                                {/* Price requires fetching product data - showing placeholder */}

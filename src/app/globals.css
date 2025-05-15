@@ -137,3 +137,13 @@ a.bg-secondary.text-primary:hover {
     color: var(--color-secondary-light) !important; /* Change text color */
 }
 
+/* Simple CSS Fade-in Animation */
+@keyframes simpleFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-simple-fade-in {
+  animation: simpleFadeIn 0.7s ease-out forwards;
+}
+
