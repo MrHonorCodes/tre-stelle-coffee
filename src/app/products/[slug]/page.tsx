@@ -18,6 +18,12 @@ interface SanityProduct extends SanityDocument {
   stripePriceId?: string;
 }
 
+// Explicitly define Props for the page component
+type Props = {
+  params: Promise<{ slug: string }>;
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   _id,
   name,
@@ -29,7 +35,8 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   stripePriceId
 }`;
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
+export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
+  const params = await paramsPromise;
   const { slug } = params;
   const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
   if (!product) {
@@ -41,7 +48,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default async function ProductDetailPage({ params: paramsPromise }: Props) {
+  const params = await paramsPromise;
   const { slug } = params;
   const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
 
