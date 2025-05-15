@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { notFound, useParams } from 'next/navigation';
 import Image from 'next/image'; 
-import productsData from '../../../data/products.json';
-import FadeIn from '../../../../components/ui/FadeIn';
-import { useCart } from '../../../context/CartContext';
+import productsData from '../../src/data/products.json';
+import FadeIn from '../ui/FadeIn';
+import { useCart } from '../../src/context/CartContext';
 
 // --- Configuration ---
 const MAX_QUANTITY_PER_ORDER = 5;

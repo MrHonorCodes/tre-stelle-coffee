@@ -1,20 +1,44 @@
 'use client'
 
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import productsData from '../data/products.json'; // To get product details like price
+// productsData import will be removed later as product details will be on CartItem
+// import productsData from '../data/products.json'; 
 
-// --- Types ---
+// Import Sanity types needed for CartItem
+import type { SanityDocument, Image as SanityImageType } from 'sanity'; // Removed PortableTextBlock
+
+// Define the structure of a Sanity Product (can be shared from a types file)
+// This helps in defining what product information is passed to addToCart
+interface ProductForCart extends SanityDocument { // Or use your existing SanityProduct interface if imported
+  _id: string;
+  name: string;
+  price: number;
+  image?: SanityImageType; // Optional: for displaying image in cart
+  // Add other fields you might need in the cart, like slug for linking back
+  slug?: { current: string }; 
+  stripePriceId?: string;
+}
+
+// --- Types --- 
+// Updated CartItem to store more product details and use string ID
 type CartItem = {
-  id: number; // Product ID
+  productId: string; // Changed from id: number
+  name: string;
+  price: number;
+  image?: SanityImageType; // To display in cart summary
+  slug?: { current: string }; // For linking from cart
   quantity: number;
-  options?: { [key: string]: string }; // e.g., { Size: 'M' }
+  options?: { [key: string]: string };
+  stripePriceId?: string;
 };
 
+// Updated CartContextType to reflect new addToCart signature
 type CartContextType = {
   cartItems: CartItem[];
-  addToCart: (id: number, quantity: number, options?: { [key: string]: string }) => void;
-  removeFromCart: (id: number, options?: { [key: string]: string }) => void; // Need options to identify specific variants
-  updateQuantity: (id: number, quantity: number, options?: { [key: string]: string }) => void;
+  // addToCart now accepts a ProductForCart object
+  addToCart: (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => void;
+  removeFromCart: (productId: string, options?: { [key: string]: string }) => void; 
+  updateQuantity: (productId: string, quantity: number, options?: { [key: string]: string }) => void;
   getCartTotal: () => number;
   getItemCount: () => number;
   clearCart: () => void;
@@ -24,11 +48,10 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 // --- Helper Functions ---
-// Helper to generate a unique key for a cart item including options
-const generateCartItemKey = (id: number, options?: { [key: string]: string }): string => {
-  let key = String(id);
+// generateCartItemKey updated to use productId: string
+const generateCartItemKey = (productId: string, options?: { [key: string]: string }): string => {
+  let key = productId;
   if (options) {
-    // Sort option keys for consistent key generation
     Object.keys(options).sort().forEach(optionKey => {
       key += `-${optionKey}:${options[optionKey]}`;
     });
@@ -40,7 +63,6 @@ const generateCartItemKey = (id: number, options?: { [key: string]: string }): s
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // Optional: Load cart from localStorage on initial load
   useEffect(() => {
     const storedCart = localStorage.getItem('shoppingCart');
     if (storedCart) {
@@ -48,58 +70,66 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Optional: Save cart to localStorage whenever it changes
   useEffect(() => {
-    if (cartItems.length > 0 || localStorage.getItem('shoppingCart')) { // Avoid saving empty initial cart unless clearing
+    if (cartItems.length > 0 || localStorage.getItem('shoppingCart')) { 
        localStorage.setItem('shoppingCart', JSON.stringify(cartItems));
     }
   }, [cartItems]);
 
-  const addToCart = (id: number, quantity: number, options?: { [key: string]: string }) => {
+  // addToCart function updated
+  const addToCart = (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => {
     setCartItems(prevItems => {
-      const itemKey = generateCartItemKey(id, options);
-      // Check if item with the exact same options already exists
-      const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.id, item.options) === itemKey);
+      const itemKey = generateCartItemKey(product._id, options);
+      const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.productId, item.options) === itemKey);
 
       if (existingItemIndex > -1) {
-        // Update quantity of existing item
         const updatedItems = [...prevItems];
         updatedItems[existingItemIndex].quantity += quantity;
-        // TODO: Add check against available stock here if needed
         return updatedItems;
       } else {
-        // Add new item to cart
-        return [...prevItems, { id, quantity, options }];
+        // Create a new cart item from the product details
+        const newCartItem: CartItem = {
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          slug: product.slug,
+          quantity: quantity,
+          options: options,
+          stripePriceId: product.stripePriceId,
+        };
+        return [...prevItems, newCartItem];
       }
     });
   };
 
-  const removeFromCart = (id: number, options?: { [key: string]: string }) => {
+  // removeFromCart and updateQuantity will also need to use string productId
+  // and their logic for finding items in the cart updated if itemKey generation changes.
+  const removeFromCart = (productId: string, options?: { [key: string]: string }) => {
     setCartItems(prevItems => {
-      const itemKey = generateCartItemKey(id, options);
-      return prevItems.filter(item => generateCartItemKey(item.id, item.options) !== itemKey);
+      const itemKey = generateCartItemKey(productId, options);
+      return prevItems.filter(item => generateCartItemKey(item.productId, item.options) !== itemKey);
     });
   };
 
-  const updateQuantity = (id: number, quantity: number, options?: { [key: string]: string }) => {
+  const updateQuantity = (productId: string, quantity: number, options?: { [key: string]: string }) => {
     setCartItems(prevItems => {
-      const itemKey = generateCartItemKey(id, options);
+      const itemKey = generateCartItemKey(productId, options);
       const updatedItems = prevItems.map(item => {
-        if (generateCartItemKey(item.id, item.options) === itemKey) {
-          // TODO: Add check against available stock here if needed
-          return { ...item, quantity: Math.max(0, quantity) }; // Ensure quantity doesn't go below 0
+        if (generateCartItemKey(item.productId, item.options) === itemKey) {
+          return { ...item, quantity: Math.max(0, quantity) };
         }
         return item;
       });
-      // Filter out items with quantity 0
       return updatedItems.filter(item => item.quantity > 0);
     });
   };
 
+  // getCartTotal updated to use price from CartItem
   const getCartTotal = (): number => {
     return cartItems.reduce((total, item) => {
-      const product = productsData.find(p => p.id === item.id);
-      return total + (product ? product.price * item.quantity : 0);
+      // const product = productsData.find(p => p.id === item.productId); // No longer needed
+      return total + (item.price * item.quantity);
     }, 0);
   };
 
@@ -109,7 +139,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   
   const clearCart = () => {
     setCartItems([]);
-    localStorage.removeItem('shoppingCart'); // Clear storage too
+    localStorage.removeItem('shoppingCart');
   };
 
   return (
