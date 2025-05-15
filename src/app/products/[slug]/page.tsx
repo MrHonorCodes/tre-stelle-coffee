@@ -21,7 +21,7 @@ interface SanityProduct extends SanityDocument {
 // Explicitly define Props for the page component
 type Props = {
   params: Promise<{ slug: string }>;
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
