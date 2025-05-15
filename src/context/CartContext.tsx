@@ -71,14 +71,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (cartItems.length > 0 || localStorage.getItem('shoppingCart')) { 
+    if (cartItems.length > 0 || localStorage.getItem('shoppingCart')) {
        localStorage.setItem('shoppingCart', JSON.stringify(cartItems));
     }
   }, [cartItems]);
 
   // addToCart function updated
   const addToCart = (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => {
+    // console.log('[CartContext:addToCart] Received product:', product, 'quantity:', quantity, 'options:', options); // Log received parameters
     setCartItems(prevItems => {
+      // console.log('[CartContext:addToCart] prevItems:', prevItems); // Log prevItems
       const itemKey = generateCartItemKey(product._id, options);
       const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.productId, item.options) === itemKey);
 

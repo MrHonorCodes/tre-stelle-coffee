@@ -1,52 +1,54 @@
 'use client'
 
 import Link from 'next/link';
-import Image from 'next/image';
+import NextImage from 'next/image'; // Renamed to avoid conflict with Sanity Image type
 import { useCart } from '../../context/CartContext';
-import productsData from '../../data/products.json';
+// import productsData from '../../data/products.json'; // No longer needed
 import FadeIn from '../../../components/ui/FadeIn';
 
-// Type definition for Product (simplified for cart context)
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  images: string[];
-  stock: number | { [optionValue: string]: number }; 
-  options?: { [optionName: string]: string[] } | null;
-};
+// Import Sanity types and imageUrlBuilder
+import type { Image as SanityImageType } from 'sanity';
+import imageUrlBuilder from '@sanity/image-url';
+import { client } from '../../sanity/lib/client'; // Assuming client is configured for projectId and dataset
 
-// Helper to find product data (could be optimized later if needed)
-function getProductDetails(id: number): Product | undefined {
-  return productsData.find(p => p.id === id) as Product | undefined;
+// Configure the image URL builder (or import urlFor from a shared lib)
+const { projectId, dataset } = client.config();
+const SanityImageBuilder = imageUrlBuilder({ projectId: projectId || '', dataset: dataset || '' });
+
+function urlFor(source: SanityImageType) {
+  if (!source) return undefined;
+  return SanityImageBuilder.image(source);
 }
+
+// Product type is no longer needed here as details are on CartItem
+// type Product = { ... };
+
+// getProductDetails is no longer needed
+// function getProductDetails(id: number): Product | undefined { ... }
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
 
-  // --- Shipping Configuration ---
   const SHIPPING_RATE = 5.00;
-  const SHIPPING_DESTINATION = "Texas";
+  // const SHIPPING_DESTINATION = "Texas"; // Not used in current JSX, can be re-added if needed
 
-  // Combine cart items with product details
+  // cartItems from useCart() now have product details directly
+  // We just need to calculate itemTotal if not already on CartItem
   const detailedCartItems = cartItems.map(item => {
-    const product = getProductDetails(item.id);
     return {
       ...item, 
-      productDetails: product, // Add full product details
-      itemTotal: product ? product.price * item.quantity : 0,
+      itemTotal: item.price * item.quantity, // price is now directly on item
     };
-  }).filter(item => item.productDetails); // Filter out items where product details weren't found
+  });
 
-  const subtotal = getCartTotal();
-  const total = subtotal + SHIPPING_RATE; // Calculate total including shipping
+  const subtotal = getCartTotal(); // This should now work correctly with CartContext changes
+  const total = subtotal + SHIPPING_RATE;
 
-  const handleQuantityChange = (id: number, newQuantity: number, options?: { [key: string]: string }) => {
+  const handleQuantityChange = (productId: string, newQuantity: number, options?: { [key: string]: string }) => {
     if (newQuantity < 1) {
-      removeFromCart(id, options); // Remove if quantity goes below 1
+      removeFromCart(productId, options); 
     } else {
-      // TODO: Check against stock for the specific option before updating
-      updateQuantity(id, newQuantity, options);
+      updateQuantity(productId, newQuantity, options);
     }
   };
 
@@ -65,27 +67,28 @@ export default function CartPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-              {/* Cart Items List (Left/Main Column) */}
               <div className="lg:col-span-2 space-y-6">
                 {detailedCartItems.map((item) => (
-                  <div key={`${item.id}-${JSON.stringify(item.options)}`} className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row items-center gap-4">
-                    {/* Image */}
+                  // Use item.productId and options for a unique key
+                  <div key={generateCartItemKeyInternal(item.productId, item.options)} className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row items-center gap-4">
                     <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
-                      <Image 
-                        src={item.productDetails!.images[0]} 
-                        alt={item.productDetails!.name}
-                        width={96}
-                        height={96}
-                        className="w-full h-full object-cover"
-                      />
+                      {item.image && urlFor(item.image) ? (
+                        <NextImage 
+                          src={urlFor(item.image)!.width(96).height(96).fit('crop').url()}
+                          alt={item.name}
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-xs text-gray-500">No Image</div>
+                      )}
                     </div>
-
-                    {/* Details & Actions */}
                     <div className="flex-grow flex flex-col md:flex-row justify-between items-center w-full">
-                      {/* Name & Options */}
                       <div className="mb-2 md:mb-0 text-center md:text-left">
-                        <Link href={`/products/${item.id}`} className="text-lg font-semibold text-primary hover:text-secondary transition-colors">
-                          {item.productDetails!.name}
+                        {/* Link to product using slug if available, otherwise construct from productId */}
+                        <Link href={item.slug?.current ? `/products/${item.slug.current}` : `/products/${item.productId}`} className="text-lg font-semibold text-primary hover:text-secondary transition-colors">
+                          {item.name}
                         </Link>
                         {item.options && (
                           <div className="text-sm text-gray-500 mt-1">
@@ -95,33 +98,25 @@ export default function CartPage() {
                           </div>
                         )}
                       </div>
-
-                      {/* Quantity & Price */}
                       <div className="flex items-center gap-4 md:gap-6">
-                        {/* Quantity Selector */}
                         <div className="flex items-center border border-gray-300 rounded-md">
                           <button 
-                            onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.options)}
+                            onClick={() => handleQuantityChange(item.productId, item.quantity - 1, item.options)}
                             className="px-2 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-l-md"
                             aria-label="Decrease quantity"
                           >-</button>
                           <span className="px-3 py-1 border-l border-r border-gray-300 text-center text-sm w-10">{item.quantity}</span>
                           <button 
-                            onClick={() => handleQuantityChange(item.id, item.quantity + 1, item.options)}
+                            onClick={() => handleQuantityChange(item.productId, item.quantity + 1, item.options)}
                             className="px-2 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-r-md"
-                            // TODO: Disable based on stock
                             aria-label="Increase quantity"
                           >+</button>
                         </div>
-
-                        {/* Item Total */}
                         <span className="text-lg font-semibold text-primary w-20 text-right">
                           ${item.itemTotal.toFixed(2)}
                         </span>
-
-                        {/* Remove Button */}
                         <button 
-                          onClick={() => removeFromCart(item.id, item.options)}
+                          onClick={() => removeFromCart(item.productId, item.options)}
                           className="text-gray-400 hover:text-red-600 transition-colors"
                           aria-label="Remove item"
                         >
@@ -133,7 +128,6 @@ export default function CartPage() {
                     </div>
                   </div>
                 ))}
-                 {/* Clear Cart Button */} 
                  <div className="text-right mt-4">
                     <button 
                       onClick={clearCart}
@@ -144,39 +138,29 @@ export default function CartPage() {
                  </div>
               </div>
 
-              {/* Order Summary (Right Column) */}
+              {/* Order Summary */}
               <div className="lg:col-span-1">
                 <div className="bg-white p-6 rounded-lg shadow-md sticky top-24">
                   <h2 className="text-xl font-semibold text-primary mb-6 border-b pb-3">Order Summary</h2>
-                  
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-600">Subtotal</span>
                     <span className="font-semibold text-primary">${subtotal.toFixed(2)}</span>
                   </div>
-                  
-                  {/* Updated Shipping Row */}
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-semibold text-primary">${SHIPPING_RATE.toFixed(2)}</span>
                   </div>
-                  {/* Tax Placeholder */}
                   <div className="flex justify-between items-center mb-6 text-gray-500 text-sm">
                     <span>Taxes</span>
                     <span>Calculated at checkout</span>
                   </div>
-
-                  {/* Updated Total Row */}
                   <div className="border-t pt-4 flex justify-between items-center font-bold text-lg text-primary">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                   </div>
-
-                  {/* Texas Shipping Note */}
                   <p className="text-xs text-gray-500 mt-4 text-center">
-                    * Currently shipping only to addresses within {SHIPPING_DESTINATION}. *
+                    * Currently shipping only to addresses within Texas. *
                   </p>
-
-                  {/* Checkout Button - Updated Link */}
                   <Link 
                     href="/checkout" 
                     className="mt-6 block w-full text-center px-6 py-3 bg-primary text-light rounded-md font-semibold text-lg transition-all duration-300 hover:bg-primary/80"
@@ -191,4 +175,15 @@ export default function CartPage() {
       </div>
     </main>
   );
-} 
+}
+
+// Internal helper for generating keys, as CartContext's one is not exported
+const generateCartItemKeyInternal = (productId: string, options?: { [key: string]: string }): string => {
+  let key = productId;
+  if (options) {
+    Object.keys(options).sort().forEach(optionKey => {
+      key += `-${optionKey}:${options[optionKey]}`;
+    });
+  }
+  return key;
+}; 

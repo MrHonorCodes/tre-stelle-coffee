@@ -30,7 +30,8 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
 }`;
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug: params.slug });
+  const { slug } = params;
+  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
   if (!product) {
     return { title: 'Product Not Found' };
   }
@@ -41,7 +42,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
-  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug: params.slug });
+  const { slug } = params;
+  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
 
   if (!product) {
     return (
