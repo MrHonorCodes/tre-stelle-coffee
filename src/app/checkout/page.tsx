@@ -192,11 +192,11 @@ export default function CheckoutPage() {
                       // Note: We don't have full product details here without extra fetching.
                       // For a real app, consider passing details or fetching them.
                       // Showing basic info available in CartContext.
-                      const itemKey = `${item.id}-${JSON.stringify(item.options)}`; // Recreate key
+                      const itemKey = `${item.productId}-${JSON.stringify(item.options)}`; // Recreate key. Changed item.id to item.productId
                       return (
                           <div key={itemKey} className="flex justify-between items-center text-sm">
                               <div>
-                                  <span className="font-medium">Product ID: {item.id}</span> {item.options && `(${Object.values(item.options).join(', ')})`}
+                                  <span className="font-medium">Product ID: {item.productId}</span> {item.options && `(${Object.values(item.options).join(', ')})`} {/* Changed item.id to item.productId */}
                                   <span className="block text-xs text-gray-500">Qty: {item.quantity}</span>
                               </div>
                                {/* Price requires fetching product data - showing placeholder */}
