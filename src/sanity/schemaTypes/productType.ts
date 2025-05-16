@@ -22,13 +22,11 @@ export const productType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'image',
-      title: 'Product Image',
-      type: 'image',
-      options: {
-        hotspot: true, // Enables image hotspot for better cropping
-      },
-      validation: (Rule) => Rule.required(),
+      name: 'images',
+      title: 'Product Images',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'details',
@@ -71,7 +69,7 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'name',
-      media: 'image',
+      media: 'images',
       category: 'category',
       price: 'price',
     },
@@ -79,7 +77,7 @@ export const productType = defineType({
       return {
         title: title,
         subtitle: `${category ? category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ') : ''} - $${price}`,
-        media: media,
+        media: media && media.length > 0 ? media[0] : undefined,
       };
     },
   },
