@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
       pathRevalidated = true;
     }
 
+    // Also revalidate the main products page if a product was changed
+    if (body._type === 'product') {
+      revalidatePath('/products');
+      console.log('Revalidated path: /products');
+      // We can set pathRevalidated to true here as well, or adjust the logging message for clarity
+      // For now, the existing pathRevalidated logic for specific slugs is fine.
+    }
+
     return NextResponse.json({
       status: 200,
       revalidated: true,
