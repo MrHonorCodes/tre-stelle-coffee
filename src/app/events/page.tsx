@@ -88,9 +88,41 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaE
 // Handle form submission
 const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic would go here
-    console.log("Form submitted:", formData);
-    alert("Thank you for your booking request! We'll be in touch soon to confirm your event details.");
+
+    // Convert 24-hour time to 12-hour format for the email
+    let formattedTime = '';
+    if (formData.time) {
+        const [hourString, minuteString] = formData.time.split(':');
+        let hour = parseInt(hourString, 10);
+        const minute = parseInt(minuteString, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        hour = hour % 12;
+        hour = hour ? hour : 12; // Convert hour '0' to '12'
+        const minuteFormatted = minute < 10 ? '0' + minute : minute;
+        formattedTime = `${hour}:${minuteFormatted} ${ampm}`;
+    } else {
+        formattedTime = 'Not specified'; // Fallback if time is somehow empty despite being required
+    }
+
+    // Form submission logic
+    const subject = "New Event Booking Request";
+    const body = `
+Name: ${formData.name}
+Email: ${formData.email}
+Phone: ${formData.phone}
+Event Date: ${formData.date}
+Start Time: ${formattedTime}
+Number of Hours: ${formData.hours}
+Event Details:
+${formData.message}
+    `;
+    const mailtoLink = `mailto:contact@trestellecoffeeco.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+    // Optional: You might want to still give some feedback to the user on the page,
+    // as they will be navigated away to their email client.
+    // For example, you could show a temporary message like "Preparing your email..."
+    // or reset the form.
+    // For now, we'll just navigate.
 };
 
 return (
