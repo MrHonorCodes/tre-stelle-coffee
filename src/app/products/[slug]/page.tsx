@@ -1,9 +1,11 @@
 import { type SanityDocument } from 'next-sanity';
-import { client } from '../../../sanity/lib/client';
+import { client } from '@/sanity/lib/client';
 import type { Image as SanityImageType } from 'sanity';
 import Link from 'next/link';
 import FadeIn from '../../../../components/ui/FadeIn';
 import ProductDisplayClient from '../../../components/products/ProductDisplayClient';
+
+export const dynamic = 'force-dynamic';
 
 // Define the Sanity Product Type for this server component
 interface SanityProduct extends SanityDocument {
@@ -38,7 +40,11 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
 export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {
   const params = await paramsPromise;
   const { slug } = params;
-  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
+  const product = await client.fetch<SanityProduct | null>(
+    PRODUCT_QUERY,
+    { slug },
+    { next: { tags: ['product', `product:${slug}`] } }
+  );
   if (!product) {
     return { title: 'Product Not Found' };
   }
@@ -51,7 +57,11 @@ export async function generateMetadata({ params: paramsPromise }: { params: Prom
 export default async function ProductDetailPage({ params: paramsPromise }: Props) {
   const params = await paramsPromise;
   const { slug } = params;
-  const product = await client.fetch<SanityProduct | null>(PRODUCT_QUERY, { slug });
+  const product = await client.fetch<SanityProduct | null>(
+    PRODUCT_QUERY,
+    { slug },
+    { next: { tags: ['product', `product:${slug}`] } }
+  );
 
   if (!product) {
     return (
