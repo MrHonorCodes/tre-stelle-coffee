@@ -36,7 +36,7 @@ type CartItem = {
 type CartContextType = {
   cartItems: CartItem[];
   // addToCart now accepts a ProductForCart object
-  addToCart: (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => void;
+  addToCart: (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => { success: boolean; quantityAdded: number; finalQuantity: number; message?: string };
   removeFromCart: (productId: string, options?: { [key: string]: string }) => void; 
   updateQuantity: (productId: string, quantity: number, options?: { [key: string]: string }) => void;
   getCartTotal: () => number;
@@ -59,6 +59,8 @@ const generateCartItemKey = (productId: string, options?: { [key: string]: strin
   return key;
 };
 
+const MAX_QUANTITY_PER_ORDER = 5; // Define here or import from shared constants
+
 // --- Provider Component ---
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -77,38 +79,63 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [cartItems]);
 
   // addToCart function updated
-  const addToCart = (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => {
-    console.log('[CartContext addToCart] Called with:', { product, quantityPassed: quantity, options });
+  const addToCart = (product: ProductForCart, quantityToAdd: number, options?: { [key: string]: string }): { success: boolean; quantityAdded: number; finalQuantity: number; message?: string } => {
+    console.log('[CartContext addToCart] Called with:', { product, quantityPassed: quantityToAdd, options });
+    let finalQuantityInCart = 0;
+    let actualQuantityAdded = 0;
+    let statusMessage = "";
+
     setCartItems(prevItems => {
-      console.log('[CartContext addToCart] prevItems:', prevItems, 'quantityPassed to updater:', quantity);
-      const itemKey = generateCartItemKey(product._id, options);
+      console.log('[CartContext addToCart] prevItems:', prevItems, 'quantityPassed to updater:', quantityToAdd);
+      const itemKey = generateCartItemKey(product._id, options); // product._id is correct here
       const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.productId, item.options) === itemKey);
 
       if (existingItemIndex > -1) {
+        const currentItem = prevItems[existingItemIndex];
+        const newTotalQuantity = currentItem.quantity + quantityToAdd;
+        const clampedQuantity = Math.min(newTotalQuantity, MAX_QUANTITY_PER_ORDER);
+        actualQuantityAdded = clampedQuantity - currentItem.quantity;
+        finalQuantityInCart = clampedQuantity;
+        console.log(`[CartContext addToCart] Updating existing item. Prev qty: ${currentItem.quantity}, Adding: ${quantityToAdd}, New total potential: ${newTotalQuantity}, Clamped to: ${finalQuantityInCart}`);
+        
+        if (clampedQuantity < newTotalQuantity) {
+          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} reached. ${actualQuantityAdded > 0 ? `${actualQuantityAdded} item(s) added.` : 'No items added.'}`;
+        } else if (actualQuantityAdded > 0) {
+          statusMessage = `${actualQuantityAdded} item(s) added to cart.`;
+        } else if (quantityToAdd > 0) { // Tried to add positive, but none were added (already at max)
+          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} already in cart. No items added.`;
+        }
+
         // Item already exists, map to a new array
         return prevItems.map((item, index) => {
           if (index === existingItemIndex) {
-            console.log(`[CartContext addToCart] Updating existing item. Prev qty: ${item.quantity}, Adding: ${quantity}`);
-            return { ...item, quantity: item.quantity + quantity }; // Increment quantity
-          }
+            return { ...item, quantity: finalQuantityInCart }; 
+          } 
           return item;
         });
       } else {
-        // Item does not exist, add as new
-        console.log(`[CartContext addToCart] Adding new item. Quantity: ${quantity}`);
+        actualQuantityAdded = Math.min(quantityToAdd, MAX_QUANTITY_PER_ORDER);
+        finalQuantityInCart = actualQuantityAdded;
+        console.log(`[CartContext addToCart] Adding new item. Requested: ${quantityToAdd}, Adding: ${finalQuantityInCart}`);
+        statusMessage = `${finalQuantityInCart} item(s) added to cart.`;
+        if (quantityToAdd > finalQuantityInCart) {
+          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} reached. ${finalQuantityInCart} item(s) added.`;
+        }
+
         const newCartItem: CartItem = {
           productId: product._id,
           name: product.name,
           price: product.price,
           image: product.image,
           slug: product.slug,
-          quantity: quantity,
-          options: options,
+          quantity: finalQuantityInCart,
+          options: options, // options should be passed here
           stripePriceId: product.stripePriceId,
         };
         return [...prevItems, newCartItem];
       }
     });
+    return { success: actualQuantityAdded >= 0, quantityAdded: actualQuantityAdded, finalQuantity: finalQuantityInCart, message: statusMessage };
   };
 
   // removeFromCart and updateQuantity will also need to use string productId

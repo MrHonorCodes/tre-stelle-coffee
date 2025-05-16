@@ -76,7 +76,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Props
   }
 
   return (
-    <main className="min-h-screen bg-soft-white pt-24 pb-12">
+    <main className="min-h-screen bg-soft-white pt-36 pb-12">
       <FadeIn>
         <div className="container mx-auto px-4">
           <ProductDisplayClient product={product} />

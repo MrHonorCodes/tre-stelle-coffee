@@ -1,13 +1,25 @@
 import Stripe from 'stripe';
 import { NextRequest, NextResponse } from 'next/server';
 
-// Initialize Stripe with the secret key
-// Ensure STRIPE_SECRET_KEY is set in your .env.local
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-04-30.basil', // Use the latest API version
+// Ensure STRIPE_SECRET_KEY is set in your .env.local or Vercel environment variables
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+
+if (!stripeSecretKey) {
+  console.error("Stripe secret key is not set. Check your .env.local or Vercel environment variables.");
+  // Critical: Throw an error during module initialization if the key is missing.
+  // This will make the build fail explicitly if the key isn't configured in Vercel.
+  throw new Error("Stripe secret key is not set. Deployment will fail.");
+}
+
+// Initialize Stripe
+const stripe = new Stripe(stripeSecretKey, { // No need for '!' if we throw error above
+  apiVersion: '2025-04-30.basil', 
 });
 
 export async function POST(req: NextRequest) {
+  // The stripe instance is initialized at the module level.
+  // If stripeSecretKey was missing, the module would have already failed to load.
+  
   if (req.method !== 'POST') {
     return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });
   }
@@ -47,8 +59,8 @@ export async function POST(req: NextRequest) {
           shipping_rate: 'shr_1RPTqYCmUENvPwLMop0pjdPF',
         },
       ],
-      success_url: `${origin}/cart?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace {CHECKOUT_SESSION_ID}
-      cancel_url: `${origin}/cart`, // Changed to redirect back to the cart page
+      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace {CHECKOUT_SESSION_ID}
+      cancel_url: `${origin}/checkout/cancel`, // Changed to redirect to a dedicated cancel page
       // automatic_tax: { enabled: true }, // Optional: Enable automatic tax calculation if configured in Stripe
     });
 

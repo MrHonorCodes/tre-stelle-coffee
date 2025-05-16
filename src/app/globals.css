@@ -147,3 +147,20 @@ a.bg-secondary.text-primary:hover {
   animation: simpleFadeIn 0.7s ease-out forwards;
 }
 
+/* Product Card Button Hover (within a .group Link) */
+.group:hover .product-view-details-button {
+  background-color: var(--color-primary) !important;
+  color: var(--color-light-text) !important;
+}
+
+/* Cart Page - Proceed to Checkout Button */
+.cart-proceed-checkout-button {
+  cursor: pointer; /* Add pointer cursor */
+}
+
+.cart-proceed-checkout-button:hover:not(:disabled) { /* Apply hover only if not disabled */
+  background-color: transparent !important;
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important; /* Border color remains primary */
+}
+

@@ -139,10 +139,11 @@ export default async function ShopPage() {
                       <div className="mt-auto w-full">
                         <span className="text-2xl font-bold text-primary mt-4 block">${product.price ? product.price.toFixed(2) : 'N/A'}</span>
                         <button
-                          className="mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
-                          disabled={true}
+                          // className="mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
+                          // disabled={true}
+                          className="product-view-details-button mt-2 px-4 py-2 border-2 border-primary text-primary rounded-md font-semibold transition-all duration-300 w-full cursor-pointer"
                         >
-                          View Options / Add to Cart
+                          View Details
                         </button>
                       </div>
                     </div>

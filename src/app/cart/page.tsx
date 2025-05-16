@@ -27,6 +27,8 @@ function urlFor(source: SanityImageType) {
 // getProductDetails is no longer needed
 // function getProductDetails(id: number): Product | undefined { ... }
 
+const MAX_QUANTITY_PER_ORDER = 5; // Same as in ProductDisplayClient for consistency
+
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,11 +50,11 @@ export default function CartPage() {
   const total = subtotal + SHIPPING_RATE;
 
   const handleQuantityChange = (productId: string, newQuantity: number, options?: { [key: string]: string }) => {
-    console.log('[CartPage handleQuantityChange] Called with:', { productId, newQuantity, options });
-    if (newQuantity < 1) {
+    const clampedQuantity = Math.max(0, Math.min(newQuantity, MAX_QUANTITY_PER_ORDER));
+    if (clampedQuantity === 0) { // If trying to go below 1, or newQuantity was 0
       removeFromCart(productId, options); 
     } else {
-      updateQuantity(productId, newQuantity, options);
+      updateQuantity(productId, clampedQuantity, options);
     }
   };
 
@@ -149,8 +151,9 @@ export default function CartPage() {
                           <span className="px-3 py-1 border-l border-r border-gray-300 text-center text-sm w-10">{item.quantity}</span>
                           <button 
                             onClick={() => handleQuantityChange(item.productId, item.quantity + 1, item.options)}
-                            className="px-2 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-r-md"
+                            className="px-2 py-1 text-lg text-gray-600 hover:bg-gray-100 rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed"
                             aria-label="Increase quantity"
+                            disabled={item.quantity >= MAX_QUANTITY_PER_ORDER}
                           >+</button>
                         </div>
                         <span className="text-lg font-semibold text-primary w-20 text-right">
@@ -205,7 +208,7 @@ export default function CartPage() {
                   <button
                     onClick={handleCheckout}
                     disabled={isLoading || detailedCartItems.length === 0}
-                    className="mt-6 block w-full text-center px-6 py-3 bg-primary text-light rounded-md font-semibold text-lg transition-all duration-300 hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cart-proceed-checkout-button mt-6 block w-full text-center px-6 py-3 bg-primary text-light rounded-md font-semibold text-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed border-2 border-primary"
                   >
                     {isLoading ? 'Processing...' : 'Proceed to Checkout'}
                   </button>

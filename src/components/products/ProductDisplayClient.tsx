@@ -38,6 +38,8 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<'success' | 'warning' | 'error'>('success');
 
   const handleQuantityChange = (amount: number) => {
     setQuantity(prev => {
@@ -53,27 +55,49 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
     setIsAdding(true);
 
     // Log before calling addToCart
-    console.log(`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity being passed: ${quantity}`);
-    addToCart(product, quantity); 
+    console.log(`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity to add: ${quantity}`);
+    const result = addToCart(product, quantity); 
+
+    setToastMessage(result.message || (result.success ? `${product.name} updated in cart.` : "Could not add item to cart."));
+    
+    if (result.quantityAdded === quantity && result.finalQuantity <= MAX_QUANTITY_PER_ORDER && quantity > 0) {
+      setToastType('success');
+    } else if (result.quantityAdded >= 0 && result.quantityAdded < quantity) { // Used >= 0 for quantityAdded in case none were added but it was a clamp.
+      setToastType('warning'); // Partially added due to max quantity or already at max
+    } else if (!result.success) {
+      setToastType('error');
+    }
 
     setShowConfirmation(true);
     setTimeout(() => {
         setIsAdding(false);
         setShowConfirmation(false);
-        setQuantity(1); // Reset quantity after adding
-    }, 2000);
+        // Only reset quantity if it was a full success where all requested items were added.
+        if (toastType === 'success' && result.quantityAdded === quantity) { 
+          setQuantity(1); 
+        }
+    }, 3000); // Increased timeout for toast visibility
   };
   
   // Simple check for out of stock - replace with actual stock logic if available from Sanity
   const isOutOfStock = false; // Placeholder: product.stock === 0;
 
+  const toastBgColor = toastType === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 
+                       toastType === 'warning' ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 
+                       'bg-red-100 border-red-400 text-red-700';
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
       {/* Confirmation Message */} 
       {showConfirmation && (
-          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded shadow-lg z-50 transition-opacity duration-300 ease-in-out">
-              <strong className="font-bold">Success!</strong>
-              <span className="block sm:inline"> {product.name} added to cart.</span>
+          <div className={`fixed bottom-10 left-1/2 -translate-x-1/2 ${toastBgColor} px-4 py-3 rounded shadow-lg z-50 transition-opacity duration-300 ease-in-out`}>
+              <strong className="font-bold">{toastType === 'success' ? 'Success!' : toastType === 'warning' ? 'Note:' : 'Error!'}</strong>
+              <span className="block sm:inline ml-1"> {toastMessage}</span>
+              {toastType === 'success' && (
+                <Link href="/cart" className="ml-2 underline hover:text-green-900 font-semibold">
+                  View Cart
+                </Link>
+              )}
           </div>
       )}
 
