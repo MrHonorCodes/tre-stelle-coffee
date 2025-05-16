@@ -1,10 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { revalidateTag, revalidatePath } from 'next/cache';
 import { parseBody } from 'next-sanity/webhook';
+
+// Define the expected body structure from the webhook (including slug for products)
+interface SanityWebhookBody {
+  _type?: string;
+  slug?: { current: string }; // Assuming slug is an object with a current property
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const { body, isValidSignature } = await parseBody<{ _type?: string }>( // _type is optional for test pings
+    const { body, isValidSignature } = await parseBody<SanityWebhookBody>(
       req,
       process.env.SANITY_WEBHOOK_SECRET 
     );
@@ -13,23 +19,30 @@ export async function POST(req: NextRequest) {
       return new Response('Invalid Sanity webhook signature', { status: 401 });
     }
 
-    // If the body is null or _type is missing, it might be a test ping from Sanity
     if (!body || !body._type) {
       console.log('Webhook received, likely a test ping or missing _type. Body:', body);
-      // Sanity test pings might send a null body or a body without _type
-      // As long as the signature is valid, we can acknowledge it as a successful ping.
       return NextResponse.json({ status: 200, message: 'Webhook acknowledged (test ping or missing _type)' });
     }
 
-    // If we have a body and a _type, proceed with revalidation
+    // Revalidate the general tag for the document type
     revalidateTag(body._type);
     console.log(`Revalidated tag: ${body._type}`);
+
+    let pathRevalidated = false;
+    // If it's a product and a slug is provided, also revalidate the specific product path
+    if (body._type === 'product' && body.slug?.current) {
+      const productPath = `/products/${body.slug.current}`;
+      revalidatePath(productPath);
+      console.log(`Revalidated path: ${productPath}`);
+      pathRevalidated = true;
+    }
 
     return NextResponse.json({
       status: 200,
       revalidated: true,
+      tagRevalidated: body._type,
+      pathRevalidated: pathRevalidated ? (body._type === 'product' && body.slug?.current ? `/products/${body.slug.current}` : 'N/A') : 'No specific path revalidated by slug',
       now: Date.now(),
-      message: `Revalidated tag: ${body._type}`,
     });
   } catch (error: unknown) {
     let errorMessage = 'An unknown error occurred';
