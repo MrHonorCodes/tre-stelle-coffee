@@ -3,6 +3,7 @@
 // Client-specific hooks and components are removed from here and will be in a child client component
 // import { useEffect, useState } from 'react';
 import Link from 'next/link';
+// import StripeCheckoutButton from '../../components/products/StripeCheckoutButton'; // Removed
 import FadeIn from '../../../components/ui/FadeIn'; // FadeIn might be okay if it doesn't use client hooks directly
 // import ScrollReveal from '../../../components/ui/ScrollReveal'; // Client component
 // import productsData from '../../data/products.json'; // Data now from Sanity
@@ -137,8 +138,8 @@ export default async function ShopPage() {
                       
                       <div className="mt-auto w-full">
                         <span className="text-2xl font-bold text-primary mt-4 block">${product.price ? product.price.toFixed(2) : 'N/A'}</span>
-                        <button 
-                          className={`mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed'}`}
+                        <button
+                          className="mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
                           disabled={true}
                         >
                           View Options / Add to Cart

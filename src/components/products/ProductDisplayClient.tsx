@@ -52,13 +52,9 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
     if (!product) return;
     setIsAdding(true);
 
-    // Assuming addToCart in CartContext will be updated to accept the product object 
-    // or product._id (string) and quantity. For now, passing the whole product object.
-    // If CartContext strictly needs product._id (string):
-    // addToCart(product._id, quantity);
-    // If CartContext can take the whole object:
+    // Log before calling addToCart
+    console.log(`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity being passed: ${quantity}`);
     addToCart(product, quantity); 
-    console.log(`Added ${quantity} of ${product.name} (ID: ${product._id}) to cart.`);
 
     setShowConfirmation(true);
     setTimeout(() => {

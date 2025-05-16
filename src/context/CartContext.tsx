@@ -78,18 +78,24 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // addToCart function updated
   const addToCart = (product: ProductForCart, quantity: number, options?: { [key: string]: string }) => {
-    // console.log('[CartContext:addToCart] Received product:', product, 'quantity:', quantity, 'options:', options); // Log received parameters
+    console.log('[CartContext addToCart] Called with:', { product, quantityPassed: quantity, options });
     setCartItems(prevItems => {
-      // console.log('[CartContext:addToCart] prevItems:', prevItems); // Log prevItems
+      console.log('[CartContext addToCart] prevItems:', prevItems, 'quantityPassed to updater:', quantity);
       const itemKey = generateCartItemKey(product._id, options);
       const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.productId, item.options) === itemKey);
 
       if (existingItemIndex > -1) {
-        const updatedItems = [...prevItems];
-        updatedItems[existingItemIndex].quantity += quantity;
-        return updatedItems;
+        // Item already exists, map to a new array
+        return prevItems.map((item, index) => {
+          if (index === existingItemIndex) {
+            console.log(`[CartContext addToCart] Updating existing item. Prev qty: ${item.quantity}, Adding: ${quantity}`);
+            return { ...item, quantity: item.quantity + quantity }; // Increment quantity
+          }
+          return item;
+        });
       } else {
-        // Create a new cart item from the product details
+        // Item does not exist, add as new
+        console.log(`[CartContext addToCart] Adding new item. Quantity: ${quantity}`);
         const newCartItem: CartItem = {
           productId: product._id,
           name: product.name,
@@ -115,14 +121,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateQuantity = (productId: string, quantity: number, options?: { [key: string]: string }) => {
+    console.log('[CartContext updateQuantity] Called with:', { productId, newQuantity: quantity, options });
     setCartItems(prevItems => {
       const itemKey = generateCartItemKey(productId, options);
+      console.log('[CartContext updateQuantity] prevItems:', prevItems, 'targetKey:', itemKey, 'newQuantity:', quantity);
       const updatedItems = prevItems.map(item => {
         if (generateCartItemKey(item.productId, item.options) === itemKey) {
+          console.log('[CartContext updateQuantity] Updating item:', item, 'to quantity:', quantity);
           return { ...item, quantity: Math.max(0, quantity) };
         }
         return item;
       });
+      console.log('[CartContext updateQuantity] updatedItems before filter:', updatedItems);
       return updatedItems.filter(item => item.quantity > 0);
     });
   };

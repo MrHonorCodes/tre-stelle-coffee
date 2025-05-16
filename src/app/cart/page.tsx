@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link';
+import { useState } from 'react'; // Added for loading/error state
 import NextImage from 'next/image'; // Renamed to avoid conflict with Sanity Image type
 import { useCart } from '../../context/CartContext';
 // import productsData from '../../data/products.json'; // No longer needed
@@ -28,6 +29,8 @@ function urlFor(source: SanityImageType) {
 
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const SHIPPING_RATE = 5.00;
   // const SHIPPING_DESTINATION = "Texas"; // Not used in current JSX, can be re-added if needed
@@ -45,10 +48,48 @@ export default function CartPage() {
   const total = subtotal + SHIPPING_RATE;
 
   const handleQuantityChange = (productId: string, newQuantity: number, options?: { [key: string]: string }) => {
+    console.log('[CartPage handleQuantityChange] Called with:', { productId, newQuantity, options });
     if (newQuantity < 1) {
       removeFromCart(productId, options); 
     } else {
       updateQuantity(productId, newQuantity, options);
+    }
+  };
+
+  const handleCheckout = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    const lineItems = cartItems
+      .filter(item => item.stripePriceId) // Ensure item has a stripePriceId
+      .map(item => ({
+        priceId: item.stripePriceId!, // Assert stripePriceId is present due to filter
+        quantity: item.quantity,
+      }));
+
+    if (lineItems.length === 0) {
+      setError("No items in the cart are available for checkout.");
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lineItems }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create Stripe session");
+      }
+
+      const { url } = await response.json();
+      window.location.href = url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred during checkout.");
+      setIsLoading(false);
     }
   };
 
@@ -161,12 +202,14 @@ export default function CartPage() {
                   <p className="text-xs text-gray-500 mt-4 text-center">
                     * Currently shipping only to addresses within Texas. *
                   </p>
-                  <Link 
-                    href="/checkout" 
-                    className="mt-6 block w-full text-center px-6 py-3 bg-primary text-light rounded-md font-semibold text-lg transition-all duration-300 hover:bg-primary/80"
+                  <button
+                    onClick={handleCheckout}
+                    disabled={isLoading || detailedCartItems.length === 0}
+                    className="mt-6 block w-full text-center px-6 py-3 bg-primary text-light rounded-md font-semibold text-lg transition-all duration-300 hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Proceed to Checkout
-                  </Link>
+                    {isLoading ? 'Processing...' : 'Proceed to Checkout'}
+                  </button>
+                  {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
                 </div>
               </div>
             </div>
