@@ -28,7 +28,7 @@ interface SanityProduct extends SanityDocument {
   _id: string;
   name: string;
   slug: { current: string };
-  image: Image; // Main product image
+  images: Image[]; // Changed from image: Image to images: Image[]
   // Add other fields from your Sanity productType schema as needed
   // For example:
   // details?: any[]; // For Portable Text
@@ -42,7 +42,7 @@ const PRODUCTS_QUERY = `*[_type == "product"]{
   _id,
   name,
   slug,
-  image,
+  images, // Changed from image to images
   price,
   category,
   stripePriceId
@@ -121,9 +121,9 @@ export default async function ShopPage() {
                   <div className={`bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl relative flex flex-col h-full`}>
                     {/* Out of Stock badge - logic will be in client component */}
                     <div className="h-64 overflow-hidden">
-                      {product.image && (
+                      {product.images && product.images[0] && ( // Check if images array exists and has at least one image
                         <img 
-                          src={urlFor(product.image).width(400).height(400).url()}
+                          src={urlFor(product.images[0]).width(400).height(400).url()} // Use the first image from the array
                           alt={product.name}
                           className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                           width={400}
