@@ -5,7 +5,7 @@ import Link from 'next/link';
 import FadeIn from '../../../../components/ui/FadeIn';
 import ProductDisplayClient from '../../../components/products/ProductDisplayClient';
 
-export const dynamic = 'force-dynamic';
+// export const dynamic = 'force-dynamic';
 
 // Define the Sanity Product Type for this server component
 interface SanityProduct extends SanityDocument {

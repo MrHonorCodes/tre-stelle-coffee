@@ -52,7 +52,11 @@ const PRODUCTS_QUERY = `*[_type == "product"]{
 // Client-side interactivity (like filters, add to cart state) will need to be moved
 // to a separate client component that receives data as props.
 export default async function ShopPage() {
-  const products = await client.fetch<SanityProduct[]>(PRODUCTS_QUERY);
+  const products = await client.fetch<SanityProduct[]>(
+    PRODUCTS_QUERY,
+    {},
+    { next: { tags: ['product'] } }
+  );
 
   // All client-side state and effects (useState, useEffect, filtering logic, cart logic) 
   // have been removed. This component now only fetches data and passes it to the JSX.
