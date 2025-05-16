@@ -74,6 +74,10 @@ body {
   background-color: var(--color-secondary-light);
 }
 
+.bg-secondary-darker {
+  background-color: var(--color-secondary-darker);
+}
+
 .text-secondary-darker {
   color: var(--color-secondary-darker);
 }
@@ -162,5 +166,10 @@ a.bg-secondary.text-primary:hover {
   background-color: transparent !important;
   color: var(--color-primary) !important;
   border-color: var(--color-primary) !important; /* Border color remains primary */
+}
+
+/* Back to Top Button Hover */
+.back-to-top-button:hover {
+  background-color: var(--color-secondary-darker);
 }
 
