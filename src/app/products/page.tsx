@@ -2,26 +2,20 @@
 // 'use client'; // Removed: This page is a Server Component for data fetching
 // Client-specific hooks and components are removed from here and will be in a child client component
 // import { useEffect, useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link'; // No longer used
 // import StripeCheckoutButton from '../../components/products/StripeCheckoutButton'; // Removed
-import FadeIn from '../../../components/ui/FadeIn'; // FadeIn might be okay if it doesn't use client hooks directly
+// import FadeIn from '../../../components/ui/FadeIn'; // FadeIn might be okay if it doesn't use client hooks directly
 // import ScrollReveal from '../../../components/ui/ScrollReveal'; // Client component
 // import productsData from '../../data/products.json'; // Data now from Sanity
 // import { useCart } from '../../context/CartContext'; // Client hook
 import { type SanityDocument } from 'next-sanity'; // For typing Sanity documents
 import { client } from '../../sanity/lib/client'; // Your Sanity client
-import imageUrlBuilder from '@sanity/image-url'; // For Sanity images
+// import imageUrlBuilder from '@sanity/image-url'; // For Sanity images
 import type { Image } from 'sanity'; // Sanity image type
 // PortableText can be added later when we render rich text details
 // import { PortableText } from 'next-sanity';
-
-// Configure the image URL builder
-const { projectId, dataset } = client.config();
-const builder = imageUrlBuilder({ projectId: projectId || '', dataset: dataset || '' });
-
-function urlFor(source: Image) {
-  return builder.image(source);
-}
+import ProductListWithFilter from '../../components/products/ProductListWithFilter';
+import FadeIn from '../../../components/ui/FadeIn';
 
 // Define the Sanity Product Type (adjust based on your Sanity schema)
 interface SanityProduct extends SanityDocument {
@@ -105,60 +99,8 @@ export default async function ShopPage() {
             </FadeIn>
           </div>
 
-          {/* Category Filters - Placeholder */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <p className="text-gray-500">Category filters will be here (Client Component)</p>
-          </div>
-
-          {/* Products Grid - Responsive gap */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {products.map((product) => {
-              // Simplified product card - interactivity removed for now
-              const isOutOfStock = product.isOutOfStock || false;
-              // const hasOptions = ...; // Logic for options will be in client component
-              // const isAdding = ...; // Logic for adding state will be in client component
-              return (
-                // ScrollReveal was here - will be in client component
-                <Link key={product._id} href={`/products/${product.slug.current}`} className={`block group h-full ${isOutOfStock ? 'opacity-70' : ''}`}>
-                  <div className={`bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl relative flex flex-col h-full`}>
-                    {isOutOfStock && (
-                      <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full z-10">
-                        OUT OF STOCK
-                      </div>
-                    )}
-                    <div className="h-64 overflow-hidden">
-                      {product.images && product.images[0] && ( // Check if images array exists and has at least one image
-                        <img 
-                          src={urlFor(product.images[0]).width(400).height(400).url()} // Use the first image from the array
-                          alt={product.name}
-                          className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                          width={400}
-                          height={400}
-                        />
-                      )}
-                    </div>
-                    <div className="p-6 text-center flex flex-col items-center flex-grow">
-                      <span className="text-sm text-gray-500">{product.category || 'Coffee'}</span>
-                      <h3 className="text-xl font-bold text-primary my-2 group-hover:text-secondary transition-colors">{product.name}</h3>
-                      {/* Product description (PortableText) can be added here or on detail page */}
-                      
-                      <div className="mt-auto w-full">
-                        <span className="text-2xl font-bold text-primary mt-4 block">${product.price ? product.price.toFixed(2) : 'N/A'}</span>
-                        <button
-                          className={`product-view-details-button mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full cursor-pointer 
-                                      ${isOutOfStock ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed' 
-                                                     : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
-                          disabled={isOutOfStock} // Disable button if out of stock
-                        >
-                          {isOutOfStock ? 'Out of Stock' : 'View Details'}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          {/* Category Filters and Products Grid (Client Component) */}
+          <ProductListWithFilter products={products} />
         </div>
       </section>
 
