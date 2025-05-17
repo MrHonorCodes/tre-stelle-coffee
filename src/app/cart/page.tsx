@@ -115,9 +115,9 @@ export default function CartPage() {
                   // Use item.productId and options for a unique key
                   <div key={generateCartItemKeyInternal(item.productId, item.options)} className="bg-white p-4 rounded-lg shadow-md flex flex-col md:flex-row items-center gap-4">
                     <div className="w-24 h-24 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
-                      {item.image && urlFor(item.image) ? (
+                      {item.images && item.images.length > 0 && urlFor(item.images[0]) ? (
                         <NextImage 
-                          src={urlFor(item.image)!.width(96).height(96).fit('crop').url()}
+                          src={urlFor(item.images[0])!.width(96).height(96).fit('crop').url()}
                           alt={item.name}
                           width={96}
                           height={96}

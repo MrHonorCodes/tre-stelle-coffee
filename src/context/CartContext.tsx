@@ -13,7 +13,7 @@ interface ProductForCart extends SanityDocument { // Or use your existing Sanity
   _id: string;
   name: string;
   price: number;
-  image?: SanityImageType; // Optional: for displaying image in cart
+  images?: SanityImageType[]; // Changed from image?: SanityImageType
   // Add other fields you might need in the cart, like slug for linking back
   slug?: { current: string }; 
   stripePriceId?: string;
@@ -25,7 +25,7 @@ type CartItem = {
   productId: string; // Changed from id: number
   name: string;
   price: number;
-  image?: SanityImageType; // To display in cart summary
+  images?: SanityImageType[]; // Changed from image?: SanityImageType
   slug?: { current: string }; // For linking from cart
   quantity: number;
   options?: { [key: string]: string };
@@ -60,6 +60,7 @@ const generateCartItemKey = (productId: string, options?: { [key: string]: strin
 };
 
 const MAX_QUANTITY_PER_ORDER = 5; // Define here or import from shared constants
+const MAX_TOTAL_ITEMS_IN_CART = 50; // Example value, adjust as needed
 
 // --- Provider Component ---
 export const CartProvider = ({ children }: { children: ReactNode }) => {
@@ -79,63 +80,87 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [cartItems]);
 
   // addToCart function updated
-  const addToCart = (product: ProductForCart, quantityToAdd: number, options?: { [key: string]: string }): { success: boolean; quantityAdded: number; finalQuantity: number; message?: string } => {
-    console.log('[CartContext addToCart] Called with:', { product, quantityPassed: quantityToAdd, options });
-    let finalQuantityInCart = 0;
-    let actualQuantityAdded = 0;
-    let statusMessage = "";
+  const addToCart = (product: ProductForCart, quantityToAdd: number = 1, selectedOptions?: { [key: string]: string }): { success: boolean; message: string; quantityAdded: number; finalQuantity: number } => {
+    let resultState = {
+      success: false,
+      message: "Item could not be added to cart.",
+      quantityAdded: 0,
+      finalQuantity: 0
+    };
 
     setCartItems(prevItems => {
-      console.log('[CartContext addToCart] prevItems:', prevItems, 'quantityPassed to updater:', quantityToAdd);
-      const itemKey = generateCartItemKey(product._id, options); // product._id is correct here
-      const existingItemIndex = prevItems.findIndex(item => generateCartItemKey(item.productId, item.options) === itemKey);
+      const existingItemIndex = prevItems.findIndex(item => item.productId === product._id && JSON.stringify(item.options) === JSON.stringify(selectedOptions || {}));
+      const newItems = [...prevItems];
 
-      if (existingItemIndex > -1) {
-        const currentItem = prevItems[existingItemIndex];
-        const newTotalQuantity = currentItem.quantity + quantityToAdd;
-        const clampedQuantity = Math.min(newTotalQuantity, MAX_QUANTITY_PER_ORDER);
-        actualQuantityAdded = clampedQuantity - currentItem.quantity;
-        finalQuantityInCart = clampedQuantity;
-        console.log(`[CartContext addToCart] Updating existing item. Prev qty: ${currentItem.quantity}, Adding: ${quantityToAdd}, New total potential: ${newTotalQuantity}, Clamped to: ${finalQuantityInCart}`);
+      if (existingItemIndex !== -1) {
+        const existingItem = newItems[existingItemIndex];
+        const newQuantity = Math.min(existingItem.quantity + quantityToAdd, MAX_QUANTITY_PER_ORDER);
+        const quantityChange = newQuantity - existingItem.quantity;
         
-        if (clampedQuantity < newTotalQuantity) {
-          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} reached. ${actualQuantityAdded > 0 ? `${actualQuantityAdded} item(s) added.` : 'No items added.'}`;
-        } else if (actualQuantityAdded > 0) {
-          statusMessage = `${actualQuantityAdded} item(s) added to cart.`;
-        } else if (quantityToAdd > 0) { // Tried to add positive, but none were added (already at max)
-          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} already in cart. No items added.`;
+        if (quantityChange >= 0) { // If quantity can be increased or stays the same (at max)
+          newItems[existingItemIndex] = {
+            ...existingItem,
+            quantity: newQuantity,
+            images: product.images || existingItem.images // Preserve or update images
+          };
+          resultState = {
+            success: true,
+            message: quantityChange < quantityToAdd && quantityToAdd > 0 ?
+              `Only ${quantityChange} more ${product.name}(s) could be added (max ${MAX_QUANTITY_PER_ORDER} per item). Total: ${newQuantity}` :
+              `${product.name} quantity updated to ${newQuantity}.`,
+            quantityAdded: quantityChange,
+            finalQuantity: newQuantity
+          };
+        } else {
+           // This case should ideally not be hit if quantityToAdd is positive due to Math.min
+           resultState = {
+            success: false,
+            message: `Could not update ${product.name} quantity.`,
+            quantityAdded: 0,
+            finalQuantity: existingItem.quantity
+          };
         }
-
-        // Item already exists, map to a new array
-        return prevItems.map((item, index) => {
-          if (index === existingItemIndex) {
-            return { ...item, quantity: finalQuantityInCart }; 
-          } 
-          return item;
-        });
-      } else {
-        actualQuantityAdded = Math.min(quantityToAdd, MAX_QUANTITY_PER_ORDER);
-        finalQuantityInCart = actualQuantityAdded;
-        console.log(`[CartContext addToCart] Adding new item. Requested: ${quantityToAdd}, Adding: ${finalQuantityInCart}`);
-        statusMessage = `${finalQuantityInCart} item(s) added to cart.`;
-        if (quantityToAdd > finalQuantityInCart) {
-          statusMessage = `Max quantity of ${MAX_QUANTITY_PER_ORDER} reached. ${finalQuantityInCart} item(s) added.`;
+      } else { // Adding a new item
+        const currentTotalQuantityInCart = newItems.reduce((sum, item) => sum + item.quantity, 0);
+        if (currentTotalQuantityInCart + quantityToAdd <= MAX_TOTAL_ITEMS_IN_CART) {
+          const quantityForNewItem = Math.min(quantityToAdd, MAX_QUANTITY_PER_ORDER);
+          
+          newItems.push({
+            productId: product._id,
+            name: product.name,
+            price: product.price,
+            images: product.images, // Store the images array
+            slug: product.slug,
+            quantity: quantityForNewItem,
+            options: selectedOptions || {},
+            stripePriceId: product.stripePriceId,
+          });
+          resultState = {
+            success: true,
+            message: `${quantityForNewItem} ${product.name}(s) added to cart.` + 
+                     (quantityForNewItem < quantityToAdd ? ` Max ${MAX_QUANTITY_PER_ORDER} per item.` : ''),
+            quantityAdded: quantityForNewItem,
+            finalQuantity: quantityForNewItem
+          };
+        } else {
+          resultState = {
+            success: false,
+            message: `Cannot add ${product.name}. Adding ${quantityToAdd} items would exceed max ${MAX_TOTAL_ITEMS_IN_CART} items in cart.`,
+            quantityAdded: 0,
+            finalQuantity: 0 // Or current quantity of this item if it were somehow findable, but it's a new item scenario
+          };
         }
-
-        const newCartItem: CartItem = {
-          productId: product._id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          slug: product.slug,
-          quantity: finalQuantityInCart,
-          options: options, // options should be passed here
-          stripePriceId: product.stripePriceId,
-        };
-        return [...prevItems, newCartItem];
       }
+      
+      // The updater must return the new state array.
+      // The side effect (updating resultState) is okay here because it's used by the calling component.
+      return newItems; 
     });
-    return { success: actualQuantityAdded >= 0, quantityAdded: actualQuantityAdded, finalQuantity: finalQuantityInCart, message: statusMessage };
+
+    // This return provides immediate feedback to the calling component (e.g., ProductDisplayClient).
+    // Note: `resultState` is determined *synchronously* within the `setCartItems` planning phase,
+    // but the actual `cartItems` state update is asynchronous. This is a common pattern for immediate UI feedback.
+    return resultState;
   };
 
   // removeFromCart and updateQuantity will also need to use string productId

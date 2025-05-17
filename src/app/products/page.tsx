@@ -35,6 +35,7 @@ interface SanityProduct extends SanityDocument {
   price: number;
   category?: string; // Assuming category is a string field
   stripePriceId?: string;
+  isOutOfStock?: boolean; // Added isOutOfStock
   // stock related fields if managed in Sanity
 }
 
@@ -45,7 +46,8 @@ const PRODUCTS_QUERY = `*[_type == "product"]{
   images, // Changed from image to images
   price,
   category,
-  stripePriceId
+  stripePriceId,
+  isOutOfStock // Added isOutOfStock
   // details, // Fetch details if you plan to display them on this list page
 }`;
 
@@ -112,14 +114,18 @@ export default async function ShopPage() {
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {products.map((product) => {
               // Simplified product card - interactivity removed for now
-              // const isOutOfStock = ...; // Logic for stock will be in client component
+              const isOutOfStock = product.isOutOfStock || false;
               // const hasOptions = ...; // Logic for options will be in client component
               // const isAdding = ...; // Logic for adding state will be in client component
               return (
                 // ScrollReveal was here - will be in client component
-                <Link key={product._id} href={`/products/${product.slug.current}`} className="block group h-full">
+                <Link key={product._id} href={`/products/${product.slug.current}`} className={`block group h-full ${isOutOfStock ? 'opacity-70' : ''}`}>
                   <div className={`bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl relative flex flex-col h-full`}>
-                    {/* Out of Stock badge - logic will be in client component */}
+                    {isOutOfStock && (
+                      <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-full z-10">
+                        OUT OF STOCK
+                      </div>
+                    )}
                     <div className="h-64 overflow-hidden">
                       {product.images && product.images[0] && ( // Check if images array exists and has at least one image
                         <img 
@@ -139,11 +145,12 @@ export default async function ShopPage() {
                       <div className="mt-auto w-full">
                         <span className="text-2xl font-bold text-primary mt-4 block">${product.price ? product.price.toFixed(2) : 'N/A'}</span>
                         <button
-                          // className="mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed"
-                          // disabled={true}
-                          className="product-view-details-button mt-2 px-4 py-2 border-2 border-primary text-primary rounded-md font-semibold transition-all duration-300 w-full cursor-pointer"
+                          className={`product-view-details-button mt-2 px-4 py-2 border-2 rounded-md font-semibold transition-all duration-300 w-full cursor-pointer 
+                                      ${isOutOfStock ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed' 
+                                                     : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
+                          disabled={isOutOfStock} // Disable button if out of stock
                         >
-                          View Details
+                          {isOutOfStock ? 'Out of Stock' : 'View Details'}
                         </button>
                       </div>
                     </div>

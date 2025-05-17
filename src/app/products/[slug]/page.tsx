@@ -10,12 +10,25 @@ interface SanityProduct extends SanityDocument {
   _id: string;
   name: string;
   slug: { current: string };
-  image: SanityImageType;
+  images: SanityImageType[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   details?: any[];
   price: number;
   category?: string;
   stripePriceId?: string;
+  isOutOfStock?: boolean;
+  reviews?: SanityReview[];
+}
+
+// Define the Sanity Review Type for this server component
+interface SanityReview extends SanityDocument {
+  _id: string;
+  rating: number;
+  title?: string;
+  comment: string;
+  authorName: string;
+  submittedAt: string;
+  // We don't fetch authorEmail or isApproved to the client for privacy/security
 }
 
 // Explicitly define Props for the page component
@@ -28,11 +41,20 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   _id,
   name,
   slug,
-  image,
+  images,
   details,
   price,
   category,
-  stripePriceId
+  stripePriceId,
+  isOutOfStock,
+  "reviews": *[_type == "review" && references(^._id) && isApproved == true]{
+    _id,
+    rating,
+    title,
+    comment,
+    authorName,
+    submittedAt
+  } | order(submittedAt desc)
 }`;
 
 export async function generateMetadata({ params: paramsPromise }: { params: Promise<{ slug: string }> }) {

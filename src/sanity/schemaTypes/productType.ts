@@ -64,6 +64,22 @@ export const productType = defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'isOutOfStock',
+      title: 'Out of Stock',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Check this box if the product is currently out of stock.',
+    }),
+    defineField({
+      name: 'reviews',
+      title: 'Reviews',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'review' }] }],
+      // Optional: If you want to see reviews directly in the product form, 
+      // you might need a custom input component or adjust preview settings.
+      // For now, this sets up the relationship.
+    }),
     // You can add more fields here later, like SKU, stock levels, variants, etc.
   ],
   preview: {

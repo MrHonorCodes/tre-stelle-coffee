@@ -7,16 +7,52 @@ import { PortableText, type SanityDocument } from 'next-sanity';
 import imageUrlBuilder from '@sanity/image-url';
 import { useCart } from '../../context/CartContext';
 
+// Star component for displaying ratings
+const StarIcon = ({ filled, halfFilled }: { filled: boolean; halfFilled?: boolean }) => (
+  <svg className={`w-5 h-5 ${filled || halfFilled ? 'text-yellow-400' : 'text-gray-300'}`} fill="currentColor" viewBox="0 0 20 20">
+    {halfFilled ? (
+      <>
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" clipRule="evenodd" fillRule="evenodd" />
+        <path d="M10 2.236l-1.07 3.292a1 1 0 00-.95.69H4.518c-.97 0-1.371 1.24-.588 1.81l2.8 2.034a1 1 0 00.364 1.118l-1.07 3.292c-.3.921.755 1.688 1.54 1.118l2.8-2.034a1 1 0 001.175 0l2.8 2.034c.784.57 1.838-.197 1.539-1.118l-1.07-3.292a1 1 0 00-.364-1.118l2.8-2.034c.783-.57.38-1.81-.588-1.81H12.47a1 1 0 00-.95-.69L10 2.236z" opacity="0.5" />
+      </>
+    ) : (
+      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+    )}
+  </svg>
+);
+
+const RatingStars = ({ rating, totalStars = 5 }: { rating: number; totalStars?: number }) => {
+  const stars = [];
+  for (let i = 1; i <= totalStars; i++) {
+    const filled = i <= Math.floor(rating);
+    const halfFilled = !filled && i === Math.ceil(rating) && rating % 1 !== 0;
+    stars.push(<StarIcon key={i} filled={filled} halfFilled={halfFilled} />);
+  }
+  return <div className="flex items-center">{stars}</div>;
+};
+
 // Reuse the SanityProduct interface (can also be imported from a shared types file)
 interface SanityProduct extends SanityDocument {
   _id: string;
   name: string;
   slug: { current: string };
-  image: SanityImageType;
+  images: SanityImageType[];
   details?: PortableTextBlock[];
   price: number;
   category?: string;
   stripePriceId?: string;
+  isOutOfStock?: boolean;
+  reviews?: SanityReview[];
+}
+
+// Define the Sanity Review Type (can also be imported from a shared types file)
+interface SanityReview extends SanityDocument {
+  _id: string;
+  rating: number;
+  title?: string;
+  comment: string;
+  authorName: string;
+  submittedAt: string;
 }
 
 // Configure the image URL builder (should ideally come from a shared Sanity lib)
@@ -40,6 +76,19 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState<'success' | 'warning' | 'error'>('success');
+
+  // Review form state
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState('');
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewAuthorName, setReviewAuthorName] = useState('');
+  const [reviewAuthorEmail, setReviewAuthorEmail] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+  const [reviewFormMessage, setReviewFormMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Use the isOutOfStock field from the product prop
+  const isOutOfStock = product.isOutOfStock || false;
 
   const handleQuantityChange = (amount: number) => {
     setQuantity(prev => {
@@ -79,12 +128,64 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
     }, 3000); // Increased timeout for toast visibility
   };
   
-  // Simple check for out of stock - replace with actual stock logic if available from Sanity
-  const isOutOfStock = false; // Placeholder: product.stock === 0;
-
   const toastBgColor = toastType === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 
                        toastType === 'warning' ? 'bg-yellow-100 border-yellow-400 text-yellow-700' : 
                        'bg-red-100 border-red-400 text-red-700';
+
+  const handleSubmitReview = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmittingReview(true);
+    setReviewFormMessage(null);
+
+    if (reviewRating === 0) {
+      setReviewFormMessage({ type: 'error', text: 'Please select a rating.' });
+      setIsSubmittingReview(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/submit-review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product._id,
+          rating: reviewRating,
+          title: reviewTitle,
+          comment: reviewComment,
+          authorName: reviewAuthorName,
+          authorEmail: reviewAuthorEmail,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Failed to submit review.');
+      }
+
+      setReviewFormMessage({ type: 'success', text: 'Review submitted successfully! It will appear once approved.' });
+      setShowReviewForm(false);
+      // Optionally, clear form fields
+      setReviewRating(0);
+      setReviewTitle('');
+      setReviewComment('');
+      setReviewAuthorName('');
+      setReviewAuthorEmail('');
+      // Potentially re-fetch product data or optimistically update UI if reviews are live updated
+    } catch (error) {
+      if (error instanceof Error) {
+        setReviewFormMessage({ type: 'error', text: error.message });
+      } else {
+        setReviewFormMessage({ type: 'error', text: 'An unexpected error occurred.' });
+      }
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const averageRating = product.reviews && product.reviews.length > 0
+    ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
+    : 0;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -102,15 +203,20 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
       )}
 
       {/* Product Image */}
-      <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md">
-        {product.image && urlFor(product.image) && (
+      <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md relative">
+        {product.images && product.images.length > 0 && urlFor(product.images[0]) && (
           <img 
-            src={urlFor(product.image)!.width(800).height(800).fit('crop').url()} // Ensure responsive image
+            src={urlFor(product.images[0])!.width(800).height(800).fit('crop').url()}
             alt={product.name}
             className="w-full h-full object-cover"
             width={800}
             height={800}
           />
+        )}
+        {isOutOfStock && (
+          <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+            OUT OF STOCK
+          </div>
         )}
       </div>
 
@@ -119,6 +225,19 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
         <span className="text-sm text-gray-500 mb-1 uppercase tracking-wider">{product.category || 'Coffee'}</span>
         <h1 className="text-3xl md:text-4xl font-bold text-primary mb-3">{product.name}</h1>
         
+        {/* Average Rating Display */}
+        {product.reviews && product.reviews.length > 0 && (
+          <div className="flex items-center mb-4">
+            <RatingStars rating={averageRating} />
+            <span className="ml-2 text-sm text-gray-600">
+              ({averageRating.toFixed(1)} based on {product.reviews.length} review{product.reviews.length > 1 ? 's' : ''})
+            </span>
+          </div>
+        )}
+        {(!product.reviews || product.reviews.length === 0) && (
+           <div className="mb-4 text-sm text-gray-500">No reviews yet.</div>
+        )}
+
         <div className="text-3xl font-semibold text-primary mb-6">
           ${product.price ? product.price.toFixed(2) : 'N/A'}
         </div>
@@ -170,6 +289,92 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
           <Link href="/products" className="text-primary hover:text-secondary transition-colors">
             &larr; Back to all products
           </Link>
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-12 pt-8 border-t border-gray-200">
+        <h2 className="text-2xl font-bold text-primary mb-6">Customer Reviews</h2>
+        {product.reviews && product.reviews.length > 0 ? (
+          <div className="space-y-6">
+            {product.reviews.map((review) => (
+              <div key={review._id} className="bg-white p-6 rounded-lg shadow">
+                <div className="flex items-center mb-2">
+                  <RatingStars rating={review.rating} />
+                  {review.title && <h3 className="ml-3 text-lg font-semibold text-gray-800">{review.title}</h3>}
+                </div>
+                <p className="text-gray-700 mb-3">{review.comment}</p>
+                <div className="text-sm text-gray-500">
+                  <span>By {review.authorName}</span>
+                  <span className="mx-1">&bull;</span>
+                  <span>{new Date(review.submittedAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-600">Be the first to review this product!</p>
+        )}
+
+        {/* Review Submission Form */}
+        <div className="mt-8">
+          <button
+            onClick={() => setShowReviewForm(!showReviewForm)}
+            className="px-6 py-2 bg-secondary text-dark-text font-semibold rounded-md hover:bg-opacity-90 transition-colors"
+          >
+            {showReviewForm ? 'Cancel Review' : 'Write a Review'}
+          </button>
+
+          {showReviewForm && (
+            <form onSubmit={handleSubmitReview} className="mt-6 bg-white p-6 rounded-lg shadow">
+              <h3 className="text-xl font-semibold text-primary mb-4">Submit Your Review</h3>
+              
+              {reviewFormMessage && (
+                <div className={`p-3 mb-4 rounded text-sm ${reviewFormMessage.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                  {reviewFormMessage.text}
+                </div>
+              )}
+
+              <div className="mb-4">
+                <label htmlFor="reviewAuthorName" className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                <input type="text" id="reviewAuthorName" value={reviewAuthorName} onChange={(e) => setReviewAuthorName(e.target.value)} required className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"/>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="reviewAuthorEmail" className="block text-sm font-medium text-gray-700 mb-1">Your Email <span className="text-xs text-gray-500">(Not published)</span></label>
+                <input type="email" id="reviewAuthorEmail" value={reviewAuthorEmail} onChange={(e) => setReviewAuthorEmail(e.target.value)} required className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"/>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Your Rating</label>
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button key={star} type="button" onClick={() => setReviewRating(star)} className="focus:outline-none">
+                      <StarIcon filled={star <= reviewRating} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="reviewTitle" className="block text-sm font-medium text-gray-700 mb-1">Review Title (Optional)</label>
+                <input type="text" id="reviewTitle" value={reviewTitle} onChange={(e) => setReviewTitle(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"/>
+              </div>
+
+              <div className="mb-6">
+                <label htmlFor="reviewComment" className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
+                <textarea id="reviewComment" value={reviewComment} onChange={(e) => setReviewComment(e.target.value)} rows={4} required className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={isSubmittingReview}
+                className="w-full px-6 py-3 bg-primary text-white font-semibold rounded-md hover:bg-primary-dark transition-colors disabled:opacity-50"
+              >
+                {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
