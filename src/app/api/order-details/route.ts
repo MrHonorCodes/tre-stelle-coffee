@@ -10,7 +10,7 @@ if (!stripeSecretKey) {
 }
 
 const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2024-06-20', // Use the latest API version available or your preferred one
+  apiVersion: '2025-04-30.basil', // Use the version your Stripe types expect
   typescript: true,
 });
 
@@ -23,9 +23,10 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+    const response = await stripe.checkout.sessions.retrieve(sessionId, {
       expand: ['line_items', 'line_items.data.price.product', 'customer'],
     });
+    const session = response as Stripe.Checkout.Session;
 
     if (!session) {
       return NextResponse.json({ error: 'Session not found' }, { status: 404 });
@@ -46,24 +47,38 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    const customerEmail = typeof session.customer === 'string' ? null : session.customer?.email;
-    const shippingDetails = session.shipping_details
+    let customerEmail: string | null = null;
+    if (typeof session.customer !== 'string' && session.customer && !('deleted' in session.customer)) {
+      customerEmail = session.customer.email;
+    } else if (session.customer_details?.email) {
+      customerEmail = session.customer_details.email;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const shippingDetails = (session as any).shipping_details
       ? {
-          name: session.shipping_details.name,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          name: (session as any).shipping_details.name,
           address: {
-            line1: session.shipping_details.address?.line1,
-            line2: session.shipping_details.address?.line2,
-            city: session.shipping_details.address?.city,
-            state: session.shipping_details.address?.state,
-            postal_code: session.shipping_details.address?.postal_code,
-            country: session.shipping_details.address?.country,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            line1: (session as any).shipping_details.address?.line1,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            line2: (session as any).shipping_details.address?.line2,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            city: (session as any).shipping_details.address?.city,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            state: (session as any).shipping_details.address?.state,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            postal_code: (session as any).shipping_details.address?.postal_code,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            country: (session as any).shipping_details.address?.country,
           },
         }
       : null;
 
     return NextResponse.json({
       lineItems,
-      customerEmail: customerEmail || session.customer_details?.email,
+      customerEmail,
       shippingDetails,
       // You can add more details from the session object if needed
       // For example: session.payment_status, session.total_details, etc.
