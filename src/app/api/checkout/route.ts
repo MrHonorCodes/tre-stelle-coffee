@@ -59,6 +59,9 @@ export async function POST(req: NextRequest) {
           shipping_rate: 'shr_1RPxYrChXWBA9KQdMnP9LbP3',
         },
       ],
+      metadata: {
+        cart: lineItems.map(item => `${item.priceId} x${item.quantity}${item.size ? ` (Size: ${item.size})` : ''}`).join('; ')
+      },
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace {CHECKOUT_SESSION_ID}
       cancel_url: `${origin}/checkout/cancel`, // Changed to redirect to a dedicated cancel page
       // automatic_tax: { enabled: true }, // Optional: Enable automatic tax calculation if configured in Stripe

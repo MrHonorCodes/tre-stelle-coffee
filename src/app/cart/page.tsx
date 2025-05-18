@@ -67,6 +67,7 @@ export default function CartPage() {
       .map(item => ({
         priceId: item.stripePriceId!, // Assert stripePriceId is present due to filter
         quantity: item.quantity,
+        ...(item.options?.size && { size: item.options.size })
       }));
 
     if (lineItems.length === 0) {

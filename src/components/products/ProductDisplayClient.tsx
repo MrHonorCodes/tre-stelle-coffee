@@ -50,6 +50,8 @@ interface SanityProduct extends SanityDocument {
   stripePriceId?: string;
   isOutOfStock?: boolean;
   reviews?: SanityReview[];
+  size?: string;
+  sizes?: string[];
 }
 
 // Define the Sanity Review Type (can also be imported from a shared types file)
@@ -99,6 +101,8 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
   const handleQuantityChange = (amount: number) => {
     setQuantity(prev => {
       const newQuantity = prev + amount;
@@ -110,11 +114,18 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 
   const handleAddToCart = () => {
     if (!product) return;
+    if (product.category === 'merchandise' && product.sizes && product.sizes.length > 0 && !selectedSize) {
+      setToastType('error');
+      setToastMessage('Please select a size.');
+      setShowConfirmation(true);
+      setTimeout(() => setShowConfirmation(false), 2000);
+      return;
+    }
     setIsAdding(true);
-
     // Log before calling addToCart
-    console.log(`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity to add: ${quantity}`);
-    const result = addToCart(product, quantity); 
+    console.log(`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity to add: ${quantity}, Size: ${selectedSize}`);
+    const options = product.category === 'merchandise' ? { size: selectedSize } : undefined;
+    const result = addToCart({ ...product }, quantity, options);
 
     setToastMessage(result.message || (result.success ? `${product.name} updated in cart.` : "Could not add item to cart."));
     
@@ -295,6 +306,24 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
           </div>
         )}
 
+        {/* Size selector for merchandise */}
+        {product.category === 'merchandise' && product.sizes && product.sizes.length > 0 && (
+          <div className="mb-4">
+            <label htmlFor="size-select" className="block text-sm font-medium text-gray-700 mb-1">Select Size:</label>
+            <select
+              id="size-select"
+              value={selectedSize}
+              onChange={e => setSelectedSize(e.target.value)}
+              className="w-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+            >
+              <option value="">Choose a size</option>
+              {product.sizes.map(size => (
+                <option key={size} value={size}>{size}</option>
+              ))}
+            </select>
+          </div>
+        )}
+        
         {/* Quantity Selector */}
         {!isOutOfStock && (
           <div className="mb-6">

@@ -80,6 +80,22 @@ export const productType = defineType({
       // you might need a custom input component or adjust preview settings.
       // For now, this sets up the relationship.
     }),
+    defineField({
+      name: 'sizes',
+      title: 'Available Sizes',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Small', value: 'S' },
+          { title: 'Medium', value: 'M' },
+          { title: 'Large', value: 'L' },
+          { title: 'Extra Large', value: 'XL' },
+          { title: 'XX Large', value: 'XXL' },
+        ],
+      },
+      description: 'Select all available sizes for merchandise products.',
+    }),
     // You can add more fields here later, like SKU, stock levels, variants, etc.
   ],
   preview: {
