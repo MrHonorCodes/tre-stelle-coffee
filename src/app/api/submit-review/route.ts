@@ -1,12 +1,15 @@
 import { NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client'; // Adjust path as necessary
-  import { LRUCache } from 'lru-cache';
+import { LRUCache } from 'lru-cache';
+
 // Rate limiter: 5 requests per hour per IP
 const rateLimiter = new LRUCache<string, { count: number; last: number }>({
   max: 5000, // max unique IPs to track
   ttl: 1000 * 60 * 60, // 1 hour
 });
 const MAX_REVIEWS_PER_HOUR = 5;
+
+const HCAPTCHA_SECRET = process.env.HCAPTCHA_SECRET;
 
 export async function POST(request: Request) {
   // Get IP address (works for Vercel/Node.js)
@@ -33,7 +36,25 @@ export async function POST(request: Request) {
       comment,
       authorName,
       authorEmail,
+      hcaptchaToken,
     } = body;
+
+    // hCaptcha verification
+    if (!hcaptchaToken) {
+      return NextResponse.json({ message: 'Captcha is required.' }, { status: 400 });
+    }
+    if (!HCAPTCHA_SECRET) {
+      return NextResponse.json({ message: 'hCaptcha secret not configured.' }, { status: 500 });
+    }
+    const verifyRes = await fetch('https://hcaptcha.com/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `response=${hcaptchaToken}&secret=${HCAPTCHA_SECRET}`,
+    });
+    const verifyData = await verifyRes.json();
+    if (!verifyData.success) {
+      return NextResponse.json({ message: 'Captcha verification failed.' }, { status: 400 });
+    }
 
     // Basic validation
     if (!productId || !rating || !comment || !authorName) {

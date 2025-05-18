@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import type { Image as SanityImageType, PortableTextBlock } from 'sanity';
 import { PortableText, type SanityDocument } from 'next-sanity';
@@ -103,6 +103,8 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 
   const [selectedSize, setSelectedSize] = useState<string>("");
 
+  const [hcaptchaToken, setHcaptchaToken] = useState<string | null>(null);
+
   const handleQuantityChange = (amount: number) => {
     setQuantity(prev => {
       const newQuantity = prev + amount;
@@ -162,6 +164,11 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
       setIsSubmittingReview(false);
       return;
     }
+    if (!hcaptchaToken) {
+      setReviewFormMessage({ type: 'error', text: 'Please complete the captcha.' });
+      setIsSubmittingReview(false);
+      return;
+    }
 
     try {
       const response = await fetch('/api/submit-review', {
@@ -174,6 +181,7 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
           comment: reviewComment,
           authorName: reviewAuthorName,
           authorEmail: reviewAuthorEmail,
+          hcaptchaToken,
         }),
       });
 
@@ -206,6 +214,25 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
   const averageRating = product.reviews && product.reviews.length > 0
     ? product.reviews.reduce((acc, review) => acc + review.rating, 0) / product.reviews.length
     : 0;
+
+  useEffect(() => {
+    // Only add the script once
+    if (!document.getElementById('hcaptcha-script')) {
+      const script = document.createElement('script');
+      script.id = 'hcaptcha-script';
+      script.src = 'https://js.hcaptcha.com/1/api.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    // Add the callback to window
+    (window as Window & { onHCaptchaSuccess?: (token: string) => void }).onHCaptchaSuccess = (token: string) => {
+      setHcaptchaToken(token);
+    };
+    return () => {
+      // Clean up callback if needed
+      delete (window as Window & { onHCaptchaSuccess?: (token: string) => void }).onHCaptchaSuccess;
+    };
+  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
@@ -440,6 +467,15 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
               <div className="mb-6">
                 <label htmlFor="reviewComment" className="block text-sm font-medium text-gray-700 mb-1">Your Review</label>
                 <textarea id="reviewComment" value={reviewComment} onChange={(e) => setReviewComment(e.target.value)} rows={4} required className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"></textarea>
+              </div>
+
+              {/* hCaptcha widget */}
+              <div className="mb-6">
+                <div
+                  className="h-captcha"
+                  data-sitekey="a31e8ca2-e870-49da-9500-16a25b00362e"
+                  data-callback="onHCaptchaSuccess"
+                ></div>
               </div>
 
               <button 
