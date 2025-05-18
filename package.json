@@ -20,6 +20,7 @@
     "sanity": "^3.88.3",
     "stripe": "^18.1.0",
     "styled-components": "^6.1.18",
+    "swiper": "^11.2.6",
     "tre-stelle-coffee": "file:"
   },
   "devDependencies": {

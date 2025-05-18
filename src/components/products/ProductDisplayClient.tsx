@@ -6,6 +6,13 @@ import type { Image as SanityImageType, PortableTextBlock } from 'sanity';
 import { PortableText, type SanityDocument } from 'next-sanity';
 import imageUrlBuilder from '@sanity/image-url';
 import { useCart } from '../../context/CartContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Thumbs } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/thumbs';
+import type { Swiper as SwiperClass } from 'swiper';
 
 // Star component for displaying ratings
 const StarIcon = ({ filled, halfFilled }: { filled: boolean; halfFilled?: boolean }) => (
@@ -89,6 +96,8 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 
   // Use the isOutOfStock field from the product prop
   const isOutOfStock = product.isOutOfStock || false;
+
+  const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
   const handleQuantityChange = (amount: number) => {
     setQuantity(prev => {
@@ -202,16 +211,54 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
           </div>
       )}
 
-      {/* Product Image */}
-      <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden shadow-md relative">
-        {product.images && product.images.length > 0 && urlFor(product.images[0]) && (
-          <img 
-            src={urlFor(product.images[0])!.width(800).height(800).fit('crop').url()}
-            alt={product.name}
-            className="w-full h-full object-cover"
-            width={800}
-            height={800}
-          />
+      {/* Product Image Gallery with Swiper */}
+      <div className="w-full max-w-2xl mx-auto bg-gray-100 rounded-lg overflow-visible shadow-md relative flex flex-col items-center justify-center">
+        <Swiper
+          modules={[Navigation, Pagination, Thumbs]}
+          navigation
+          pagination={{ clickable: true }}
+          thumbs={{ swiper: thumbsSwiper }}
+          className="mb-4"
+          style={{ width: '100%', height: 400 }}
+        >
+          {product.images.map((img, idx) => {
+            const imageUrl = urlFor(img)?.url();
+            return (
+              <SwiperSlide key={idx}>
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt={product.name}
+                    style={{ width: '100%', height: 400, objectFit: 'contain', background: '#fff' }}
+                  />
+                )}
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+        {product.images.length > 1 && (
+          <Swiper
+            modules={[Thumbs]}
+            onSwiper={setThumbsSwiper}
+            slidesPerView={Math.min(product.images.length, 5)}
+            watchSlidesProgress
+            style={{ width: '100%', height: 100 }}
+          >
+            {product.images.map((img, idx) => {
+              const thumbUrl = urlFor(img)?.width(100).height(100).url();
+              return (
+                <SwiperSlide key={idx}>
+                  {thumbUrl && (
+                    <img
+                      src={thumbUrl}
+                      alt={product.name}
+                      style={{ width: '100%', height: 100, objectFit: 'contain', background: '#fff' }}
+                    />
+                  )}
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         )}
         {isOutOfStock && (
           <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
