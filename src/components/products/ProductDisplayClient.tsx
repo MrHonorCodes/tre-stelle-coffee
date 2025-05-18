@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import type { Image as SanityImageType, PortableTextBlock } from 'sanity';
 import { PortableText, type SanityDocument } from 'next-sanity';
@@ -70,6 +70,27 @@ const tempProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'woqu8pre'; /
 const tempDataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';   // Fallback, use your actual dataset
 
 const builder = imageUrlBuilder({ projectId: tempProjectId, dataset: tempDataset });
+
+// Define global window properties for hCaptcha to satisfy TypeScript
+
+interface HCaptchaRenderParams {
+  sitekey: string;
+  callback: (token: string) => void;
+  // Add other hCaptcha parameters as needed, e.g.:
+  // theme?: 'light' | 'dark';
+  // size?: 'normal' | 'compact';
+  // tabindex?: number;
+}
+
+declare global {
+  interface Window {
+    hcaptcha?: {
+      render: (container: string | HTMLElement, params: HCaptchaRenderParams) => string | undefined;
+      // Add other hCaptcha methods like reset, getResponse if you use them
+    };
+    onHCaptchaScriptLoad?: () => void;
+  }
+}
 
 function urlFor(source: SanityImageType) {
   if (!source) return undefined; // Handle cases where image might be undefined
@@ -217,17 +238,17 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
     : 0;
 
   // Callback function for hCaptcha
-  const handleHCaptchaVerify = (token: string) => {
+  const handleHCaptchaVerify = useCallback((token: string) => {
     console.log("hCaptcha verified with token:", token);
     setHcaptchaToken(token);
-  };
+  }, [setHcaptchaToken]);
 
   // Function to explicitly render hCaptcha
-  const renderHCaptcha = () => {
-    if ((window as any).hcaptcha && document.getElementById('hcaptcha-container') && !hcaptchaToken) {
+  const renderHCaptcha = useCallback(() => {
+    if (window.hcaptcha && document.getElementById('hcaptcha-container') && !hcaptchaToken) {
       try {
         console.log("Attempting to render hCaptcha");
-        (window as any).hcaptcha.render('hcaptcha-container', {
+        window.hcaptcha.render('hcaptcha-container', {
           sitekey: "a31e8ca2-e870-49da-9500-16a25b00362e",
           callback: handleHCaptchaVerify,
         });
@@ -238,10 +259,10 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
     } else {
       console.log("hCaptcha not ready or container not found or already solved.");
     }
-  };
+  }, [hcaptchaToken, handleHCaptchaVerify]);
 
   useEffect(() => {
-    (window as any).onHCaptchaScriptLoad = () => {
+    window.onHCaptchaScriptLoad = () => {
       console.log("hCaptcha script finished loading.");
       setIsHCaptchaLoaded(true);
       renderHCaptcha();
@@ -256,22 +277,22 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
       document.head.appendChild(script);
       console.log("hCaptcha script appended to head.");
     } else {
-      if ((window as any).hcaptcha) {
+      if (window.hcaptcha) {
         setIsHCaptchaLoaded(true);
         renderHCaptcha();
       }
     }
 
     return () => {
-      delete (window as any).onHCaptchaScriptLoad;
+      delete window.onHCaptchaScriptLoad;
     };
-  }, []);
+  }, [renderHCaptcha]); // Added renderHCaptcha to dependencies
 
   useEffect(() => {
     if (showReviewForm && isHCaptchaLoaded) {
       renderHCaptcha();
     }
-  }, [showReviewForm, isHCaptchaLoaded, renderHCaptcha]); // Added renderHCaptcha to dependencies
+  }, [showReviewForm, isHCaptchaLoaded, renderHCaptcha]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">

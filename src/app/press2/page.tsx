@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 // 'use client'; // REMOVED: This page needs to be a Server Component to use async/await for data fetching
 
 import Link from 'next/link';
