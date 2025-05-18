@@ -63,9 +63,9 @@ export default function CartPage() {
     setError(null);
 
     const lineItems = cartItems
-      .filter(item => item.stripePriceId) // Ensure item has a stripePriceId
+      .filter(item => item.productId && item.quantity > 0)
       .map(item => ({
-        priceId: item.stripePriceId!, // Assert stripePriceId is present due to filter
+        productId: item.productId,
         quantity: item.quantity,
         ...(item.options?.size && { size: item.options.size })
       }));
