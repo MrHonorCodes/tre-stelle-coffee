@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       // Specify the shipping rate to use
       shipping_options: [
         {
-          shipping_rate: 'shr_1RPTqYCmUENvPwLMop0pjdPF',
+          shipping_rate: 'shr_1RPxYrChXWBA9KQdMnP9LbP3',
         },
       ],
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace {CHECKOUT_SESSION_ID}
