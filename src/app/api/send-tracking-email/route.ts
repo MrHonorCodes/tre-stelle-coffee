@@ -93,19 +93,73 @@ export async function POST(req: NextRequest) {
 
       // Send email using Resend
       try {
+        const uspsTrackingUrl = `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNumber}`;
+
         const { data, error } = await resend.emails.send({
-          from: 'Tre Stelle Coffee <contact@trestellecoffeeco.com>', // Replace with your verified Resend domain/email
+          from: 'Tre Stelle Coffee <contact@trestellecoffeeco.com>', // Ensure this matches your verified Resend domain
           to: [customerEmail],
           subject: 'Your Tre Stelle Coffee Order Has Shipped!',
           html: `
-            <h1>Your Order Has Shipped!</h1>
-            <p>Hi there,</p>
-            <p>Great news! Your order containing ${productsText} has shipped.</p>
-            <p>You can track your package using the following tracking number:</p>
-            <p><strong>${trackingNumber}</strong></p>
-            <p>Please allow some time for the tracking information to update.</p>
-            <p>Thanks for your order!</p>
-            <p>The Tre Stelle Coffee Team</p>
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Order Shipped</title>
+            <style>
+              /* Basic reset and body style - some clients might strip this, so inline is safer */
+              body {
+                margin: 0;
+                padding: 0;
+                font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif, \'Apple Color Emoji\', \'Segoe UI Emoji\', \'Segoe UI Symbol\';
+                line-height: 1.6;
+                color: #333333;
+                background-color: #f4f4f4;
+              }
+            </style>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; line-height: 1.6; color: #333333; background-color: #f4f4f4;">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4;">
+              <tr>
+                <td align="center" style="padding: 20px 0;">
+                  <table width="600" border="0" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <!-- Optional Header with Logo -->
+                    <tr>
+                      <td align="center" style="padding: 20px 20px 10px; background-color: #2c3e50; color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                        <!-- Replace with your logo URL if you have one -->
+                        <!-- <img src="YOUR_LOGO_URL_HERE" alt="Tre Stelle Coffee Logo" width="150" style="display: block; margin-bottom: 10px;"> -->
+                        <h1 style="margin: 0; font-size: 24px; font-weight: 600;">Your Order Has Shipped!</h1>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 30px 25px;">
+                        <p style="margin: 0 0 15px; font-size: 16px;">Hi there,</p>
+                        <p style="margin: 0 0 15px; font-size: 16px;">Great news! Your Tre Stelle Coffee order containing <strong>${productsText}</strong> has shipped via USPS.</p>
+                        <p style="margin: 0 0 10px; font-size: 16px;">You can track your package using the following USPS tracking number:</p>
+                        <p style="margin: 20px 0; text-align: center;">
+                          <a href="${uspsTrackingUrl}" target="_blank" style="display: inline-block; padding: 12px 25px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px; font-weight: 500;">
+                            <strong>${trackingNumber}</strong>
+                          </a>
+                        </p>
+                        <p style="margin: 0 0 15px; font-size: 16px;">Please allow some time for the tracking information to update.</p>
+                        <p style="margin: 0 0 15px; font-size: 14px; color: #555555;">If the link above doesn't work, you can also go to <a href="https://www.usps.com/manage/welcome.htm" target="_blank" style="color: #3498db; text-decoration: underline;">USPS.com</a> and enter the tracking number manually.</p>
+                        <p style="margin: 25px 0 0; font-size: 16px;">Thanks for your order!</p>
+                        <p style="margin: 5px 0 0; font-size: 16px;">The Tre Stelle Coffee Team</p>
+                      </td>
+                    </tr>
+                    <!-- Footer -->
+                    <tr>
+                      <td align="center" style="padding: 20px; background-color: #ecf0f1; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                        <p style="margin: 0; font-size: 12px; color: #7f8c8d;">&copy; ${new Date().getFullYear()} Tre Stelle Coffee. All rights reserved.</p>
+                        <!-- You can add your address or other contact info here -->
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
           `,
         });
 
