@@ -42,15 +42,17 @@ export async function POST(req: NextRequest) {
 
     // Fetch all products from Sanity in one query
     const productIds = lineItems.map((item: { productId: string }) => item.productId);
-    type ProductSanity = { _id: string; stripePriceId: string; isOutOfStock?: boolean };
+    type ProductSanity = { _id: string; name: string; stripePriceId: string; isOutOfStock?: boolean };
     const products: ProductSanity[] = await client.fetch(
-      `*[_type == "product" && _id in $ids]{ _id, stripePriceId, isOutOfStock }`,
+      `*[_type == "product" && _id in $ids]{ _id, name, stripePriceId, isOutOfStock }`,
       { ids: productIds }
     );
     const productMap: Record<string, ProductSanity> = Object.fromEntries(products.map((p) => [p._id, p]));
 
     // Build Stripe line items, validating each
     const stripeLineItems = [];
+    const productDetailsForMetadata = [];
+
     for (const item of lineItems) {
       const product = productMap[item.productId];
       if (!product) {
@@ -69,6 +71,12 @@ export async function POST(req: NextRequest) {
         price: product.stripePriceId,
         quantity: item.quantity,
       });
+      productDetailsForMetadata.push({
+        productId: item.productId,
+        name: product.name,
+        quantity: item.quantity,
+        size: item.size || null,
+      });
     }
 
     // For dynamic origin for success and cancel URLs
@@ -85,11 +93,11 @@ export async function POST(req: NextRequest) {
       // Specify the shipping rate to use
       shipping_options: [
         {
-          shipping_rate: 'shr_1RPxYrChXWBA9KQdMnP9LbP3',
+          shipping_rate: 'shr_1RPxtPChXWBA9KQdTpNbCZIm',
         },
       ],
       metadata: {
-        cart: lineItems.map(item => `${item.productId} x${item.quantity}${item.size ? ` (Size: ${item.size})` : ''}`).join('; ')
+        productDetails: JSON.stringify(productDetailsForMetadata),
       },
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`, // Stripe will replace {CHECKOUT_SESSION_ID}
       cancel_url: `${origin}/checkout/cancel`, // Changed to redirect to a dedicated cancel page
