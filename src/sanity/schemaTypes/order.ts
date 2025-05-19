@@ -47,6 +47,14 @@ export default defineType({
       },
       readOnly: true,
     }),
+    defineField({
+      name: 'isArchived',
+      title: 'Archived',
+      type: 'boolean',
+      initialValue: false,
+      description: 'Set to true to archive this order.',
+      // You might want to control who can edit this via roles if needed
+    }),
   ],
   preview: {
     select: {
