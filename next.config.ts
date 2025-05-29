@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: cdn.sanity.io avatars.nordpass.com;",
               "font-src 'self' data: fonts.gstatic.com;",
               "connect-src 'self' *.vercel.app cdn.sanity.io *.hcaptcha.com *.api.sanity.io;",
-              "frame-src 'self' newassets.hcaptcha.com *.hcaptcha.com;",
+              "frame-src 'self' newassets.hcaptcha.com *.hcaptcha.com https://www.google.com https://maps.google.com https://www.youtube.com;",
               "frame-ancestors 'none';",
               "object-src 'none';",
             ].join(' '),
