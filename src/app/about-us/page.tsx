@@ -67,7 +67,7 @@ return (
                 Tre Stelle Coffee Co.
             </h2>
             <p className="text-gray-700 mb-6 text-lg">
-                Tre Stelle Coffee Co. was founded in late 2019, initially as a specialized roasting company. Jonathan established the business with support from his father, and we&apos;ve since expanded into a full-service Coffee Shop & Roastery. Beyond serving exceptional coffee, our core mission is to create an inclusive coffee business that welcomes individuals from all backgrounds and walks of life.
+                Tre Stelle Coffee Co. was founded in late 2019, initially as a specialized micro-roasting company; since then, we have expanded into a full-service Coffee Shop & Roastery. Beyond serving exceptional coffee, our core mission is to create an inclusive coffee business that welcomes individuals from all backgrounds and walks of life.
             </p>
             <Link href="/products" className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary">
                 Our Products
@@ -82,10 +82,10 @@ return (
                 Inspiration
             </h2>
             <p className="text-gray-700 mb-2 text-lg">
-                The name &quot;Tre Stelle&quot; draws inspiration from Yordan&apos;s youth in Eritrea, where he frequently visited his favorite café called Tre Stelle. Eritrea has rich Italian cultural influences, and &quot;Tre Stelle&quot; translates to &quot;Three Stars&quot; in Italian.
+                The name &quot;Tre Stelle&quot; draws inspiration from a well-known cafe in Asmara, Eritrea; Eritrea has rich Italian cultural influences, and &quot;Tre Stelle&quot; translates to &quot;Three Stars&quot; in Italian.
             </p>
             <p className="text-gray-700 text-lg">
-                In Summer 2019, Jonathan traveled to Eritrea and visited this café, which inspired him to adopt the name for our business.
+                In 2019, our founder, Jonathan traveled to Eritrea and visited this café, which inspired him to adopt the name for our business.
             </p>
             </ScrollReveal>
             
@@ -179,7 +179,7 @@ return (
                 </div>
                 <h3 className="text-xl font-semibold mb-4 text-center">Community</h3>
                 <p className="text-center">
-                We believe in building relationships with our customers, suppliers, and the wider Dallas community.
+                We believe in building relationships with our customers, suppliers, and the greater Dallas community.
                 </p>
             </div>
             </ScrollReveal>

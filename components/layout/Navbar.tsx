@@ -54,7 +54,7 @@ export default function Navbar() {
     <header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light">
       <div className="container mx-auto px-4">
         <nav className="flex justify-between items-center">
-          <Link href="/" className="flex-shrink-0 relative h-10">
+          <Link href="/" className="flex-shrink-0 relative flex items-center space-x-3">
             <div className="p-1 bg-primary rounded-md inline-block">
               <Image
                 src="/images/white-logo.png"
@@ -63,6 +63,11 @@ export default function Navbar() {
                 height={40}
                 className="h-10 w-auto"
               />
+            </div>
+            <div className="flex items-center justify-center">
+              <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold text-primary tracking-wide text-center whitespace-nowrap">
+                TRE STELLE COFFEE CO.
+              </h1>
             </div>
           </Link>
           

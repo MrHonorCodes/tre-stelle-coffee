@@ -95,7 +95,7 @@ export default function Home() {
                 Coffee Roasting Company
               </h2>
                 <p className="text-gray-700 mb-4">
-                Founded in late 2019 as a dedicated roasting company with the support of his father, Jonathan&apos;s business has since grown into a full-fledged Coffee Shop & Roastery. Beyond serving exceptional coffee, our mission is to create an inclusive space that welcomes individuals from all walks of life.
+                Founded in late 2019 as a dedicated roasting company, Tre Stelle has since grown into a full-fledged Coffee Shop & Roastery. Beyond serving exceptional coffee, our mission is to create an inclusive brand that welcomes individuals from all walks of life.
                 </p>
               <p className="text-gray-700 mb-6">
                 We take pride in sourcing the finest beans from around the world and roasting them to perfection, creating unique flavor profiles that highlight each coffee&apos;s natural characteristics.
@@ -136,7 +136,7 @@ export default function Home() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-center">Sourcing</h3>
-                  <p className="text-center">We partner with farmers who are passionate about quality and sustainability.</p>
+                  <p className="text-center">We partner with green coffee suppliers who are passionate about quality and sustainability.</p>
                 </div>
               </ScrollReveal>
               <ScrollReveal delay={0.2}>
@@ -198,7 +198,7 @@ export default function Home() {
               <div className="p-8 text-center">
                 <h3 className="text-3xl font-bold text-primary mb-4">Tre Stelle Coffee Co.</h3>
                 <address className="not-italic mb-6 text-lg">
-                  17390 Preston Road, suite 210<br/>
+                  17390 Preston Road, Suite 210<br/>
                   Dallas, Texas 75252
                 </address>
                 <a 

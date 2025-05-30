@@ -53,7 +53,7 @@ return (
             <span className="text-sm text-tertiary uppercase tracking-wider font-semibold">Partner With Us</span>
             <h2 className="text-4xl font-bold text-primary mt-4 mb-6">We love partnering up with other local businesses!</h2>
             <p className="text-gray-700">
-                At Tre Stelle Coffee Co., we&apos;re passionate about helping businesses elevate their coffee offerings. As a locally owned roastery established in 2019, we understand the importance of quality, consistency, and personalized service. Our goal is to be more than just a supplier – we aim to be your partner in creating exceptional coffee experiences.
+                At Tre Stelle Coffee Co., we&apos;re passionate about helping businesses elevate their coffee offerings. As a locally owned Roastery, we understand the importance of quality, consistency, and personalized service. Our goal is to be more than just a supplier – we aim to be your partner in creating exceptional coffee experiences.
             </p>
             </ScrollReveal>
         </div>
