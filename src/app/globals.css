@@ -1,175 +1,180 @@
-@import "tailwindcss";
-@import "tailwindcss/utilities";
-
+@import 'tailwindcss';
+@import 'tailwindcss/utilities';
 
 :root {
-  --foreground-rgb: 26, 26, 26;
-  --background-rgb: 248, 245, 242;
-  /* Color Palette Variables */
-  --color-primary: #4a0000;
-  --color-secondary: #e7c583;
-  --color-secondary-light: #f3e2bf;
-  --color-secondary-darker: #c5a366;
-  --color-tertiary: #2E1A13;
-  --color-soft-white: #F8F5F2;
-  --color-dark-text: #1A1A1A;
-  --color-light-text: #F8F5F2;
+	--foreground-rgb: 26, 26, 26;
+	--background-rgb: 248, 245, 242;
+	/* Color Palette Variables */
+	--color-primary: #4a0000;
+	--color-secondary: #e7c583;
+	--color-secondary-light: #f3e2bf;
+	--color-secondary-darker: #c5a366;
+	--color-tertiary: #2e1a13;
+	--color-soft-white: #f8f5f2;
+	--color-dark-text: #1a1a1a;
+	--color-light-text: #f8f5f2;
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 @layer utilities {
-  .scroll-smooth {
-    scroll-behavior: smooth;
-  }
+	.scroll-smooth {
+		scroll-behavior: smooth;
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+	color: rgb(var(--foreground-rgb));
+	background: rgb(var(--background-rgb));
 }
 
 /* Restoring manual utility classes */
-.bg-primary{
-  background-color: var(--color-primary);
+.bg-primary {
+	background-color: var(--color-primary);
 }
-.bg-secondary{
-  background-color: var(--color-secondary);
+.bg-secondary {
+	background-color: var(--color-secondary);
 }
 .bg-tertiary {
-  background-color: var(--color-tertiary);
+	background-color: var(--color-tertiary);
 }
 .text-primary {
-  color: var(--color-primary);
+	color: var(--color-primary);
 }
 .text-secondary {
-  color: var(--color-secondary);
+	color: var(--color-secondary);
 }
 .border-primary {
-  border-color: var(--color-primary);
+	border-color: var(--color-primary);
 }
 .text-light {
-  color: var(--color-light-text);
+	color: var(--color-light-text);
 }
 
 .text-dark {
-  color: var(--color-dark-text);
+	color: var(--color-dark-text);
 }
 
 .bg-soft-white {
-  background-color: var(--color-soft-white);
+	background-color: var(--color-soft-white);
 }
 
 .border-tertiary {
-  border-color: var(--color-tertiary);
+	border-color: var(--color-tertiary);
 }
 
 .text-tertiary {
-  color: var(--color-tertiary);
+	color: var(--color-tertiary);
 }
 
 .bg-secondary-light {
-  background-color: var(--color-secondary-light);
+	background-color: var(--color-secondary-light);
 }
 
 .bg-secondary-darker {
-  background-color: var(--color-secondary-darker);
+	background-color: var(--color-secondary-darker);
 }
 
 .text-secondary-darker {
-  color: var(--color-secondary-darker);
+	color: var(--color-secondary-darker);
 }
 
 a:hover .link-underline {
-  width: 100%;
+	width: 100%;
 }
 
 .group:hover .group-hover\:block {
-  display: block;
+	display: block;
 }
 
 /* Manual Hover Styles */
 
 /* Buttons: Secondary bg -> Transparent bg, Secondary text/border */
 /* Target both a and button elements */
-a.bg-secondary.text-dark-text:hover, 
+a.bg-secondary.text-dark-text:hover,
 button.bg-secondary.text-dark-text:hover {
-  background-color: transparent !important; /* Use !important to override specificity if needed */
-  color: var(--color-secondary) !important;
-  border-color: var(--color-secondary) !important; 
+	background-color: transparent !important; /* Use !important to override specificity if needed */
+	color: var(--color-secondary) !important;
+	border-color: var(--color-secondary) !important;
 }
 
 /* Buttons: Light text -> Light bg, Primary text/border */
 a.text-light.border-light:hover {
-  background-color: var(--color-light-text) !important;
-  color: var(--color-primary) !important;
-  border-color: var(--color-light-text) !important;
+	background-color: var(--color-light-text) !important;
+	color: var(--color-primary) !important;
+	border-color: var(--color-light-text) !important;
 }
 
 /* Navbar Links & Icons: Primary text -> Secondary text */
 /* Target links/buttons specifically within the header to avoid affecting all primary text */
 header nav a.text-primary:hover,
 header nav button.text-primary:hover {
-  color: var(--color-secondary) !important;
+	color: var(--color-secondary) !important;
 }
 
 /* Social Icons: Primary bg -> Secondary bg, Primary text */
 /* Assuming these are in a section with bg-tertiary, target links with bg-primary */
 section.bg-tertiary a.bg-primary:hover {
-    background-color: var(--color-secondary) !important;
-    color: var(--color-primary) !important;
+	background-color: var(--color-secondary) !important;
+	color: var(--color-primary) !important;
 }
 
 /* Button: Transparent bg, Secondary text/border -> Secondary bg, Dark text */
 a.bg-transparent.text-secondary.border-secondary:hover {
-    background-color: var(--color-secondary) !important;
-    color: var(--color-dark-text) !important;
+	background-color: var(--color-secondary) !important;
+	color: var(--color-dark-text) !important;
 }
 
 /* Button: Secondary bg, Primary text, Light border -> Transparent bg, Secondary text/border */
 a.bg-secondary.text-primary.border-light:hover {
-    background-color: transparent !important;
-    color: var(--color-secondary) !important;
-    border-color: var(--color-secondary) !important;
+	background-color: transparent !important;
+	color: var(--color-secondary) !important;
+	border-color: var(--color-secondary) !important;
 }
 
 /* Button: Secondary bg, Primary text -> Secondary-light text on hover */
 a.bg-secondary.text-primary:hover {
-    background-color: var(--color-secondary) !important; /* Explicitly keep background */
-    color: var(--color-secondary-light) !important; /* Change text color */
+	background-color: var(--color-secondary) !important; /* Explicitly keep background */
+	color: var(--color-secondary-light) !important; /* Change text color */
 }
 
 /* Simple CSS Fade-in Animation */
 @keyframes simpleFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .animate-simple-fade-in {
-  animation: simpleFadeIn 0.7s ease-out forwards;
+	animation: simpleFadeIn 0.7s ease-out forwards;
 }
 
 /* Product Card Button Hover (within a .group Link) */
 .group:hover .product-view-details-button {
-  background-color: var(--color-primary) !important;
-  color: var(--color-light-text) !important;
+	background-color: var(--color-primary) !important;
+	color: var(--color-light-text) !important;
 }
 
 /* Cart Page - Proceed to Checkout Button */
 .cart-proceed-checkout-button {
-  cursor: pointer; /* Add pointer cursor */
+	cursor: pointer; /* Add pointer cursor */
 }
 
-.cart-proceed-checkout-button:hover:not(:disabled) { /* Apply hover only if not disabled */
-  background-color: transparent !important;
-  color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important; /* Border color remains primary */
+.cart-proceed-checkout-button:hover:not(:disabled) {
+	/* Apply hover only if not disabled */
+	background-color: transparent !important;
+	color: var(--color-primary) !important;
+	border-color: var(--color-primary) !important; /* Border color remains primary */
 }
 
 /* Back to Top Button Hover */
 .back-to-top-button:hover {
-  background-color: var(--color-secondary-darker);
+	background-color: var(--color-secondary-darker);
 }
-

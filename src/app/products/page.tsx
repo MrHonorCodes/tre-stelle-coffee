@@ -19,18 +19,18 @@ import FadeIn from '../../../components/ui/FadeIn';
 
 // Define the Sanity Product Type (adjust based on your Sanity schema)
 interface SanityProduct extends SanityDocument {
-  _id: string;
-  name: string;
-  slug: { current: string };
-  images: Image[]; // Changed from image: Image to images: Image[]
-  // Add other fields from your Sanity productType schema as needed
-  // For example:
-  // details?: any[]; // For Portable Text
-  price: number;
-  category?: string; // Assuming category is a string field
-  stripePriceId?: string;
-  isOutOfStock?: boolean; // Added isOutOfStock
-  // stock related fields if managed in Sanity
+	_id: string;
+	name: string;
+	slug: { current: string };
+	images: Image[]; // Changed from image: Image to images: Image[]
+	// Add other fields from your Sanity productType schema as needed
+	// For example:
+	// details?: any[]; // For Portable Text
+	price: number;
+	category?: string; // Assuming category is a string field
+	stripePriceId?: string;
+	isOutOfStock?: boolean; // Added isOutOfStock
+	// stock related fields if managed in Sanity
 }
 
 const PRODUCTS_QUERY = `*[_type == "product"]{
@@ -49,63 +49,61 @@ const PRODUCTS_QUERY = `*[_type == "product"]{
 // Client-side interactivity (like filters, add to cart state) will need to be moved
 // to a separate client component that receives data as props.
 export default async function ShopPage() {
-  const products = await client.fetch<SanityProduct[]>(
-    PRODUCTS_QUERY,
-    {},
-    { next: { tags: ['product'] } }
-  );
+	const products = await client.fetch<SanityProduct[]>(
+		PRODUCTS_QUERY,
+		{},
+		{ next: { tags: ['product'] } }
+	);
 
-  // All client-side state and effects (useState, useEffect, filtering logic, cart logic) 
-  // have been removed. This component now only fetches data and passes it to the JSX.
-  // The interactive parts will be handled by a new Client Component.
+	// All client-side state and effects (useState, useEffect, filtering logic, cart logic)
+	// have been removed. This component now only fetches data and passes it to the JSX.
+	// The interactive parts will be handled by a new Client Component.
 
-  return (
-    <main className="min-h-screen bg-soft-white">
-      {/* Hero Section with maroon background */}
-      <section className="relative h-[50vh] overflow-hidden bg-primary pt-16 flex items-center justify-center">
-        <div className="absolute inset-0 z-0">
-          {/* Overlay with coffee brewing background */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center rounded-2xl" 
-            style={{ 
-              backgroundImage: "url('/images/Products-Banner.png')", 
-              backgroundSize: 'cover'
-            }}
-          />
-          <div className="absolute inset-0 bg-primary/60"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <FadeIn delay={0.2}>
-            <h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary">
-              Shop Our Collection
-            </h1>
-          </FadeIn>
-        </div>
-      </section>
+	return (
+		<main className="min-h-screen bg-soft-white">
+			{/* Hero Section with maroon background */}
+			<section className="relative h-[50vh] overflow-hidden bg-primary pt-16 flex items-center justify-center">
+				<div className="absolute inset-0 z-0">
+					{/* Overlay with coffee brewing background */}
+					<div
+						className="absolute inset-0 bg-cover bg-center rounded-2xl"
+						style={{
+							backgroundImage: "url('/images/Products-Banner.png')",
+							backgroundSize: 'cover',
+						}}
+					/>
+					<div className="absolute inset-0 bg-primary/60"></div>
+				</div>
 
-      {/* Products Section - This section will eventually be largely replaced by a Client Component */}
-      <section className="py-16 md:py-24 bg-soft-white">
-        <div className="container mx-auto px-4">
-          {/* Introduction Text */}
-          <div className="text-center mb-12">
-            <FadeIn>
-              <h2 className="text-3xl md:text-4xl text-primary font-bold mb-4">
-                Our Products
-              </h2>
-              <p className="text-gray-700 max-w-3xl mx-auto">
-                Discover our selection of premium coffees and merchandise, crafted with care.
-              </p>
-            </FadeIn>
-          </div>
+				<div className="container mx-auto px-4 relative z-10 text-center">
+					<FadeIn delay={0.2}>
+						<h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary">
+							Shop Our Collection
+						</h1>
+					</FadeIn>
+				</div>
+			</section>
 
-          {/* Category Filters and Products Grid (Client Component) */}
-          <ProductListWithFilter products={products} />
-        </div>
-      </section>
+			{/* Products Section - This section will eventually be largely replaced by a Client Component */}
+			<section className="py-16 md:py-24 bg-soft-white">
+				<div className="container mx-auto px-4">
+					{/* Introduction Text */}
+					<div className="text-center mb-12">
+						<FadeIn>
+							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-4">Our Products</h2>
+							<p className="text-gray-700 max-w-3xl mx-auto">
+								Discover our selection of premium coffees and merchandise, crafted with care.
+							</p>
+						</FadeIn>
+					</div>
 
-      {/* Brewing Guide CTA  OPTIONAL FOR NOW*/}
-      {/*   <section className="py-16 bg-soft-white">
+					{/* Category Filters and Products Grid (Client Component) */}
+					<ProductListWithFilter products={products} />
+				</div>
+			</section>
+
+			{/* Brewing Guide CTA  OPTIONAL FOR NOW*/}
+			{/*   <section className="py-16 bg-soft-white">
         <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
@@ -141,6 +139,6 @@ export default async function ShopPage() {
         </div>
         </div>
     </section> */}
-    </main>
-  );
+		</main>
+	);
 }

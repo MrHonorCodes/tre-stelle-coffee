@@ -1,82 +1,82 @@
 [
-  {
-    "id": 1,
-    "name": "Ethiopian Yirgacheffe",
-    "category": "Coffee",
-    "price": 19.00,
-    "images": ["/images/products/ethiopian-yirgacheffe.jpg"],
-    "description": "Bright, fruity notes with vibrant acidity and floral undertones. Ideal for pour-over or drip methods.",
-    "stock": 15,
-    "options": null
-  },
-  {
-    "id": 2,
-    "name": "Brazil Fazenda",
-    "category": "Coffee",
-    "price": 17.00,
-    "images": ["/images/products/brazil-fazenda.jpg"],
-    "description": "A smooth, classic coffee with nutty, mild sweetness and prominent chocolate notes. Great for espresso or a balanced drip brew.",
-    "stock": 20,
-    "options": null
-  },
-  {
-    "id": 3,
-    "name": "Colombia Excelso",
-    "category": "Coffee",
-    "price": 17.00,
-    "images": ["/images/products/colombia-excelso.jpg"],
-    "description": "Rich caramel sweetness balanced with a hint of citrus and a medium body. Versatile for various brewing methods.",
-    "stock": 20, 
-    "options": null
-  },
-  {
-    "id": 4,
-    "name": "Highlands Blend",
-    "category": "Coffee",
-    "price": 18.00,
-    "images": ["/images/products/highlands-blend.jpg"],
-    "description": "Our signature blend combining the best of Colombia Excelso, Brazil Fazenda, and Ethiopian Yirgacheffe for a complex and balanced cup.",
-    "stock": 25,
-    "options": null
-  },
-  {
-    "id": 5,
-    "name": "Dr Congo Lake Kivu",
-    "category": "Coffee",
-    "price": 17.00,
-    "images": ["/images/products/dr-congo-lake-kivu.jpg"],
-    "description": "A unique coffee offering sweet, complex flavors with distinct berry notes and a remarkably smooth finish.",
-    "stock": 0,
-    "options": null
-  },
-  {
-    "id": 6,
-    "name": "Logo Sticker",
-    "category": "Merchandise",
-    "price": 2.00,
-    "images": ["/images/products/logo-sticker.jpg"],
-    "description": "High-quality die-cut vinyl sticker featuring the Tre Stelle Coffee Co. logo.",
-    "stock": 50,
-    "options": null
-  },
-  {
-    "id": 7,
-    "name": "Bridging The Gap T-Shirt", 
-    "category": "Merchandise",
-    "price": 25.00,
-    "images": [
-      "/images/products/bridging-the-gap-shirt-front.jpg",
-      "/images/products/bridging-the-gap-shirt-back.jpg" 
-    ],
-    "description": "Support a great cause with our 'Bridging The Gap' t-shirt. Comfortable fit, available in multiple sizes.",
-    "stock": {
-      "S": 5,
-      "M": 10,
-      "L": 10,
-      "XL": 5 
-    },
-    "options": {
-      "Size": ["S", "M", "L", "XL"]
-    }
-  } 
-] 
+	{
+		"id": 1,
+		"name": "Ethiopian Yirgacheffe",
+		"category": "Coffee",
+		"price": 19.0,
+		"images": ["/images/products/ethiopian-yirgacheffe.jpg"],
+		"description": "Bright, fruity notes with vibrant acidity and floral undertones. Ideal for pour-over or drip methods.",
+		"stock": 15,
+		"options": null
+	},
+	{
+		"id": 2,
+		"name": "Brazil Fazenda",
+		"category": "Coffee",
+		"price": 17.0,
+		"images": ["/images/products/brazil-fazenda.jpg"],
+		"description": "A smooth, classic coffee with nutty, mild sweetness and prominent chocolate notes. Great for espresso or a balanced drip brew.",
+		"stock": 20,
+		"options": null
+	},
+	{
+		"id": 3,
+		"name": "Colombia Excelso",
+		"category": "Coffee",
+		"price": 17.0,
+		"images": ["/images/products/colombia-excelso.jpg"],
+		"description": "Rich caramel sweetness balanced with a hint of citrus and a medium body. Versatile for various brewing methods.",
+		"stock": 20,
+		"options": null
+	},
+	{
+		"id": 4,
+		"name": "Highlands Blend",
+		"category": "Coffee",
+		"price": 18.0,
+		"images": ["/images/products/highlands-blend.jpg"],
+		"description": "Our signature blend combining the best of Colombia Excelso, Brazil Fazenda, and Ethiopian Yirgacheffe for a complex and balanced cup.",
+		"stock": 25,
+		"options": null
+	},
+	{
+		"id": 5,
+		"name": "Dr Congo Lake Kivu",
+		"category": "Coffee",
+		"price": 17.0,
+		"images": ["/images/products/dr-congo-lake-kivu.jpg"],
+		"description": "A unique coffee offering sweet, complex flavors with distinct berry notes and a remarkably smooth finish.",
+		"stock": 0,
+		"options": null
+	},
+	{
+		"id": 6,
+		"name": "Logo Sticker",
+		"category": "Merchandise",
+		"price": 2.0,
+		"images": ["/images/products/logo-sticker.jpg"],
+		"description": "High-quality die-cut vinyl sticker featuring the Tre Stelle Coffee Co. logo.",
+		"stock": 50,
+		"options": null
+	},
+	{
+		"id": 7,
+		"name": "Bridging The Gap T-Shirt",
+		"category": "Merchandise",
+		"price": 25.0,
+		"images": [
+			"/images/products/bridging-the-gap-shirt-front.jpg",
+			"/images/products/bridging-the-gap-shirt-back.jpg"
+		],
+		"description": "Support a great cause with our 'Bridging The Gap' t-shirt. Comfortable fit, available in multiple sizes.",
+		"stock": {
+			"S": 5,
+			"M": 10,
+			"L": 10,
+			"XL": 5
+		},
+		"options": {
+			"Size": ["S", "M", "L", "XL"]
+		}
+	}
+]
