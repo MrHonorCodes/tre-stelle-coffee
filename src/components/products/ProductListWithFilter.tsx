@@ -25,15 +25,25 @@ interface Product extends SanityDocument {
 
 const CATEGORIES = [
 	{ label: 'All', value: 'all' },
-	{ label: 'Ground Coffee', value: 'ground-coffee' },
+	{ label: 'Coffee Beans', value: 'coffee-beans' },
+	{ label: 'Whole Bean', value: 'whole-bean' },
 	{ label: 'Merchandise', value: 'merchandise' },
 ];
 
 export default function ProductListWithFilter({ products }: { products: Product[] }) {
 	const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-	const filteredProducts =
-		selectedCategory === 'all' ? products : products.filter((p) => p.category === selectedCategory);
+	const filteredProducts = selectedCategory === 'all' 
+		? products.sort((a, b) => {
+				// Show coffee products first, then others
+				const aIsCoffee = a.category === 'ground-coffee' || a.category === 'coffee-beans' || a.category === 'whole-bean';
+				const bIsCoffee = b.category === 'ground-coffee' || b.category === 'coffee-beans' || b.category === 'whole-bean';
+				
+				if (aIsCoffee && !bIsCoffee) return -1;
+				if (!aIsCoffee && bIsCoffee) return 1;
+				return 0; // Keep original order for items in same category type
+			})
+		: products.filter((p) => p.category === selectedCategory);
 
 	return (
 		<>
@@ -57,7 +67,7 @@ export default function ProductListWithFilter({ products }: { products: Product[
 			</div>
 
 			{/* Products Grid */}
-			<div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
 				{filteredProducts.map((product) => {
 					const isOutOfStock = product.isOutOfStock || false;
 					return (
@@ -74,14 +84,13 @@ export default function ProductListWithFilter({ products }: { products: Product[
 										OUT OF STOCK
 									</div>
 								)}
-								<div className="h-64 overflow-hidden">
+								<div className="h-72 overflow-hidden bg-gray-50">
 									{product.images && product.images[0] && (
 										<img
-											src={urlFor(product.images[0]).width(400).height(400).url()}
+											src={urlFor(product.images[0]).width(400).url()}
 											alt={product.name}
-											className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+											className="w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-105"
 											width={400}
-											height={400}
 										/>
 									)}
 								</div>

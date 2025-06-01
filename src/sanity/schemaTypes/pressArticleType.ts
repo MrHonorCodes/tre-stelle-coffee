@@ -41,7 +41,7 @@ export const pressArticleType = defineType({
 			title: 'URL to Article',
 			type: 'url',
 			validation: (Rule) =>
-				Rule.required().uri({
+				Rule.uri({
 					scheme: ['http', 'https'],
 				}),
 		}),
@@ -60,6 +60,16 @@ export const pressArticleType = defineType({
 				hotspot: true,
 			},
 			description: 'Optional. E.g., publication logo or a relevant photo.',
+		}),
+		defineField({
+			name: 'videoUrl',
+			title: 'Video URL (optional)',
+			type: 'url',
+			description: 'Optional. Video URL for any video content (YouTube, Vimeo, WFAA, etc.). For featured articles, this will be used instead of the image when available.',
+			validation: (Rule) =>
+				Rule.uri({
+					scheme: ['http', 'https'],
+				}),
 		}),
 		defineField({
 			name: 'isFeatured',

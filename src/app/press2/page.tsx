@@ -1,16 +1,16 @@
-// 'use client'; // REMOVED: This page needs to be a Server Component to use async/await for data fetching
+'use client';
 
 import Link from 'next/link';
 import { client } from '../../sanity/lib/client'; // Corrected path
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText } from '@portabletext/react';
 import type { SanityDocument, Image as SanityImageType, PortableTextBlock } from 'sanity'; // Added PortableTextBlock
+import { useState, useEffect } from 'react';
 
-// Assuming these UI components are available and correctly imported
-// import FadeIn from '../../../components/ui/FadeIn'; // Removed as it's no longer directly used
-import ScrollReveal from '../../../components/ui/ScrollReveal'; // Corrected path to root components
-import ImageWithFallback from '../../../components/ui/ImageWithFallback'; // Added import
-// import { useState, useEffect } from 'react'; // Only if keeping video player or other client effects
+// UI components with corrected paths
+import FadeIn from '../../../components/ui/FadeIn';
+import ScrollReveal from '../../../components/ui/ScrollReveal';
+import ImageWithFallback from '../../../components/ui/ImageWithFallback';
 
 // Define the type for a Sanity Press Article based on your schema
 interface SanityPressArticle extends SanityDocument {
@@ -22,6 +22,7 @@ interface SanityPressArticle extends SanityDocument {
 	sourceUrl: string;
 	excerpt?: PortableTextBlock[]; // Corrected type
 	image?: SanityImageType;
+	videoUrl?: string;
 	isFeatured?: boolean;
 }
 
@@ -34,6 +35,20 @@ function urlFor(source: SanityImageType) {
 	return builder.image(source);
 }
 
+// Helper function to get proper embed URL
+function getEmbedUrl(url: string): string {
+	// Handle WFAA URLs - extract video ID and convert to embed format
+	const wfaaRegex = /wfaa\.com\/.*\/([0-9]+-[a-f0-9-]+)/;
+	const wfaaMatch = url.match(wfaaRegex);
+	
+	if (wfaaMatch) {
+		return `https://www.wfaa.com/embeds/video/responsive/${wfaaMatch[1]}/iframe?autoplay=true&mute=false`;
+	}
+	
+	// Return original URL for other video types
+	return url;
+}
+
 const PRESS_ARTICLES_QUERY = `*[_type == "pressArticle"]{
   _id,
   title,
@@ -43,23 +58,33 @@ const PRESS_ARTICLES_QUERY = `*[_type == "pressArticle"]{
   sourceUrl,
   excerpt,
   image,
+  videoUrl,
   isFeatured
 } | order(isFeatured desc, publicationDate desc)`;
 
 // Main Page Component
-export default async function PressPageSanity() {
+export default function PressPageSanity() {
 	console.log('--- PressPageSanity: Component rendering ---');
 
-	let articles: SanityPressArticle[] = [];
-	try {
-		console.log('--- PressPageSanity: Fetching articles... ---');
-		articles = await client.fetch(PRESS_ARTICLES_QUERY);
-		console.log('--- PressPageSanity: Articles fetched:', articles);
-	} catch (error) {
-		console.error('--- PressPageSanity: Error fetching articles ---', error);
-		// Optionally, re-throw or handle to show an error state on the page
-		// For now, articles will remain an empty array if fetch fails
-	}
+	// State to control video visibility
+	const [showVideo, setShowVideo] = useState(false);
+	const [articles, setArticles] = useState<SanityPressArticle[]>([]);
+
+	// Fetch articles on component mount
+	useEffect(() => {
+		const fetchArticles = async () => {
+			try {
+				console.log('--- PressPageSanity: Fetching articles... ---');
+				const fetchedArticles = await client.fetch(PRESS_ARTICLES_QUERY);
+				console.log('--- PressPageSanity: Articles fetched:', fetchedArticles);
+				setArticles(fetchedArticles);
+			} catch (error) {
+				console.error('--- PressPageSanity: Error fetching articles ---', error);
+			}
+		};
+
+		fetchArticles();
+	}, []);
 
 	const featuredArticle = articles.find((article) => article.isFeatured);
 	console.log('--- PressPageSanity: Featured article:', featuredArticle);
@@ -67,7 +92,6 @@ export default async function PressPageSanity() {
 	const regularArticles = articles.filter((article) => !article.isFeatured);
 	console.log('--- PressPageSanity: Regular articles count:', regularArticles.length);
 
-	// const [showVideo, setShowVideo] = useState(false); // If video player logic is reintroduced
 	console.log('--- PressPageSanity: Returning JSX... ---');
 	return (
 		<main className="min-h-screen bg-soft-white">
@@ -84,30 +108,27 @@ export default async function PressPageSanity() {
 					<div className="absolute inset-0 bg-primary/60"></div>
 				</div>
 				<div className="container mx-auto px-4 relative z-10 text-center">
-					{/* <FadeIn delay={0.2}> */}
-					<h1
-						className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary animate-simple-fade-in"
-						style={{ animationDelay: '0.2s' }}
-					>
-						Press
-					</h1>
-					{/* </FadeIn> */}
+					<FadeIn delay={0.2}>
+						<h1 className="text-4xl md:text-6xl font-extrabold mb-2 leading-tight text-secondary">
+							Press
+						</h1>
+					</FadeIn>
 				</div>
 			</section>
 
-			{/* Press Section Introduction (copied from original) */}
+			{/* Press Section Introduction */}
 			<section className="py-16 md:py-24 bg-soft-white">
 				<div className="container mx-auto px-4">
-					<div className="text-center mb-16 animate-simple-fade-in">
-						{/* <FadeIn> */}
-						<h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
-							Tre Stelle in the News
-						</h2>
-						<p className="text-gray-700 max-w-3xl mx-auto">
-							We&apos;re grateful for the attention our coffee and story have received. Here&apos;s
-							some of the press coverage featuring Tre Stelle Coffee Co.
-						</p>
-						{/* </FadeIn> */}
+					<div className="text-center mb-16">
+						<FadeIn>
+							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
+								Tre Stelle in the News
+							</h2>
+							<p className="text-gray-700 max-w-3xl mx-auto">
+								We&apos;re grateful for the attention our coffee and story have received.
+								Here&apos;s some of the press coverage featuring Tre Stelle Coffee Co.
+							</p>
+						</FadeIn>
 					</div>
 
 					{/* Featured Press Item from Sanity */}
@@ -154,16 +175,46 @@ export default async function PressPageSanity() {
 												)}
 											</div>
 										</div>
-										{/* Image for featured article - replaces video player for now */}
-										{featuredArticle.image && (
-											<div className="relative pb-[56.25%] h-0 bg-gray-200">
-												<ImageWithFallback
-													src={urlFor(featuredArticle.image)?.width(800).url()}
-													alt={`Image for ${featuredArticle.title}`}
-													className="absolute top-0 left-0 w-full h-full object-cover"
+										{/* Media section for featured article - video player like original press page */}
+										<div
+											className="relative pb-[56.25%] h-0 bg-black flex items-center justify-center cursor-pointer group"
+											onClick={() => featuredArticle.videoUrl && setShowVideo(true)}
+										>
+											{!showVideo || !featuredArticle.videoUrl ? (
+												// Placeholder content
+												<div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+													{featuredArticle.image ? (
+														<ImageWithFallback
+															src={urlFor(featuredArticle.image)?.width(200).url()}
+															alt={featuredArticle.sourceName}
+															className="h-16 object-contain mb-4 opacity-80 group-hover:opacity-100 transition-opacity"
+														/>
+													) : null}
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														className="h-16 w-16 text-white opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+														fill="currentColor"
+														viewBox="0 0 24 24"
+													>
+														<path d="M8 5v14l11-7z" />
+													</svg>
+													<p className="text-white text-sm mt-2 opacity-70 group-hover:opacity-100 transition-opacity">
+														{featuredArticle.videoUrl ? 'Click to Play' : 'Featured Media'}
+													</p>
+												</div>
+											) : (
+												// Iframe - loaded only when showVideo is true
+												<iframe
+													key={`video-${featuredArticle._id}-${showVideo}`}
+													className="absolute top-0 left-0 w-full h-full"
+													src={getEmbedUrl(featuredArticle.videoUrl)}
+													title={featuredArticle.title}
+													allowFullScreen={true}
+													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+													frameBorder="0"
 												/>
-											</div>
-										)}
+											)}
+										</div>
 									</div>
 								</div>
 							</ScrollReveal>
@@ -207,7 +258,7 @@ export default async function PressPageSanity() {
 														rel="noopener noreferrer"
 														className="px-4 py-1 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
 													>
-														Read News
+														Read Article
 													</Link>
 												)}
 											</div>
