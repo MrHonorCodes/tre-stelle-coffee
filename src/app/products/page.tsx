@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 // 'use client'; // Removed: This page is a Server Component for data fetching
 // Client-specific hooks and components are removed from here and will be in a child client component
 // import { useEffect, useState } from 'react';

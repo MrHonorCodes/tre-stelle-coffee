@@ -1,93 +1,94 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
+import Link from 'next/link';
+import { client } from '../../sanity/lib/client'; // Corrected path
+import imageUrlBuilder from '@sanity/image-url';
+import { PortableText } from '@portabletext/react';
+import type { SanityDocument, Image as SanityImageType, PortableTextBlock } from 'sanity'; // Added PortableTextBlock
+import ImageWithFallback from '../../../components/ui/ImageWithFallback';
 
-// Press feature type
-type PressFeature = {
-	id: number;
-	outlet: string;
-	logo: string;
-	headline?: string;
-	excerpt?: string;
-	date: string;
-	link: string;
-	featured?: boolean;
-};
+// Define the type for a Sanity Press Article based on your schema
+interface SanityPressArticle extends SanityDocument {
+	_id: string;
+	title: string;
+	slug: { current: string };
+	publicationDate: string; // Assuming YYYY-MM-DD format
+	sourceName: string;
+	sourceUrl: string;
+	excerpt?: PortableTextBlock[]; // Corrected type
+	image?: SanityImageType;
+	videoUrl?: string;
+	isFeatured?: boolean;
+}
+
+// Setup for Sanity image URLs
+const builder = imageUrlBuilder(client);
+function urlFor(source: SanityImageType) {
+	if (!source) {
+		return undefined; // Or a placeholder URL
+	}
+	return builder.image(source);
+}
+
+// Helper function to get proper embed URL
+function getEmbedUrl(url: string): string {
+	// Handle WFAA URLs - extract video ID and convert to embed format
+	const wfaaRegex = /wfaa\.com\/.*\/([0-9]+-[a-f0-9-]+)/;
+	const wfaaMatch = url.match(wfaaRegex);
+	
+	if (wfaaMatch) {
+		return `https://www.wfaa.com/embeds/video/responsive/${wfaaMatch[1]}/iframe?autoplay=true&mute=false`;
+	}
+	
+	// Return original URL for other video types
+	return url;
+}
+
+const PRESS_ARTICLES_QUERY = `*[_type == "pressArticle"]{
+  _id,
+  title,
+  slug,
+  publicationDate,
+  sourceName,
+  sourceUrl,
+  excerpt,
+  image,
+  videoUrl,
+  isFeatured
+} | order(isFeatured desc, publicationDate desc)`;
 
 export default function Press() {
+	console.log('--- Press: Component rendering ---');
+
 	// State to control video visibility
 	const [showVideo, setShowVideo] = useState(false);
+	const [articles, setArticles] = useState<SanityPressArticle[]>([]);
 
-	// Add smooth scrolling effect
+	// Fetch articles on component mount
 	useEffect(() => {
-		document.documentElement.style.scrollBehavior = 'smooth';
-		return () => {
-			document.documentElement.style.scrollBehavior = 'auto';
+		const fetchArticles = async () => {
+			try {
+				console.log('--- Press: Fetching articles... ---');
+				const fetchedArticles = await client.fetch(PRESS_ARTICLES_QUERY);
+				console.log('--- Press: Articles fetched:', fetchedArticles);
+				setArticles(fetchedArticles);
+			} catch (error) {
+				console.error('--- Press: Error fetching articles ---', error);
+			}
 		};
+
+		fetchArticles();
 	}, []);
 
-	// Press features data
-	const pressFeatures: PressFeature[] = [
-		{
-			id: 1,
-			outlet: 'WFAA Good Morning Texas',
-			logo: '/images/press/wfaa-logo.jpg',
-			headline: 'Cozy up with fall-inspired coffee drinks at Tre Stelle Coffee Co.',
-			excerpt:
-				'Tre Stelle Coffee Co. features beans sourced from around the world, roasted locally in Dallas.',
-			date: 'September 26, 2022',
-			link: 'https://www.wfaa.com/video/entertainment/television/programs/good-morning-texas/cozy-up-with-fall-inspired-coffee-drinks-at-tre-stelle-coffee-co/287-af38153a-df57-45d8-a8e5-82c465b83f9a',
-			featured: true,
-		},
-		{
-			id: 2,
-			outlet: 'Dallas Morning News',
-			logo: '/images/press/dallas-morning-news-logo.png',
-			headline: 'East African-inspired coffee shop Tre Stelle opens in Dallas',
-			excerpt:
-				'The local roastery is building bridges between cultures and neighborhoods through their inclusive approach.',
-			date: 'August 18, 2022',
-			link: 'https://www.dallasnews.com/food/restaurant-news/2022/08/18/east-african-inspired-coffee-shop-tre-stelle-opens-in-dallas/',
-		},
-		{
-			id: 3,
-			outlet: 'Dallas Weekly',
-			logo: '/images/press/dallas-weekly-logo.jpg',
-			headline:
-				'The Stars Align for Coffee Lover in North Texas with Opening of Tre Selle Coffee Co. in North Dallas',
-			excerpt:
-				"Entrepreneur Jonathan has gone from running from the smell of coffee to running Dallas' newest specialty coffee house.",
-			date: 'August 9, 2022',
-			link: 'https://dallasweekly.com/tag/tre-stelle/',
-		},
-		{
-			id: 4,
-			outlet: 'Daily Coffee News',
-			logo: '/images/press/DCN_Logo.png',
-			headline: "Coffee, Culture and Community Are Co-Stars at Tre Stelle's First Cafe in Dallas",
-			excerpt:
-				'The stars have aligned for specialty coffee in Far North Dallas as Eritrean family-run roasting company Tre Stelle Coffee has opened its first cafe.',
-			date: 'August 17, 2022',
-			link: 'https://dailycoffeenews.com/2022/08/17/coffee-culture-and-community-are-co-stars-at-tre-stelles-first-cafe-in-dallas/',
-		},
-		{
-			id: 5,
-			outlet: 'DALLAS OBSERVER',
-			logo: '/images/press/dallas-observer-logo.png',
-			headline: "Tre Stelle Is a 20-Year-Old's Dream Coffee Shop Made Reality",
-			excerpt:
-				"The shop is inspired by the traditions of Eritrea, homeland of the proprietor's parents.",
-			date: 'October 16, 2023',
-			link: 'https://www.dallasobserver.com/restaurants/tre-stelle-is-a-20-year-olds-dream-coffee-shop-made-reality-17650978',
-		},
-	];
+	const featuredArticle = articles.find((article) => article.isFeatured);
+	console.log('--- Press: Featured article:', featuredArticle);
 
-	// Get featured press item (if any)
-	const featuredPress = pressFeatures.find((item) => item.featured);
-	const regularPress = pressFeatures.filter((item) => !item.featured);
+	const regularArticles = articles.filter((article) => !article.isFeatured);
+	console.log('--- Press: Regular articles count:', regularArticles.length);
 
+	console.log('--- Press: Returning JSX... ---');
 	return (
 		<main className="min-h-screen bg-soft-white">
 			{/* Hero Section with maroon background */}
@@ -129,71 +130,65 @@ export default function Press() {
 						</FadeIn>
 					</div>
 
-					{/* Featured Press Item (if exists) */}
-					{featuredPress && (
+					{/* Featured Press Item from Sanity */}
+					{featuredArticle && (
 						<div className="mb-20">
 							<ScrollReveal>
 								<div className="bg-white rounded-2xl shadow-lg overflow-hidden">
 									<div className="grid grid-cols-1 md:grid-cols-2">
 										<div className="p-8 md:p-12 flex flex-col justify-center">
-											<div className="h-16 mb-8 flex items-center">
-												<img
-													src={featuredPress.logo}
-													alt={featuredPress.outlet}
-													className="h-full object-contain"
-													onError={(e) => {
-														(e.target as HTMLImageElement).onerror = null;
-														(e.target as HTMLImageElement).src =
-															`https://via.placeholder.com/200x100?text=${featuredPress.outlet}`;
-													}}
-												/>
-											</div>
+											{featuredArticle.image && (
+												<div className="h-16 mb-8 flex items-center">
+													<ImageWithFallback
+														src={urlFor(featuredArticle.image)?.width(800).quality(100).dpr(2).url()}
+														alt={featuredArticle.sourceName}
+														className="h-full object-contain"
+													/>
+												</div>
+											)}
 											<h3 className="text-2xl md:text-3xl text-primary font-bold mb-4">
-												{featuredPress.headline || 'Tre Stelle Coffee Featured on WFAA'}
+												{featuredArticle.title}
 											</h3>
-											<p className="text-gray-700 mb-4">
-												{featuredPress.excerpt ||
-													'Watch how Tre Stelle Coffee brings Eritrean coffee culture to Dallas, featuring our owner Jonathan Ghebreamlak sharing his story and passion for coffee.'}
-											</p>
-											<div className="flex justify-between items-center">
-												<span className="text-gray-500">{featuredPress.date || 'April 2023'}</span>
-												{featuredPress.link ? (
-													<a
-														href={featuredPress.link}
+											{featuredArticle.excerpt && (
+												<div className="text-gray-700 mb-4 prose max-w-none">
+													<PortableText value={featuredArticle.excerpt} />
+												</div>
+											)}
+											<div className="flex justify-between items-center mt-auto">
+												<span className="text-gray-500">
+													{new Date(featuredArticle.publicationDate).toLocaleDateString('en-US', {
+														year: 'numeric',
+														month: 'long',
+														day: 'numeric',
+													})}
+												</span>
+												{featuredArticle.sourceUrl && (
+													<Link
+														href={featuredArticle.sourceUrl}
 														target="_blank"
 														rel="noopener noreferrer"
 														className="px-6 py-2 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
 													>
 														Read Article
-													</a>
-												) : (
-													<a
-														href="https://www.wfaa.com"
-														target="_blank"
-														rel="noopener noreferrer"
-														className="px-6 py-2 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
-													>
-														Visit WFAA
-													</a>
+													</Link>
 												)}
 											</div>
 										</div>
-										{/* Video Placeholder / Iframe Area */}
+										{/* Media section for featured article - video player like original press page */}
 										<div
 											className="relative pb-[56.25%] h-0 bg-black flex items-center justify-center cursor-pointer group"
-											onClick={() => setShowVideo(true)}
+											onClick={() => featuredArticle.videoUrl && setShowVideo(true)}
 										>
-											{!showVideo ? (
+											{!showVideo || !featuredArticle.videoUrl ? (
 												// Placeholder content
 												<div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-													<img
-														src="/images/press/wfaa-logo.jpg"
-														alt="WFAA Logo"
-														className="h-16 object-contain mb-4 opacity-80 group-hover:opacity-100 transition-opacity"
-														onError={(e) => {
-															(e.target as HTMLImageElement).style.display = 'none'; // Hide if logo fails
-														}}
-													/>
+													{featuredArticle.image ? (
+														<ImageWithFallback
+															src={urlFor(featuredArticle.image)?.width(800).quality(100).dpr(2).url()}
+															alt={featuredArticle.sourceName}
+															className="h-16 object-contain mb-4 opacity-80 group-hover:opacity-100 transition-opacity"
+														/>
+													) : null}
 													<svg
 														xmlns="http://www.w3.org/2000/svg"
 														className="h-16 w-16 text-white opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
@@ -203,19 +198,20 @@ export default function Press() {
 														<path d="M8 5v14l11-7z" />
 													</svg>
 													<p className="text-white text-sm mt-2 opacity-70 group-hover:opacity-100 transition-opacity">
-														Click to Play
+														{featuredArticle.videoUrl ? 'Click to Play' : 'Featured Media'}
 													</p>
 												</div>
 											) : (
 												// Iframe - loaded only when showVideo is true
 												<iframe
+													key={`video-${featuredArticle._id}-${showVideo}`}
 													className="absolute top-0 left-0 w-full h-full"
-													src="https://www.wfaa.com/embeds/video/responsive/287-af38153a-df57-45d8-a8e5-82c465b83f9a/iframe?autoplay=1" // Set autoplay=1 here so it plays on click
-													title="Tre Stelle Coffee Featured on WFAA"
+													src={getEmbedUrl(featuredArticle.videoUrl)}
+													title={featuredArticle.title}
 													allowFullScreen={true}
 													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-													loading="lazy"
-												></iframe>
+													frameBorder="0"
+												/>
 											)}
 										</div>
 									</div>
@@ -224,127 +220,55 @@ export default function Press() {
 						</div>
 					)}
 
-					{/* Regular Press Grid */}
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-						{regularPress.map((press, index) => (
-							<ScrollReveal key={press.id} delay={index * 0.1}>
-								<div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-									<div className="p-8">
-										<div className="h-12 mb-6 flex items-center">
-											<img
-												src={press.logo}
-												alt={press.outlet}
-												className="h-full object-contain"
-												onError={(e) => {
-													(e.target as HTMLImageElement).onerror = null;
-													(e.target as HTMLImageElement).src =
-														`https://via.placeholder.com/200x60?text=${press.outlet}`;
-												}}
-											/>
-										</div>
-										<h3 className="text-xl font-bold text-primary mb-3">{press.headline}</h3>
-										<p className="text-gray-600 mb-4 line-clamp-2">{press.excerpt}</p>
-										<div className="flex justify-between items-center">
-											<span className="text-gray-500 text-sm">{press.date}</span>
-											<a
-												href={press.link}
-												target="_blank"
-												rel="noopener noreferrer"
-												className="px-4 py-1 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
-											>
-												Read News
-											</a>
+					{/* Regular Press Grid from Sanity */}
+					{regularArticles.length > 0 && (
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+							{regularArticles.map((article, index) => (
+								<ScrollReveal key={article._id} delay={index * 0.1}>
+									<div className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+										<div className="p-8 flex flex-col h-full">
+											{article.image && (
+												<div className="h-12 mb-6 flex items-center">
+													<ImageWithFallback
+														src={urlFor(article.image)?.width(600).quality(100).dpr(2).url()}
+														alt={article.sourceName}
+														className="h-full object-contain"
+													/>
+												</div>
+											)}
+											<h3 className="text-xl font-bold text-primary mb-3">{article.title}</h3>
+											{article.excerpt && (
+												<div className="text-gray-600 mb-4 line-clamp-3 prose-sm max-w-none">
+													<PortableText value={article.excerpt} />
+												</div>
+											)}
+											<div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
+												<span className="text-gray-500 text-sm">
+													{new Date(article.publicationDate).toLocaleDateString('en-US', {
+														year: 'numeric',
+														month: 'long',
+														day: 'numeric',
+													})}
+												</span>
+												{article.sourceUrl && (
+													<Link
+														href={article.sourceUrl}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="px-4 py-1 bg-secondary text-dark-text font-semibold rounded-full text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
+													>
+														Read Article
+													</Link>
+												)}
+											</div>
 										</div>
 									</div>
-								</div>
-							</ScrollReveal>
-						))}
-					</div>
+								</ScrollReveal>
+							))}
+						</div>
+					)}
 				</div>
 			</section>
-
-			{/* Media Kit Section OPTIONAL AND CAN BE ADDED LATER*/}
-			{/* 
-        <section className="py-16 bg-tertiary text-light-text">
-            <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
-                <ScrollReveal>
-                <div className="text-center mb-10">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Media Resources</h2>
-                    <p className="text-lg">
-                    For press inquiries, please contact us directly. We&apos;ve also prepared a media kit with   
-                    resources for publications and press.
-                    </p>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                    <div className="h-12 w-12 bg-secondary text-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-center">Brand Assets</h3>
-                    <p className="text-center mb-4">Logos, product images, and brand guidelines.</p>
-                    <div className="text-center">
-                        <a 
-                        href="#" 
-                        className="text-secondary hover:underline"
-                        >
-                        Download ZIP
-                        </a>
-                    </div>
-                    </div>
-                    
-                    <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                    <div className="h-12 w-12 bg-secondary text-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                        </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-center">Company Fact Sheet</h3>
-                    <p className="text-center mb-4">Key information about our history and products.</p>
-                    <div className="text-center">
-                        <a 
-                        href="#" 
-                        className="text-secondary hover:underline"
-                        >
-                        Download PDF
-                        </a>
-                    </div>
-                    </div>
-                    
-                    <div className="bg-white/10 p-6 rounded-lg backdrop-blur-sm">
-                    <div className="h-12 w-12 bg-secondary text-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-center">Founder Bios</h3>
-                    <p className="text-center mb-4">Background information on our team and story.</p>
-                    <div className="text-center">
-                        <a 
-                        href="#" 
-                        className="text-secondary hover:underline"
-                        >
-                        Download PDF
-                        </a>
-                    </div>
-                    </div>
-                </div>
-                
-                <div className="text-center">
-                    <a 
-                    href="mailto:press@trestellecoffeeco.com" 
-                    className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
-                    >
-                    Contact Press Team
-                    </a>
-                </div>
-                </ScrollReveal>
-            </div>
-            </div>
-        </section> */}
 
 			{/* Press Quotes */}
 			<section className="py-20 bg-soft-white">
@@ -378,15 +302,10 @@ export default function Press() {
 											who knows the &apos;coffee language,&apos; they&apos;re happy to oblige.&quot;
 										</p>
 										<div className="h-12 flex items-center justify-center">
-											<img
+											<ImageWithFallback
 												src="/images/press/dallas-morning-news-logo.png"
 												alt="Dallas Morning News Logo"
 												className="h-full object-contain"
-												onError={(e) => {
-													(e.target as HTMLImageElement).onerror = null;
-													(e.target as HTMLImageElement).src =
-														'https://via.placeholder.com/200x50?text=Dallas+Morning+News';
-												}}
 											/>
 										</div>
 									</div>
@@ -398,15 +317,10 @@ export default function Press() {
 											the coffee. That&apos;s what makes us different.&quot;
 										</p>
 										<div className="h-12 flex items-center justify-center">
-											<img
+											<ImageWithFallback
 												src="/images/press/dallas-observer-logo.png"
 												alt="Dallas Observer Logo"
 												className="h-full object-contain"
-												onError={(e) => {
-													(e.target as HTMLImageElement).onerror = null;
-													(e.target as HTMLImageElement).src =
-														'https://via.placeholder.com/200x50?text=Dallas+Observer';
-												}}
 											/>
 										</div>
 									</div>
@@ -426,12 +340,12 @@ export default function Press() {
 							Interested in featuring Tre Stelle Coffee Co. in your publication? We&apos;d love to
 							share our story with you.
 						</p>
-						<a
+						<Link
 							href="mailto:contact@trestellecoffeeco.com"
 							className="px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm inline-block transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
 						>
 							Contact For Press Inquiries
-						</a>
+						</Link>
 					</ScrollReveal>
 				</div>
 			</section>

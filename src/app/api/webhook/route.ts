@@ -52,8 +52,8 @@ export async function POST(req: NextRequest) {
 		const session = event.data.object as Stripe.Checkout.Session;
 
 		const customerEmail = session.customer_details?.email;
-		// Retrieve product details from metadata - ensure this matches what you send
-		const productInfo = session.metadata?.productDetails || 'Unknown Product';
+		// Retrieve and parse product details from metadata
+		const productDetailsRaw = session.metadata?.productDetails || 'Unknown Product';
 		const orderId = session.id;
 
 		if (!customerEmail) {
@@ -62,22 +62,77 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ error: 'Customer email not found' }, { status: 400 });
 		}
 
+		// Parse the product details JSON
+		let orderItems: Array<{
+			_key: string;
+			product: { _type: string; _ref: string } | null;
+			productId: string;
+			productName: string;
+			quantity: number;
+			size: string | null;
+		}> = [];
+		try {
+			if (productDetailsRaw !== 'Unknown Product') {
+				const parsedProducts = JSON.parse(productDetailsRaw);
+				
+				// Get all productIds from the order
+				const productIds = parsedProducts.map((item: { productId?: string }) => item.productId).filter(Boolean);
+				
+				// Fetch products from Sanity using productId field
+				const sanityProducts = await sanityClient.fetch(
+					`*[_type == "product" && productId in $productIds]{ _id, productId }`,
+					{ productIds }
+				);
+				
+				// Create a map of productId -> Sanity _id
+				const productIdToSanityId = Object.fromEntries(
+					sanityProducts.map((p: { productId: string; _id: string }) => [p.productId, p._id])
+				);
+				
+				orderItems = parsedProducts.map((item: { productId?: string; name?: string; quantity?: number; size?: string | null }, index: number) => {
+					const sanityId = productIdToSanityId[item.productId || ''];
+					return {
+						_key: `item-${index}-${item.productId || 'unknown'}-${Date.now()}`,
+						product: sanityId ? {
+							_type: 'reference',
+							_ref: sanityId,
+						} : null,
+						productId: item.productId || 'unknown',
+						productName: item.name || 'Unknown Product',
+						quantity: item.quantity || 1,
+						size: item.size || null,
+					};
+				});
+			}
+		} catch (error) {
+			console.warn('Failed to parse product details JSON:', error);
+			// Fallback: create a single item with the raw string
+			orderItems = [
+				{
+					_key: `fallback-${Date.now()}`,
+					product: null, // No reference available for fallback
+					productId: 'unknown',
+					productName: productDetailsRaw,
+					quantity: 1,
+					size: null,
+				},
+			];
+		}
+
 		try {
 			const newOrder = await sanityClient.create({
 				_type: 'order',
 				customerEmail: customerEmail,
-				productDetails: productInfo, // Make sure this metadata key is correct
+				orderItems: orderItems,
+				productDetails: productDetailsRaw, // Keep legacy field for backward compatibility
 				stripeSessionId: orderId,
 				trackingEmailSent: false,
-				orderTimestamp: new Date().toISOString(), // Add timestamp for the order
+				orderTimestamp: new Date().toISOString(),
 			});
 			console.log('Order created in Sanity:', newOrder._id);
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : 'Unknown Sanity order creation error';
 			console.error('Sanity Order Creation Error:', message);
-			// Decide if you want to return an error to Stripe.
-			// Generally, for async processing like this, you might still return 200 to Stripe
-			// and handle the error internally (e.g., retry, log for manual intervention).
 			return NextResponse.json(
 				{ error: `Failed to save order to Sanity: ${message}` },
 				{ status: 500 }

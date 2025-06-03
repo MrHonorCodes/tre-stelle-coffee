@@ -12,10 +12,71 @@ export default defineType({
 			readOnly: true,
 		}),
 		defineField({
-			name: 'productDetails', // Changed from 'product' to be more descriptive
-			title: 'Product Details',
-			type: 'text', // Using text for potentially longer product descriptions or multiple items
+			name: 'orderItems',
+			title: 'Order Items',
+			type: 'array',
+			of: [
+				{
+					type: 'object',
+					title: 'Order Item',
+					fields: [
+						{
+							name: 'product',
+							title: 'Product',
+							type: 'reference',
+							to: [{ type: 'product' }],
+							readOnly: true,
+						},
+						{
+							name: 'productId',
+							title: 'Product ID',
+							type: 'string',
+							readOnly: true,
+						},
+						{
+							name: 'productName',
+							title: 'Product Name',
+							type: 'string',
+							readOnly: true,
+						},
+						{
+							name: 'quantity',
+							title: 'Quantity',
+							type: 'number',
+							readOnly: true,
+						},
+						{
+							name: 'size',
+							title: 'Size',
+							type: 'string',
+							readOnly: true,
+						},
+					],
+					preview: {
+						select: {
+							title: 'productName',
+							subtitle: 'quantity',
+							size: 'size',
+							media: 'product.images.0',
+						},
+						prepare({ title, subtitle, size, media }) {
+							return {
+								title: title || 'Unknown Product',
+								subtitle: `Qty: ${subtitle || 0}${size ? ` • Size: ${size}` : ''}`,
+								media: media,
+							};
+						},
+					},
+				},
+			],
 			readOnly: true,
+		}),
+		defineField({
+			name: 'productDetails',
+			title: 'Raw Product Details (Legacy)',
+			type: 'text',
+			readOnly: true,
+			hidden: true, // Hide this field since we now have the structured orderItems
 		}),
 		defineField({
 			name: 'stripeSessionId',
@@ -61,14 +122,17 @@ export default defineType({
 			title: 'customerEmail',
 			subtitle: 'stripeSessionId',
 			timestamp: 'orderTimestamp',
+			orderItems: 'orderItems',
 		},
 		prepare(selection) {
-			const { title, subtitle, timestamp } = selection;
+			const { title, subtitle, orderItems } = selection;
+			const itemCount = orderItems?.length || 0;
+			const totalQuantity = orderItems?.reduce((sum: number, item: { quantity?: number }) => sum + (item.quantity || 0), 0) || 0;
+			
 			return {
 				title: title || 'No Email',
-				subtitle: `Order ID: ${subtitle || 'N/A'}`,
-				media: undefined, // No media for orders, or you could add an icon
-				timestamp: timestamp ? new Date(timestamp).toLocaleDateString() : 'No Date',
+				subtitle: `${itemCount} item${itemCount !== 1 ? 's' : ''} (${totalQuantity} total) • ${subtitle || 'No Session ID'}`,
+				media: undefined,
 			};
 		},
 	},

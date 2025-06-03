@@ -25,8 +25,13 @@ interface SanityOrderDocument {
 	customerEmail?: string;
 	trackingNumber?: string;
 	trackingEmailSent?: boolean;
-	productDetails?: string; // Assuming productDetails is a JSON string
-	// Add other fields from your order schema as needed
+	orderItems?: Array<{
+		productId: string;
+		productName: string;
+		quantity: number;
+		size?: string;
+	}>;
+	productDetails?: string; // Legacy field
 }
 
 // Optional: A secret to verify the webhook request is from Sanity
@@ -71,18 +76,25 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ message: 'Order not found' }, { status: 404 });
 		}
 
-		const { customerEmail, trackingNumber, trackingEmailSent, productDetails } = order;
+		const { customerEmail, trackingNumber, trackingEmailSent, orderItems, productDetails } = order;
 
 		if (trackingNumber && !trackingEmailSent) {
 			if (!customerEmail) {
 				console.error(`Order ${orderId} has tracking number but no customer email.`);
-				// Optionally update status to prevent retries if email is genuinely missing
 				return NextResponse.json({ message: 'Customer email missing for order' }, { status: 400 });
 			}
 
-			// For product details, you might want to parse them if they are stored as a JSON string
+			// Format product details using the new structured data
 			let productsText = 'Your items';
-			if (typeof productDetails === 'string') {
+			if (orderItems && orderItems.length > 0) {
+				productsText = orderItems
+					.map((item) => {
+						const sizeText = item.size ? ` (${item.size})` : '';
+						return `${item.productName}${sizeText} (Qty: ${item.quantity})`;
+					})
+					.join(', ');
+			} else if (typeof productDetails === 'string') {
+				// Fallback to legacy field if orderItems is not available
 				try {
 					const productsArray = JSON.parse(productDetails) as ProductDetailItem[];
 					productsText = productsArray
@@ -90,7 +102,7 @@ export async function POST(req: NextRequest) {
 						.join(', ');
 				} catch (e) {
 					console.warn('Could not parse productDetails for email:', e);
-					productsText = productDetails; // fallback to raw string if parsing fails
+					productsText = productDetails;
 				}
 			}
 

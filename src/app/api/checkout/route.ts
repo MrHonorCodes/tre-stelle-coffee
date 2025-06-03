@@ -53,16 +53,17 @@ export async function POST(req: NextRequest) {
 		const productIds = lineItems.map((item: { productId: string }) => item.productId);
 		type ProductSanity = {
 			_id: string;
+			productId: string;
 			name: string;
 			stripePriceId: string;
 			isOutOfStock?: boolean;
 		};
 		const products: ProductSanity[] = await client.fetch(
-			`*[_type == "product" && _id in $ids]{ _id, name, stripePriceId, isOutOfStock }`,
+			`*[_type == "product" && productId in $ids]{ _id, productId, name, stripePriceId, isOutOfStock }`,
 			{ ids: productIds }
 		);
 		const productMap: Record<string, ProductSanity> = Object.fromEntries(
-			products.map((p) => [p._id, p])
+			products.map((p) => [p.productId, p])
 		);
 
 		// Build Stripe line items, validating each
@@ -100,7 +101,7 @@ export async function POST(req: NextRequest) {
 				quantity: item.quantity,
 			});
 			productDetailsForMetadata.push({
-				productId: item.productId,
+				productId: product.productId,
 				name: product.name,
 				quantity: item.quantity,
 				size: item.size || null,

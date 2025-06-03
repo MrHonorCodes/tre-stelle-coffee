@@ -6,6 +6,13 @@ export const productType = defineType({
 	type: 'document',
 	fields: [
 		defineField({
+			name: 'productId',
+			title: 'Product ID',
+			type: 'string',
+			validation: (Rule) => Rule.required(),
+			description: 'Unique identifier for this product (used for order tracking and Stripe integration)',
+		}),
+		defineField({
 			name: 'name',
 			title: 'Product Name',
 			type: 'string',
