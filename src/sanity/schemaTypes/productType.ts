@@ -61,7 +61,6 @@ export const productType = defineType({
 			type: 'string',
 			options: {
 				list: [
-					{ title: 'Coffee Beans', value: 'coffee-beans' },
 					{ title: 'Whole Bean', value: 'whole-bean' },
 					{ title: 'Merchandise', value: 'merchandise' },
 					{ title: 'Brewing Gear', value: 'brewing-gear' },

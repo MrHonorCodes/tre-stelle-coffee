@@ -25,7 +25,6 @@ interface Product extends SanityDocument {
 
 const CATEGORIES = [
 	{ label: 'All', value: 'all' },
-	{ label: 'Coffee Beans', value: 'coffee-beans' },
 	{ label: 'Whole Bean', value: 'whole-bean' },
 	{ label: 'Merchandise', value: 'merchandise' },
 ];
@@ -36,8 +35,8 @@ export default function ProductListWithFilter({ products }: { products: Product[
 	const filteredProducts = selectedCategory === 'all' 
 		? products.sort((a, b) => {
 				// Show coffee products first, then others
-				const aIsCoffee = a.category === 'ground-coffee' || a.category === 'coffee-beans' || a.category === 'whole-bean';
-				const bIsCoffee = b.category === 'ground-coffee' || b.category === 'coffee-beans' || b.category === 'whole-bean';
+				const aIsCoffee = a.category === 'ground-coffee' || a.category === 'whole-bean';
+				const bIsCoffee = b.category === 'ground-coffee' || b.category === 'whole-bean';
 				
 				if (aIsCoffee && !bIsCoffee) return -1;
 				if (!aIsCoffee && bIsCoffee) return 1;
