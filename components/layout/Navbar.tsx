@@ -26,8 +26,10 @@ const ExternalLinkIcon = () => (
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const [isSmallDropdownOpen, setIsSmallDropdownOpen] = useState(false);
 	const [isClient, setIsClient] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+	const smallDropdownRef = useRef<HTMLDivElement>(null);
 	const pathname = usePathname();
 	const { getItemCount } = useCart();
 	const itemCount = getItemCount();
@@ -48,18 +50,21 @@ export default function Navbar() {
 		setIsClient(true);
 	}, []);
 
-	// Close dropdown when clicking outside
+	// Close dropdowns when clicking outside
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent): void {
 			if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
 				setIsDropdownOpen(false);
+			}
+			if (smallDropdownRef.current && !smallDropdownRef.current.contains(event.target as Node)) {
+				setIsSmallDropdownOpen(false);
 			}
 		}
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [dropdownRef]);
+	}, [dropdownRef, smallDropdownRef]);
 
 	return (
 		<header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light">
@@ -300,15 +305,15 @@ export default function Navbar() {
 							);
 						})}
 						{/* Dropdown for additional menu items on small tablet */}
-						<div className="relative" ref={dropdownRef}>
+						<div className="relative" ref={smallDropdownRef}>
 							<button
-								onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-								className={`font-medium text-sm flex items-center transition-colors duration-300 ${isDropdownOpen ? 'text-secondary' : 'text-primary'}`}
+								onClick={() => setIsSmallDropdownOpen(!isSmallDropdownOpen)}
+								className={`font-medium text-sm flex items-center transition-colors duration-300 ${isSmallDropdownOpen ? 'text-secondary' : 'text-primary'}`}
 							>
 								<span>More</span>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									className={`h-4 w-4 ml-1 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`}
+									className={`h-4 w-4 ml-1 transition-transform duration-300 ${isSmallDropdownOpen ? 'rotate-180' : ''}`}
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"
@@ -321,7 +326,7 @@ export default function Navbar() {
 									/>
 								</svg>
 							</button>
-							{isDropdownOpen && (
+							{isSmallDropdownOpen && (
 								<div
 									className="absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-soft-white"
 									style={{ zIndex: 50 }}
@@ -336,7 +341,7 @@ export default function Navbar() {
 													target="_blank"
 													rel="noopener noreferrer"
 													className="block w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
-													onClick={() => setIsDropdownOpen(false)}
+													onClick={() => setIsSmallDropdownOpen(false)}
 												>
 													<span>{link.name}</span>
 													<ExternalLinkIcon />
@@ -348,7 +353,7 @@ export default function Navbar() {
 												key={link.name}
 												href={link.path}
 												className="block px-4 py-3 hover:text-secondary transition-colors duration-200 text-sm text-primary"
-												onClick={() => setIsDropdownOpen(false)}
+												onClick={() => setIsSmallDropdownOpen(false)}
 											>
 												{link.name}
 											</Link>
