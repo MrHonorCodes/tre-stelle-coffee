@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
 			// Specify the shipping rate to use
 			shipping_options: [
 				{
-					shipping_rate: 'shr_1RPxtPChXWBA9KQdTpNbCZIm',
+					shipping_rate: 'shr_1RPxYrChXWBA9KQdMnP9LbP3',
 				},
 			],
 			metadata: {
