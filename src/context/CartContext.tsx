@@ -148,7 +148,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 					const quantityForNewItem = Math.min(quantityToAdd, MAX_QUANTITY_PER_ORDER);
 
 					newItems.push({
-						productId: product._id,
+						productId: String(product.productId), // Ensure string type
 						name: product.name,
 						price: product.price,
 						images: product.images, // Store the images array
