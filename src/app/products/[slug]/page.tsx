@@ -40,6 +40,7 @@ type Props = {
 
 const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   _id,
+  productId,
   name,
   slug,
   images,

@@ -34,6 +34,7 @@ interface SanityProduct extends SanityDocument {
 
 const PRODUCTS_QUERY = `*[_type == "product"]{
   _id,
+  productId, // <-- Added
   name,
   slug,
   images, // Changed from image to images
