@@ -369,9 +369,28 @@ export default function CheckoutPage() {
 											{qualifiesForFreeShipping ? 'Free' : `$${shippingCost.toFixed(2)}`}
 										</span>
 									</div>
-									{!qualifiesForFreeShipping && subtotal > 0 && (
-										<div className="text-sm text-gray-500 text-center mb-2">
-											Add ${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} more for free shipping!
+									{subtotal > 0 && (
+										<div className={`mb-3 p-3 rounded-lg border ${qualifiesForFreeShipping ? 'bg-green-50 border-green-300' : 'bg-secondary-light border-secondary'}`}>
+											<div className="text-center mb-2">
+												{qualifiesForFreeShipping ? (
+													<span className="text-sm font-bold text-green-700">
+														🎉 Congratulations! You qualified for FREE SHIPPING!
+													</span>
+												) : (
+													<span className="text-sm font-bold text-primary">
+														Add ${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} more for FREE SHIPPING!
+													</span>
+												)}
+											</div>
+											<div className="w-full bg-gray-200 rounded-full h-2.5">
+												<div 
+													className={`h-2.5 rounded-full transition-all duration-300 ${qualifiesForFreeShipping ? 'bg-green-500' : 'bg-primary'}`}
+													style={{ width: `${Math.min((subtotal / FREE_SHIPPING_THRESHOLD) * 100, 100)}%` }}
+												></div>
+											</div>
+											<div className="text-xs text-gray-600 text-center mt-1">
+												${subtotal.toFixed(2)} / ${FREE_SHIPPING_THRESHOLD.toFixed(2)}
+											</div>
 										</div>
 									)}
 									<div className="flex justify-between items-center">
