@@ -50,78 +50,83 @@ export default function Home() {
 
 				{/* Content Container (Ensure it's above background layers) */}
 				<div className="relative container mx-auto px-4 h-[calc(100%-80px)] flex items-center z-10">
-					<div className="w-full md:w-1/2 lg:w-2/5 text-light md:pl-8">
-						<FadeIn delay={0.2}>
-							<h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight text-secondary">
-								Bridging the gap between modern & traditional coffee!
-							</h1>
-						</FadeIn>
-						<FadeIn delay={0.4}>
-							<p className="text-base md:text-lg mb-8 max-w-lg">
-								We partner with trusted suppliers to bring you the finest coffee beans, carefully
-								selected from farms worldwide. Discover the harmony of tradition and quality in
-								every cup.
-							</p>
-						</FadeIn>
-						<FadeIn delay={0.6}>
-							<div className="flex flex-wrap gap-4">
-								<a
-									href="https://trestellecoffeeco.square.site/"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="px-8 py-3 bg-transparent text-secondary font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 border-2 border-secondary hover:bg-secondary hover:text-dark-text"
-								>
-									Order Now
-								</a>
-								<a
-									href="/about-us"
-									className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light"
-								>
-									Learn More
-								</a>
-							</div>
-						</FadeIn>
-					</div>
+					<div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-center w-full">
+						{/* Text Content */}
+						<div className="w-full lg:w-1/2 text-light text-center lg:text-left">
+							<FadeIn delay={0.2}>
+								<h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight text-secondary">
+									Bridging the gap between modern & traditional coffee!
+								</h1>
+							</FadeIn>
+							<FadeIn delay={0.4}>
+								<p className="text-base md:text-lg mb-8 max-w-lg mx-auto lg:mx-0">
+									We partner with trusted suppliers to bring you the finest coffee beans, carefully
+									selected from farms worldwide. Discover the harmony of tradition and quality in
+									every cup.
+								</p>
+							</FadeIn>
+							<FadeIn delay={0.6}>
+								<div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+									<a
+										href="https://trestellecoffeeco.square.site/"
+										target="_blank"
+										rel="noopener noreferrer"
+										className="px-8 py-3 bg-transparent text-secondary font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 border-2 border-secondary hover:bg-secondary hover:text-dark-text"
+									>
+										Order Now
+									</a>
+									<a
+										href="/about-us"
+										className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light"
+									>
+										Learn More
+									</a>
+								</div>
+							</FadeIn>
+						</div>
 
-					{/* Video Embed Section */}
-					{/* <VideoSection /> */}
+						{/* Video Section */}
+						<div className="w-full lg:w-1/2 max-w-md lg:max-w-none">
+							<FadeIn delay={0.8}>
+								<div 
+									className="rounded-lg overflow-hidden shadow-xl border-2" 
+									style={{ borderColor: '#e7c583' }}
+								>
+									<video
+										ref={videoRef}
+										controls
+										preload="metadata"
+										className="w-full h-full aspect-video object-cover"
+										src="/videos/Introduction.mp4"
+									>
+										Your browser does not support the video tag.
+									</video>
+								</div>
+							</FadeIn>
+						</div>
+					</div>
 				</div>
 			</section>
 
 			{/* About Section with tertiary color accents */}
 			<section className="py-24 bg-soft-white">
 				<div className="container mx-auto px-4">
-					<div className="flex flex-col lg:flex-row gap-12 items-center">
-						<ScrollReveal className="lg:w-1/2">
+					<div className="max-w-4xl mx-auto text-center">
+						<ScrollReveal>
 							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
 								Coffee Roasting Company
 							</h2>
-							<p className="text-gray-700 mb-4">
+							<p className="text-gray-700 mb-4 text-lg">
 								Founded in late 2019 as a dedicated roasting company, Tre Stelle has since grown
 								into a full-fledged Coffee Shop & Roastery. Beyond serving exceptional coffee, our
 								mission is to create an inclusive brand that welcomes individuals from all walks of
 								life.
 							</p>
-							<p className="text-gray-700 mb-6">
+							<p className="text-gray-700 mb-6 text-lg">
 								We take pride in sourcing the finest beans from around the world and roasting them
 								to perfection, creating unique flavor profiles that highlight each coffee&apos;s
 								natural characteristics.
 							</p>
-						</ScrollReveal>
-						<ScrollReveal className="lg:w-1/2" delay={0.2} direction="right">
-							{/* Container for the video */}
-							<div className="rounded-lg overflow-hidden shadow-xl border-4 border-primary">
-								{/* Replaced placeholder div with video element - Added ref */}
-								<video
-									ref={videoRef}
-									controls
-									preload="metadata"
-									className="w-full h-full aspect-video object-cover"
-									src="/videos/Introduction.mp4"
-								>
-									Your browser does not support the video tag.
-								</video>
-							</div>
 						</ScrollReveal>
 					</div>
 				</div>

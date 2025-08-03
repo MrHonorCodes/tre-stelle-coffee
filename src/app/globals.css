@@ -49,6 +49,9 @@ body {
 .border-primary {
 	border-color: var(--color-primary);
 }
+.border-secondary {
+	border-color: var(--color-secondary);
+}
 .text-light {
 	color: var(--color-light-text);
 }

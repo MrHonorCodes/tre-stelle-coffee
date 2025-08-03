@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
+import ContactSection from '../../../components/layout/ContactSection';
 
 // Event Package Type - Commented out as the section using it is also commented out
 /*
@@ -775,6 +776,9 @@ ${formData.message}
 					</ScrollReveal>
 				</div>
 			</section>
+
+			{/* Contact Section */}
+			<ContactSection />
 		</main>
 	);
 }

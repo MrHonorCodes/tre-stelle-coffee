@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import ContactSection from '../../../components/layout/ContactSection';
 
 export const metadata: Metadata = {
 	title: 'Catering Services | Tre Stelle Coffee Co.',
@@ -92,6 +93,9 @@ export default function CateringPage() {
 					</div>
 				</div>
 			</section>
+
+			{/* Contact Section */}
+			<ContactSection />
 		</div>
 	);
 }

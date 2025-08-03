@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
+import ContactSection from '../../../components/layout/ContactSection';
 
 export default function Wholesale() {
 	// Add smooth scrolling effect
@@ -259,7 +260,7 @@ export default function Wholesale() {
 				</div>
 			</section>
 
-			{/* Contact Section */}
+			{/* Partnership CTA Section */}
 			<section className="py-24 bg-soft-white">
 				<div className="container mx-auto px-4">
 					<div className="max-w-3xl mx-auto text-center mb-16">
@@ -290,6 +291,9 @@ export default function Wholesale() {
 					</div>
 				</div>
 			</section>
+
+			{/* Contact Section */}
+			<ContactSection />
 		</main>
 	);
 }
