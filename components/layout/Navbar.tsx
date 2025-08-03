@@ -67,7 +67,7 @@ export default function Navbar() {
 	}, [dropdownRef, smallDropdownRef]);
 
 	return (
-		<header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light">
+		<header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light" style={{ top: '48px' }}>
 			<div className="container mx-auto px-4">
 				<nav className="flex justify-between items-center">
 					<Link href="/" className="flex-shrink-0 relative flex items-center space-x-3">

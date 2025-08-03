@@ -55,11 +55,12 @@ export async function POST(req: NextRequest) {
 			_id: string;
 			productId: string;
 			name: string;
+			price: number;
 			stripePriceId: string;
 			isOutOfStock?: boolean;
 		};
 		const products: ProductSanity[] = await client.fetch(
-			`*[_type == "product" && productId in $ids]{ _id, productId, name, stripePriceId, isOutOfStock }`,
+			`*[_type == "product" && productId in $ids]{ _id, productId, name, price, stripePriceId, isOutOfStock }`,
 			{ ids: productIds }
 		);
 		const productMap: Record<string, ProductSanity> = Object.fromEntries(
@@ -69,6 +70,7 @@ export async function POST(req: NextRequest) {
 		// Build Stripe line items, validating each
 		const stripeLineItems = [];
 		const productDetailsForMetadata = [];
+		let orderTotal = 0;
 
 		for (const item of lineItems) {
 			const product = productMap[item.productId];
@@ -96,6 +98,10 @@ export async function POST(req: NextRequest) {
 					{ status: 400 }
 				);
 			}
+
+			// Calculate order total for shipping determination
+			orderTotal += (product.price || 0) * item.quantity;
+
 			stripeLineItems.push({
 				price: product.stripePriceId,
 				quantity: item.quantity,
@@ -108,6 +114,15 @@ export async function POST(req: NextRequest) {
 			});
 		}
 
+		// Determine shipping based on order total
+		const FREE_SHIPPING_THRESHOLD = 50;
+		const PAID_SHIPPING_RATE_ID = 'shr_1RPxYrChXWBA9KQdMnP9LbP3'; // $5.00 shipping
+		const FREE_SHIPPING_RATE_ID = 'shr_1RPxtPChXWBA9KQdTpNbCZIm'; // Replace with your actual free shipping rate ID from Stripe
+
+		const shippingOptions = orderTotal >= FREE_SHIPPING_THRESHOLD 
+			? [{ shipping_rate: FREE_SHIPPING_RATE_ID }]
+			: [{ shipping_rate: PAID_SHIPPING_RATE_ID }];
+
 		// For dynamic origin for success and cancel URLs
 		const origin = req.headers.get('origin') || 'http://localhost:3000';
 
@@ -119,12 +134,8 @@ export async function POST(req: NextRequest) {
 			shipping_address_collection: {
 				allowed_countries: ['US'], // Only allow US shipping addresses
 			},
-			// Specify the shipping rate to use
-			shipping_options: [
-				{
-					shipping_rate: 'shr_1RPxYrChXWBA9KQdMnP9LbP3',
-				},
-			],
+			// Conditionally apply shipping based on order total
+			shipping_options: shippingOptions,
 			metadata: {
 				productDetails: JSON.stringify(productDetailsForMetadata),
 			},

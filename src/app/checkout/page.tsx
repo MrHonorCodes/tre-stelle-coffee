@@ -32,9 +32,12 @@ export default function CheckoutPage() {
 	// --- Calculate Totals ---
 	const subtotal = getCartTotal();
 	const SHIPPING_RATE = 5.0; // Match cart page
+	const FREE_SHIPPING_THRESHOLD = 50;
+	const qualifiesForFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+	const shippingCost = qualifiesForFreeShipping ? 0 : SHIPPING_RATE;
 	const TAX_RATE = 0.0825; // Example tax rate (8.25%)
 	const taxes = subtotal * TAX_RATE;
-	const total = subtotal + SHIPPING_RATE + taxes;
+	const total = subtotal + shippingCost + taxes;
 
 	// --- Input Handler ---
 	const handleInputChange = (
@@ -362,8 +365,15 @@ export default function CheckoutPage() {
 									</div>
 									<div className="flex justify-between items-center">
 										<span className="text-gray-600">Shipping</span>
-										<span className="font-semibold text-primary">${SHIPPING_RATE.toFixed(2)}</span>
+										<span className="font-semibold text-primary">
+											{qualifiesForFreeShipping ? 'Free' : `$${shippingCost.toFixed(2)}`}
+										</span>
 									</div>
+									{!qualifiesForFreeShipping && subtotal > 0 && (
+										<div className="text-sm text-gray-500 text-center mb-2">
+											Add ${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} more for free shipping!
+										</div>
+									)}
 									<div className="flex justify-between items-center">
 										<span className="text-gray-600">Taxes</span>
 										<span className="font-semibold text-primary">${taxes.toFixed(2)}</span>

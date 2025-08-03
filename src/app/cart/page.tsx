@@ -35,6 +35,7 @@ export default function CartPage() {
 	const [error, setError] = useState<string | null>(null);
 
 	const SHIPPING_RATE = 5.0;
+	const FREE_SHIPPING_THRESHOLD = 50;
 	// const SHIPPING_DESTINATION = "Texas"; // Not used in current JSX, can be re-added if needed
 
 	// cartItems from useCart() now have product details directly
@@ -47,7 +48,9 @@ export default function CartPage() {
 	});
 
 	const subtotal = getCartTotal(); // This should now work correctly with CartContext changes
-	const total = subtotal + SHIPPING_RATE;
+	const qualifiesForFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+	const shippingCost = qualifiesForFreeShipping ? 0 : SHIPPING_RATE;
+	const total = subtotal + shippingCost;
 
 	const handleQuantityChange = (
 		productId: string,
@@ -240,8 +243,15 @@ export default function CartPage() {
 									</div>
 									<div className="flex justify-between items-center mb-4">
 										<span className="text-gray-600">Shipping</span>
-										<span className="font-semibold text-primary">${SHIPPING_RATE.toFixed(2)}</span>
+										<span className="font-semibold text-primary">
+											{qualifiesForFreeShipping ? 'Free' : `$${shippingCost.toFixed(2)}`}
+										</span>
 									</div>
+									{!qualifiesForFreeShipping && subtotal > 0 && (
+										<div className="text-sm text-gray-500 mb-4 text-center">
+											Add ${(FREE_SHIPPING_THRESHOLD - subtotal).toFixed(2)} more for free shipping!
+										</div>
+									)}
 									<div className="flex justify-between items-center mb-6 text-gray-500 text-sm">
 										<span>Taxes</span>
 										<span>Calculated at checkout</span>
