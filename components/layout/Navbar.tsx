@@ -27,21 +27,30 @@ export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [isSmallDropdownOpen, setIsSmallDropdownOpen] = useState(false);
+	const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
 	const [isClient, setIsClient] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const smallDropdownRef = useRef<HTMLDivElement>(null);
+	const aboutDropdownXlRef = useRef<HTMLDivElement>(null);
+	const aboutDropdownLgRef = useRef<HTMLDivElement>(null);
+	const aboutDropdownMdRef = useRef<HTMLDivElement>(null);
 	const pathname = usePathname();
 	const { getItemCount } = useCart();
 	const itemCount = getItemCount();
 
 	const navLinks = [
-		{ name: 'Home', path: '/' },
-		{ name: 'About Us', path: '/about-us' },
+		{ 
+			name: 'About Us', 
+			path: '/about-us',
+			dropdown: [
+				{ name: 'Our Story', path: '/about-us' },
+				{ name: 'Find Us', path: '/find-us' }
+			]
+		},
 		{ name: 'Our Products', path: '/products' },
-		{ name: 'Press', path: '/press' },
-		{ name: 'Book Event', path: '/events' },
 		{ name: 'Wholesale', path: '/wholesale' },
-		{ name: 'Find Us', path: '/find-us' },
+		{ name: 'Book Event', path: '/events' },
+		{ name: 'Catering', path: '/catering' },
 		{ name: 'Order Ahead', path: 'https://trestellecoffeeco.square.site/', external: true },
 	];
 
@@ -59,12 +68,20 @@ export default function Navbar() {
 			if (smallDropdownRef.current && !smallDropdownRef.current.contains(event.target as Node)) {
 				setIsSmallDropdownOpen(false);
 			}
+			// Check all about dropdown refs
+			const aboutRefs = [aboutDropdownXlRef, aboutDropdownLgRef, aboutDropdownMdRef];
+			const clickedOutsideAbout = aboutRefs.every(ref => 
+				!ref.current || !ref.current.contains(event.target as Node)
+			);
+			if (clickedOutsideAbout) {
+				setIsAboutDropdownOpen(false);
+			}
 		}
 		document.addEventListener('mousedown', handleClickOutside);
 		return () => {
 			document.removeEventListener('mousedown', handleClickOutside);
 		};
-	}, [dropdownRef, smallDropdownRef]);
+	}, [dropdownRef, smallDropdownRef, aboutDropdownXlRef, aboutDropdownLgRef, aboutDropdownMdRef]);
 
 	return (
 		<header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light" style={{ top: '48px' }}>
@@ -104,6 +121,76 @@ export default function Navbar() {
 									</Link>
 								);
 							}
+							
+							if (link.dropdown) {
+								// Handle dropdown links - Desktop uses hover
+								const isActive = link.dropdown.some(dropdownItem => pathname === dropdownItem.path);
+								return (
+									<div 
+										key={link.name} 
+										className="relative" 
+										ref={aboutDropdownXlRef}
+										onMouseEnter={() => setIsAboutDropdownOpen(true)}
+										onMouseLeave={() => setIsAboutDropdownOpen(false)}
+									>
+										<button
+											className={`font-medium text-sm transition-colors duration-300 relative group flex items-center ${isActive ? 'text-secondary-darker' : 'text-primary hover:text-secondary'}`}
+										>
+											<span>{link.name}</span>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className={`h-4 w-4 ml-1 transition-transform duration-300 ${isAboutDropdownOpen ? 'rotate-180' : ''}`}
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M19 9l-7 7-7-7"
+												/>
+											</svg>
+											<span
+												style={{
+													content: "''",
+													position: 'absolute',
+													height: '2px',
+													width: isActive ? '100%' : '0',
+													left: '0',
+													bottom: '-4px',
+													backgroundColor: isActive
+														? 'var(--color-secondary-darker)'
+														: 'var(--color-secondary)',
+													transition: 'all 0.3s ease',
+												}}
+												className={`link-underline ${!isActive ? 'group-hover:w-full' : ''}`}
+											></span>
+										</button>
+										{isAboutDropdownOpen && (
+											<div
+												className="absolute left-0 pt-2 w-48"
+												style={{ zIndex: 50 }}
+											>
+												<div className="rounded-md shadow-lg py-1 bg-soft-white">
+													{link.dropdown.map((dropdownItem) => (
+														<Link
+															key={dropdownItem.name}
+															href={dropdownItem.path}
+															className="block px-4 py-3 hover:text-secondary transition-colors duration-200 text-sm text-primary"
+															onClick={() => setIsAboutDropdownOpen(false)}
+														>
+															{dropdownItem.name}
+														</Link>
+													))}
+												</div>
+											</div>
+										)}
+									</div>
+								);
+							}
+							
+							// Handle regular links
 							const isActive = pathname === link.path;
 							return (
 								<Link
@@ -162,6 +249,74 @@ export default function Navbar() {
 					<div className="hidden lg:flex xl:hidden items-center space-x-4">
 						{navLinks.slice(0, 4).map((link) => {
 							// Show first 4 links normally
+							if (link.dropdown) {
+								// Handle dropdown links - Desktop uses hover
+								const isActive = link.dropdown.some(dropdownItem => pathname === dropdownItem.path);
+								return (
+									<div 
+										key={link.name} 
+										className="relative" 
+										ref={aboutDropdownLgRef}
+										onMouseEnter={() => setIsAboutDropdownOpen(true)}
+										onMouseLeave={() => setIsAboutDropdownOpen(false)}
+									>
+										<button
+											className={`font-medium text-sm transition-colors duration-300 relative group flex items-center ${isActive ? 'text-secondary-darker' : 'text-primary hover:text-secondary'}`}
+										>
+											<span>{link.name}</span>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className={`h-4 w-4 ml-1 transition-transform duration-300 ${isAboutDropdownOpen ? 'rotate-180' : ''}`}
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M19 9l-7 7-7-7"
+												/>
+											</svg>
+											<span
+												style={{
+													content: "''",
+													position: 'absolute',
+													height: '2px',
+													width: isActive ? '100%' : '0',
+													left: '0',
+													bottom: '-4px',
+													backgroundColor: isActive
+														? 'var(--color-secondary-darker)'
+														: 'var(--color-secondary)',
+													transition: 'all 0.3s ease',
+												}}
+												className={`link-underline ${!isActive ? 'group-hover:w-full' : ''}`}
+											></span>
+										</button>
+										{isAboutDropdownOpen && (
+											<div
+												className="absolute left-0 pt-2 w-48"
+												style={{ zIndex: 50 }}
+											>
+												<div className="rounded-md shadow-lg py-1 bg-soft-white">
+													{link.dropdown.map((dropdownItem) => (
+														<Link
+															key={dropdownItem.name}
+															href={dropdownItem.path}
+															className="block px-4 py-3 hover:text-secondary transition-colors duration-200 text-sm text-primary"
+															onClick={() => setIsAboutDropdownOpen(false)}
+														>
+															{dropdownItem.name}
+														</Link>
+													))}
+												</div>
+											</div>
+										)}
+									</div>
+								);
+							}
+							
 							const isActive = pathname === link.path;
 							return (
 								<Link
@@ -224,7 +379,7 @@ export default function Navbar() {
 													href={link.path}
 													target="_blank"
 													rel="noopener noreferrer"
-													className="block w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
+													className="w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
 													onClick={() => setIsDropdownOpen(false)}
 												>
 													<span>{link.name}</span>
@@ -232,6 +387,28 @@ export default function Navbar() {
 												</Link>
 											);
 										}
+										
+										if (link.dropdown) {
+											// Handle dropdown items in the More dropdown
+											return (
+												<div key={link.name}>
+													<div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+														{link.name}
+													</div>
+													{link.dropdown.map((dropdownItem) => (
+														<Link
+															key={dropdownItem.name}
+															href={dropdownItem.path}
+															className="block px-6 py-2 hover:text-secondary transition-colors duration-200 text-sm text-primary"
+															onClick={() => setIsDropdownOpen(false)}
+														>
+															{dropdownItem.name}
+														</Link>
+													))}
+												</div>
+											);
+										}
+										
 										return (
 											<Link
 												key={link.name}
@@ -278,6 +455,67 @@ export default function Navbar() {
 					<div className="hidden md:flex lg:hidden items-center space-x-3">
 						{navLinks.slice(0, 2).map((link) => {
 							// Show first 2 links normally
+							if (link.dropdown) {
+								// Handle dropdown links - Tablet/mobile uses click
+								const isActive = link.dropdown.some(dropdownItem => pathname === dropdownItem.path);
+								return (
+									<div key={link.name} className="relative" ref={aboutDropdownMdRef}>
+										<button
+											onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
+											className={`font-medium text-sm transition-colors duration-300 relative group flex items-center ${isActive ? 'text-secondary-darker' : 'text-primary hover:text-secondary'}`}
+										>
+											<span>{link.name}</span>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												className={`h-4 w-4 ml-1 transition-transform duration-300 ${isAboutDropdownOpen ? 'rotate-180' : ''}`}
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M19 9l-7 7-7-7"
+												/>
+											</svg>
+											<span
+												style={{
+													content: "''",
+													position: 'absolute',
+													height: '2px',
+													width: isActive ? '100%' : '0',
+													left: '0',
+													bottom: '-4px',
+													backgroundColor: isActive
+														? 'var(--color-secondary-darker)'
+														: 'var(--color-secondary)',
+													transition: 'all 0.3s ease',
+												}}
+												className={`link-underline ${!isActive ? 'group-hover:w-full' : ''}`}
+											></span>
+										</button>
+										{isAboutDropdownOpen && (
+											<div
+												className="absolute left-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-soft-white"
+												style={{ zIndex: 50 }}
+											>
+												{link.dropdown.map((dropdownItem) => (
+													<Link
+														key={dropdownItem.name}
+														href={dropdownItem.path}
+														className="block px-4 py-3 hover:text-secondary transition-colors duration-200 text-sm text-primary"
+														onClick={() => setIsAboutDropdownOpen(false)}
+													>
+														{dropdownItem.name}
+													</Link>
+												))}
+											</div>
+										)}
+									</div>
+								);
+							}
+							
 							const isActive = pathname === link.path;
 							return (
 								<Link
@@ -340,7 +578,7 @@ export default function Navbar() {
 													href={link.path}
 													target="_blank"
 													rel="noopener noreferrer"
-													className="block w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
+													className="w-full text-left px-4 py-2 my-1 bg-secondary text-primary font-semibold rounded-md text-sm transition-all duration-300 hover:bg-secondary/80 flex items-center justify-between hover:-translate-y-1 transform"
 													onClick={() => setIsSmallDropdownOpen(false)}
 												>
 													<span>{link.name}</span>
@@ -348,6 +586,28 @@ export default function Navbar() {
 												</Link>
 											);
 										}
+										
+										if (link.dropdown) {
+											// Handle dropdown items in the More dropdown
+											return (
+												<div key={link.name}>
+													<div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+														{link.name}
+													</div>
+													{link.dropdown.map((dropdownItem) => (
+														<Link
+															key={dropdownItem.name}
+															href={dropdownItem.path}
+															className="block px-6 py-2 hover:text-secondary transition-colors duration-200 text-sm text-primary"
+															onClick={() => setIsSmallDropdownOpen(false)}
+														>
+															{dropdownItem.name}
+														</Link>
+													))}
+												</div>
+											);
+										}
+										
 										return (
 											<Link
 												key={link.name}
@@ -473,7 +733,7 @@ export default function Navbar() {
 									href={link.path}
 									target="_blank"
 									rel="noopener noreferrer"
-									className="block w-full py-3 my-1 bg-secondary text-primary font-semibold rounded-md text-base transition-all duration-300 hover:bg-secondary/80 flex items-center justify-center hover:-translate-y-1 transform"
+									className="w-full py-3 my-1 bg-secondary text-primary font-semibold rounded-md text-base transition-all duration-300 hover:bg-secondary/80 flex items-center justify-center hover:-translate-y-1 transform"
 									onClick={() => setIsOpen(false)}
 								>
 									<span>{link.name}</span>
@@ -481,6 +741,28 @@ export default function Navbar() {
 								</Link>
 							);
 						}
+						
+						if (link.dropdown) {
+							// Handle dropdown items in mobile navigation
+							return (
+								<div key={link.name} className="w-full">
+									<div className="py-2 text-lg font-semibold text-primary border-b border-gray-200 mb-2">
+										{link.name}
+									</div>
+									{link.dropdown.map((dropdownItem) => (
+										<Link
+											key={dropdownItem.name}
+											href={dropdownItem.path}
+											className="block py-2 text-base hover:text-secondary transition-colors w-full text-primary pl-4"
+											onClick={() => setIsOpen(false)}
+										>
+											{dropdownItem.name}
+										</Link>
+									))}
+								</div>
+							);
+						}
+						
 						return (
 							<Link
 								key={link.name}

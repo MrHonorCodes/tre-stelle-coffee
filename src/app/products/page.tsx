@@ -15,6 +15,7 @@ import type { Image } from 'sanity'; // Sanity image type
 // import { PortableText } from 'next-sanity';
 import ProductListWithFilter from '../../components/products/ProductListWithFilter';
 import FadeIn from '../../../components/ui/FadeIn';
+import ContactSection from '../../../components/layout/ContactSection';
 
 // Define the Sanity Product Type (adjust based on your Sanity schema)
 interface SanityProduct extends SanityDocument {
@@ -101,6 +102,9 @@ export default async function ShopPage() {
 					<ProductListWithFilter products={products} />
 				</div>
 			</section>
+
+			{/* Contact Section */}
+			<ContactSection />
 
 			{/* Brewing Guide CTA  OPTIONAL FOR NOW*/}
 			{/*   <section className="py-16 bg-soft-white">
