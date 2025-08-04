@@ -28,6 +28,7 @@ export default function Navbar() {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const [isSmallDropdownOpen, setIsSmallDropdownOpen] = useState(false);
 	const [isAboutDropdownOpen, setIsAboutDropdownOpen] = useState(false);
+	const [isMobileAboutDropdownOpen, setIsMobileAboutDropdownOpen] = useState(false);
 	const [isClient, setIsClient] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const smallDropdownRef = useRef<HTMLDivElement>(null);
@@ -680,7 +681,13 @@ export default function Navbar() {
 						</Link>
 						{/* Mobile Menu Toggle Button */}
 						<button
-							onClick={() => setIsOpen(!isOpen)}
+							onClick={() => {
+								setIsOpen(!isOpen);
+								// Reset mobile dropdown when closing main menu
+								if (isOpen) {
+									setIsMobileAboutDropdownOpen(false);
+								}
+							}}
 							className="text-primary hover:text-secondary transition-colors"
 							aria-label="Toggle menu"
 						>
@@ -746,19 +753,45 @@ export default function Navbar() {
 							// Handle dropdown items in mobile navigation
 							return (
 								<div key={link.name} className="w-full">
-									<div className="py-2 text-lg font-semibold text-primary border-b border-gray-200 mb-2">
-										{link.name}
-									</div>
-									{link.dropdown.map((dropdownItem) => (
-										<Link
-											key={dropdownItem.name}
-											href={dropdownItem.path}
-											className="block py-2 text-base hover:text-secondary transition-colors w-full text-primary pl-4"
-											onClick={() => setIsOpen(false)}
+									<button
+										onClick={() => setIsMobileAboutDropdownOpen(!isMobileAboutDropdownOpen)}
+										className="w-full py-3 text-lg font-semibold text-primary border-b border-gray-200 mb-2 flex items-center justify-center gap-2 hover:text-secondary transition-colors"
+									>
+										<span>{link.name}</span>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className={`h-5 w-5 transition-transform duration-300 ${isMobileAboutDropdownOpen ? 'rotate-180' : ''}`}
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
 										>
-											{dropdownItem.name}
-										</Link>
-									))}
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M19 9l-7 7-7-7"
+											/>
+										</svg>
+									</button>
+									<div 
+										className={`overflow-hidden transition-all duration-300 ease-in-out ${
+											isMobileAboutDropdownOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0'
+										}`}
+									>
+										{link.dropdown.map((dropdownItem) => (
+											<Link
+												key={dropdownItem.name}
+												href={dropdownItem.path}
+												className="block py-3 text-base hover:text-secondary transition-colors w-full text-primary text-center bg-gray-50/80"
+												onClick={() => {
+													setIsOpen(false);
+													setIsMobileAboutDropdownOpen(false);
+												}}
+											>
+												{dropdownItem.name}
+											</Link>
+										))}
+									</div>
 								</div>
 							);
 						}
