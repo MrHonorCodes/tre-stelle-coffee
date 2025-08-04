@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
 import ContactSection from '../../../components/layout/ContactSection';
@@ -12,6 +12,46 @@ export default function Wholesale() {
 			document.documentElement.style.scrollBehavior = 'auto';
 		};
 	}, []);
+
+	// State for wholesale inquiry form
+	const [formData, setFormData] = useState({
+		name: '',
+		email: '',
+		businessName: '',
+		businessType: '',
+		monthlyVolume: '',
+		additionalInfo: '',
+	});
+
+	// Handle form input changes
+	const handleInputChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+	) => {
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
+
+	// Handle form submission
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+
+		// Form submission logic
+		const subject = 'New Wholesale Partnership Inquiry';
+		const body = `
+Name: ${formData.name}
+Email: ${formData.email}
+Business Name: ${formData.businessName}
+Business Type: ${formData.businessType || 'Not specified'}
+Estimated Monthly Volume: ${formData.monthlyVolume}
+Additional Information:
+${formData.additionalInfo || 'None provided'}
+    `;
+		const mailtoLink = `mailto:contact@trestellecoffeeco.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+		window.location.href = mailtoLink;
+	};
 
 	return (
 		<main className="min-h-screen bg-soft-white">
@@ -260,35 +300,142 @@ export default function Wholesale() {
 				</div>
 			</section>
 
-			{/* Partnership CTA Section */}
-			<section className="py-24 bg-soft-white">
+			{/* Wholesale Inquiry Form Section */}
+			<section id="inquiry-form" className="py-16 bg-white">
 				<div className="container mx-auto px-4">
-					<div className="max-w-3xl mx-auto text-center mb-16">
-						<ScrollReveal>
-							<span className="text-sm text-tertiary uppercase tracking-wider font-semibold">
+					<ScrollReveal>
+						<div className="max-w-4xl mx-auto">
+							<span className="text-sm text-tertiary uppercase tracking-wider font-semibold block text-center">
 								Get In Touch
 							</span>
-							<h2 className="text-4xl font-bold text-primary mt-4 mb-6">
+							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-2 text-center">
 								Ready to partner with us?
 							</h2>
-							<p className="text-gray-700 mb-8">
-								If interested in partnering up with us, please reach us on the following email:
-								<a
-									href="mailto:contact@trestellecoffeeco.com"
-									className="text-primary font-semibold hover:text-secondary transition-colors"
-								>
-									{' '}
-									contact@trestellecoffeeco.com
-								</a>
+							<p className="text-gray-600 text-center mb-12">
+								Fill out the form below to inquire about our wholesale partnership opportunities. We&apos;ll get back to you within 24 hours to discuss how we can work together.
 							</p>
-							<a
-								href="mailto:contact@trestellecoffeeco.com"
-								className="inline-block px-8 py-3 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
-							>
-								Contact Us Today
-							</a>
-						</ScrollReveal>
-					</div>
+
+							<form onSubmit={handleSubmit} className="bg-soft-white rounded-xl shadow-md p-8">
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+									<div>
+										<label htmlFor="name" className="block text-gray-700 font-medium mb-2">
+											Full Name <span className="text-red-500">*</span>
+										</label>
+										<input
+											type="text"
+											id="name"
+											name="name"
+											value={formData.name}
+											onChange={handleInputChange}
+											placeholder="Enter your full name"
+											required
+											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+										/>
+									</div>
+									<div>
+										<label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+											Email Address <span className="text-red-500">*</span>
+										</label>
+										<input
+											type="email"
+											id="email"
+											name="email"
+											value={formData.email}
+											onChange={handleInputChange}
+											placeholder="Enter your email address"
+											required
+											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+										/>
+									</div>
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+									<div>
+										<label htmlFor="businessName" className="block text-gray-700 font-medium mb-2">
+											Business Name <span className="text-red-500">*</span>
+										</label>
+										<input
+											type="text"
+											id="businessName"
+											name="businessName"
+											value={formData.businessName}
+											onChange={handleInputChange}
+											placeholder="Enter your business name"
+											required
+											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+										/>
+									</div>
+									<div>
+										<label htmlFor="businessType" className="block text-gray-700 font-medium mb-2">
+											Business Type
+										</label>
+										<select
+											id="businessType"
+											name="businessType"
+											value={formData.businessType}
+											onChange={handleInputChange}
+											className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+										>
+											<option value="">Select business type</option>
+											<option value="cafe">Café</option>
+											<option value="restaurant">Restaurant</option>
+											<option value="office">Office</option>
+											<option value="retail">Retail Shop</option>
+											<option value="hotel">Hotel/Hospitality</option>
+											<option value="catering">Catering Service</option>
+											<option value="other">Other</option>
+										</select>
+									</div>
+								</div>
+
+								<div className="mb-6">
+									<label htmlFor="monthlyVolume" className="block text-gray-700 font-medium mb-2">
+										Estimated Monthly Volume <span className="text-red-500">*</span>
+									</label>
+									<select
+										id="monthlyVolume"
+										name="monthlyVolume"
+										value={formData.monthlyVolume}
+										onChange={handleInputChange}
+										required
+										className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+									>
+										<option value="">Select estimated monthly volume</option>
+										<option value="5-10 lbs">5-10 lbs (Small Office/Café)</option>
+										<option value="10-25 lbs">10-25 lbs (Medium Business)</option>
+										<option value="25-50 lbs">25-50 lbs (Large Restaurant/Café)</option>
+										<option value="50-100 lbs">50-100 lbs (Multiple Locations)</option>
+										<option value="100+ lbs">100+ lbs (Enterprise)</option>
+										<option value="unsure">Unsure - Need Consultation</option>
+									</select>
+								</div>
+
+								<div className="mb-8">
+									<label htmlFor="additionalInfo" className="block text-gray-700 font-medium mb-2">
+										Additional Information
+									</label>
+									<textarea
+										id="additionalInfo"
+										name="additionalInfo"
+										value={formData.additionalInfo}
+										onChange={handleInputChange}
+										rows={5}
+										placeholder="Please share any additional details about your business, specific coffee preferences, equipment needs, or questions you may have."
+										className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
+									></textarea>
+								</div>
+
+								<div className="flex justify-center">
+									<button
+										type="submit"
+										className="px-8 py-4 bg-secondary text-dark-text border-2 border-secondary font-semibold rounded-lg text-lg transition-all duration-300 hover:bg-transparent hover:text-secondary hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-secondary/30 cursor-pointer"
+									>
+										Submit Partnership Inquiry
+									</button>
+								</div>
+							</form>
+						</div>
+					</ScrollReveal>
 				</div>
 			</section>
 
