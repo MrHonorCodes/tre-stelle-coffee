@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
-import FadeIn from './FadeIn';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Product interface matching your structure
 interface Product {
@@ -113,7 +113,7 @@ export default function FeaturedProducts() {
 								{/* Product Display */}
 								<div className="flex transition-transform duration-500 ease-in-out"
 									 style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-									{featuredProducts.map((product, index) => (
+									{featuredProducts.map((product) => (
 										<div key={product.id} className="w-full flex-shrink-0">
 											<div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
 												{/* Product Image */}
@@ -154,18 +154,18 @@ export default function FeaturedProducts() {
 														</span>
 													</div>
 													<div className="flex gap-4">
-														<a
+														<Link
 															href={`/products/${product.slug}`}
 															className="px-6 py-3 bg-secondary text-dark-text font-semibold rounded-full transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
 														>
 															View Product
-														</a>
-														<a
+														</Link>
+														<Link
 															href="/products"
 															className="px-6 py-3 bg-transparent text-primary font-semibold rounded-full border-2 border-primary transition-all duration-300 hover:bg-primary hover:text-light"
 														>
 															All Products
-														</a>
+														</Link>
 													</div>
 												</div>
 											</div>

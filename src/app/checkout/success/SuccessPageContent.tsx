@@ -67,7 +67,6 @@ export default function SuccessPageContent() {
 
 			fetchOrderDetails();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchParams, clearCart, isProcessed]); // isProcessed is correctly in deps
 
 	if (loading && !isProcessed) {

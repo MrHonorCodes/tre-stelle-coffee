@@ -112,6 +112,66 @@ export default function Home() {
 			{/* Featured Products Section */}
 			<FeaturedProducts />
 
+			{/* Wholesale Partnership Section */}
+			<section className="relative py-20 bg-primary text-light overflow-hidden">
+				<div className="absolute inset-0 z-0">
+					{/* Background Image */}
+					<div
+						className="absolute inset-0 bg-cover bg-center opacity-30"
+						style={{
+							backgroundImage: "url('/images/wholesale.jpg')",
+							backgroundSize: 'cover',
+							filter: 'brightness(0.4)',
+						}}
+					/>
+					{/* Overlay */}
+					<div className="absolute inset-0 bg-primary/70"></div>
+				</div>
+
+				<div className="container mx-auto px-4 relative z-10">
+					<div className="max-w-4xl mx-auto text-center">
+						<ScrollReveal>
+							<span className="text-sm text-secondary uppercase tracking-wider font-semibold mb-4 block">
+								Partner With Us
+							</span>
+							<h2 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight text-secondary">
+								Wholesale Partnerships
+							</h2>
+						</ScrollReveal>
+						<ScrollReveal delay={0.2}>
+							<p className="text-xl text-light mb-8 max-w-2xl mx-auto">
+								Quality coffee solutions for cafes, restaurants, offices, and more. We love partnering 
+								up with other local businesses!
+							</p>
+						</ScrollReveal>
+						<ScrollReveal delay={0.4}>
+							<div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-10 max-w-3xl mx-auto">
+								<p className="text-lg text-light/90">
+									At Tre Stelle Coffee Co., we&apos;re passionate about helping businesses elevate
+									their coffee offerings. As a locally owned Roastery, we understand the importance of
+									quality, consistency, and personalized service.
+								</p>
+							</div>
+						</ScrollReveal>
+						<ScrollReveal delay={0.6}>
+							<div className="flex flex-wrap gap-4 justify-center">
+								<a
+									href="/wholesale"
+									className="px-8 py-3 bg-secondary text-primary font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
+								>
+									Learn More
+								</a>
+								<a
+									href="mailto:contact@trestellecoffeeco.com"
+									className="px-8 py-3 text-light font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-light hover:text-primary border-2 border-light"
+								>
+									Contact Us
+								</a>
+							</div>
+						</ScrollReveal>
+					</div>
+				</div>
+			</section>
 
 			{/* Location Section */}
 			<section className="relative bg-soft-white pt-24 pb-24 text-primary">
