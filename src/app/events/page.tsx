@@ -33,7 +33,7 @@ export default function EventBooking() {
 		phone: '',
 		date: '',
 		time: '',
-		hours: '',
+		endTime: '',
 		message: '',
 	});
 
@@ -93,7 +93,9 @@ const eventPackages: EventPackage[] = [
 		e.preventDefault();
 
 		// Convert 24-hour time to 12-hour format for the email
-		let formattedTime = '';
+		let formattedStartTime = '';
+		let formattedEndTime = '';
+		
 		if (formData.time) {
 			const [hourString, minuteString] = formData.time.split(':');
 			let hour = parseInt(hourString, 10);
@@ -102,9 +104,22 @@ const eventPackages: EventPackage[] = [
 			hour = hour % 12;
 			hour = hour ? hour : 12; // Convert hour '0' to '12'
 			const minuteFormatted = minute < 10 ? '0' + minute : minute;
-			formattedTime = `${hour}:${minuteFormatted} ${ampm}`;
+			formattedStartTime = `${hour}:${minuteFormatted} ${ampm}`;
 		} else {
-			formattedTime = 'Not specified'; // Fallback if time is somehow empty despite being required
+			formattedStartTime = 'Not specified'; // Fallback if time is somehow empty despite being required
+		}
+
+		if (formData.endTime) {
+			const [hourString, minuteString] = formData.endTime.split(':');
+			let hour = parseInt(hourString, 10);
+			const minute = parseInt(minuteString, 10);
+			const ampm = hour >= 12 ? 'PM' : 'AM';
+			hour = hour % 12;
+			hour = hour ? hour : 12; // Convert hour '0' to '12'
+			const minuteFormatted = minute < 10 ? '0' + minute : minute;
+			formattedEndTime = `${hour}:${minuteFormatted} ${ampm}`;
+		} else {
+			formattedEndTime = 'Not specified'; // Fallback if endTime is somehow empty despite being required
 		}
 
 		// Form submission logic
@@ -114,8 +129,8 @@ Name: ${formData.name}
 Email: ${formData.email}
 Phone: ${formData.phone}
 Event Date: ${formData.date}
-Start Time: ${formattedTime}
-Number of Hours: ${formData.hours}
+Start Time: ${formattedStartTime}
+End Time: ${formattedEndTime}
 Event Details:
 ${formData.message}
     `;
@@ -523,10 +538,38 @@ ${formData.message}
 							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-2 text-center">
 								Let&apos;s make your event unforgettable!
 							</h2>
-							<p className="text-gray-600 text-center mb-12">
+							<p className="text-gray-600 text-center mb-8">
 								Fill out the form below to book your slot. We&apos;ll get back to you within 24
 								hours to confirm details.
 							</p>
+
+							{/* Important Timing Note */}
+							<div className="mb-8">
+								<div className="bg-secondary/10 border-l-4 border-secondary rounded-lg p-6">
+									<div className="flex items-start">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-6 w-6 text-secondary mr-3 flex-shrink-0 mt-0.5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+											/>
+										</svg>
+										<div>
+											<h3 className="text-lg font-bold text-primary mb-2">Important Timing Note</h3>
+											<p className="text-gray-700">
+												The timing you select in the booking form includes time needed for setup and cleanup. Please arrive and leave as scheduled to respect our booking times and other customers.
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
 
 							<form onSubmit={handleSubmit} className="bg-soft-white rounded-xl shadow-md p-8">
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -609,25 +652,22 @@ ${formData.message}
 								</div>
 
 								<div className="mb-6">
-									<label htmlFor="hours" className="block text-gray-700 font-medium mb-2">
-										Number of Hours <span className="text-red-500">*</span>
+									<label htmlFor="endTime" className="block text-gray-700 font-medium mb-2">
+										End Time <span className="text-red-500">*</span>
 									</label>
-									<select
-										id="hours"
-										name="hours"
-										value={formData.hours}
+									<input
+										type="time"
+										id="endTime"
+										name="endTime"
+										value={formData.endTime}
 										onChange={handleInputChange}
+										max="00:00"
 										required
 										className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
-									>
-										<option value="">Select number of hours</option>
-										<option value="2">2 hours</option>
-										<option value="3">3 hours</option>
-										<option value="4">4 hours</option>
-										<option value="5">5 hours</option>
-										<option value="6">6 hours</option>
-										<option value="7">7+ hours (specify in message)</option>
-									</select>
+									/>
+									<p className="text-sm text-gray-500 mt-1">
+										Events must end by midnight (12:00 AM)
+									</p>
 								</div>
 
 								<div className="mb-8">
@@ -700,7 +740,7 @@ ${formData.message}
 								<div className="bg-white rounded-lg shadow-md p-6">
 									<h3 className="text-xl font-bold text-primary mb-3">Is a deposit required?</h3>
 									<p className="text-gray-600">
-										Yes, we require a 50% deposit to secure your booking. The remaining balance is
+										Yes, we need a deposit to secure your booking. The remaining balance is
 										due on the day of your event. The deposit is fully refundable with 7 days&apos;
 										notice of cancellation.
 									</p>
@@ -713,8 +753,7 @@ ${formData.message}
 									<p className="text-gray-600">
 										Absolutely! You&apos;re welcome to decorate the space to suit your event. We ask
 										that you avoid anything that would damage walls or surfaces (no nails or
-										permanent adhesives). Please plan to arrive 30 minutes before your event to set
-										up.
+										permanent adhesives).
 									</p>
 								</div>
 							</ScrollReveal>
