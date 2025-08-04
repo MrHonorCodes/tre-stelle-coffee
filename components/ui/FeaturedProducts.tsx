@@ -23,7 +23,7 @@ const featuredProducts: Product[] = [
 		name: "Ethiopian Yirgacheffe",
 		category: "Coffee",
 		price: 19.0,
-		images: ["/images/products/ethiopian-yirgacheffe.jpg"],
+		images: ["/images/products/Ethiopia.PNG"],
 		description: "Bright, fruity notes with vibrant acidity and floral undertones. Ideal for pour-over or drip methods.",
 		stock: 15,
 		slug: "ethiopian-yirgacheffe",
@@ -33,7 +33,7 @@ const featuredProducts: Product[] = [
 		name: "Brazil Fazenda",
 		category: "Coffee",
 		price: 17.0,
-		images: ["/images/products/brazil-fazenda.jpg"],
+		images: ["/images/products/Brazil.PNG"],
 		description: "A smooth, classic coffee with nutty, mild sweetness and prominent chocolate notes. Great for espresso or a balanced drip brew.",
 		stock: 20,
 		slug: "brazil-fazenda",
@@ -43,7 +43,7 @@ const featuredProducts: Product[] = [
 		name: "Colombia Excelso",
 		category: "Coffee",
 		price: 17.0,
-		images: ["/images/products/colombia-excelso.jpg"],
+		images: ["/images/products/Colombia.PNG"],
 		description: "Rich caramel sweetness balanced with a hint of citrus and a medium body. Versatile for various brewing methods.",
 		stock: 20,
 		slug: "colombia-excelso",
@@ -53,7 +53,7 @@ const featuredProducts: Product[] = [
 		name: "Highlands Blend",
 		category: "Coffee",
 		price: 18.0,
-		images: ["/images/products/highlands-blend.jpg"],
+		images: ["/images/products/Highlands.PNG"],
 		description: "Our signature blend combining the best of Colombia Excelso, Brazil Fazenda, and Ethiopian Yirgacheffe for a complex and balanced cup.",
 		stock: 25,
 		slug: "highlands-blend",
@@ -117,7 +117,7 @@ export default function FeaturedProducts() {
 										<div key={product.id} className="w-full flex-shrink-0">
 											<div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
 												{/* Product Image */}
-												<div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+												<div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
 													<Image
 														src={product.images[0]}
 														alt={product.name}
