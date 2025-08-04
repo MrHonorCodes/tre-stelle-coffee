@@ -17,7 +17,7 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 			{!isStudioPage && <Navbar />}
 			{/* <SmoothScroller> - Assuming this is still intended to be commented out or handled elsewhere */}
 			<ClientLayout>
-				<div className={`flex-grow ${!isStudioPage ? 'mt-28' : ''}`}>{children}</div>
+				<div className={`flex-grow ${!isStudioPage ? 'mt-26 sm:mt-28' : ''}`}>{children}</div>
 			</ClientLayout>
 			{!isStudioPage && <Footer />}
 			{/* </SmoothScroller> */}

@@ -85,7 +85,19 @@ export default function Navbar() {
 	}, [dropdownRef, smallDropdownRef, aboutDropdownXlRef, aboutDropdownLgRef, aboutDropdownMdRef]);
 
 	return (
-		<header className="fixed w-full z-50 shadow-md py-4 bg-secondary-light" style={{ top: '48px' }}>
+		<header 
+			className="fixed w-full z-50 shadow-md py-4 bg-secondary-light"
+			style={{
+				top: '40px',
+			}}
+		>
+			<style jsx>{`
+				@media (min-width: 640px) {
+					header {
+						top: 48px !important;
+					}
+				}
+			`}</style>
 			<div className="container mx-auto px-4">
 				<nav className="flex justify-between items-center">
 					<Link href="/" className="flex-shrink-0 relative flex items-center space-x-3">
