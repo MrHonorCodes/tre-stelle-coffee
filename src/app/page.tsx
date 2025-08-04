@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import FadeIn from '../../components/ui/FadeIn';
 import ScrollReveal from '../../components/ui/ScrollReveal';
 import ContactSection from '../../components/layout/ContactSection';
+import FeaturedProducts from '../../components/ui/FeaturedProducts';
 
 // Use Next.js dynamic import with SSR disabled
 // const VideoSection = dynamic(() => import('../../components/ui/VideoSection'), {
@@ -108,29 +109,8 @@ export default function Home() {
 				</div>
 			</section>
 
-			{/* About Section with tertiary color accents */}
-			<section className="py-24 bg-soft-white">
-				<div className="container mx-auto px-4">
-					<div className="max-w-4xl mx-auto text-center">
-						<ScrollReveal>
-							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
-								Coffee Roasting Company
-							</h2>
-							<p className="text-gray-700 mb-4 text-lg">
-								Founded in late 2019 as a dedicated roasting company, Tre Stelle has since grown
-								into a full-fledged Coffee Shop & Roastery. Beyond serving exceptional coffee, our
-								mission is to create an inclusive brand that welcomes individuals from all walks of
-								life.
-							</p>
-							<p className="text-gray-700 mb-6 text-lg">
-								We take pride in sourcing the finest beans from around the world and roasting them
-								to perfection, creating unique flavor profiles that highlight each coffee&apos;s
-								natural characteristics.
-							</p>
-						</ScrollReveal>
-					</div>
-				</div>
-			</section>
+			{/* Featured Products Section */}
+			<FeaturedProducts />
 
 
 			{/* Location Section */}

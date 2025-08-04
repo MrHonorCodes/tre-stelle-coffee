@@ -1,0 +1,218 @@
+'use client';
+import { useState, useEffect } from 'react';
+import ScrollReveal from './ScrollReveal';
+import FadeIn from './FadeIn';
+import Image from 'next/image';
+
+// Product interface matching your structure
+interface Product {
+	id: number;
+	name: string;
+	category: string;
+	price: number;
+	images: string[];
+	description: string;
+	stock: number;
+	slug: string;
+}
+
+// Featured coffee products data
+const featuredProducts: Product[] = [
+	{
+		id: 1,
+		name: "Ethiopian Yirgacheffe",
+		category: "Coffee",
+		price: 19.0,
+		images: ["/images/products/ethiopian-yirgacheffe.jpg"],
+		description: "Bright, fruity notes with vibrant acidity and floral undertones. Ideal for pour-over or drip methods.",
+		stock: 15,
+		slug: "ethiopian-yirgacheffe",
+	},
+	{
+		id: 2,
+		name: "Brazil Fazenda",
+		category: "Coffee",
+		price: 17.0,
+		images: ["/images/products/brazil-fazenda.jpg"],
+		description: "A smooth, classic coffee with nutty, mild sweetness and prominent chocolate notes. Great for espresso or a balanced drip brew.",
+		stock: 20,
+		slug: "brazil-fazenda",
+	},
+	{
+		id: 3,
+		name: "Colombia Excelso",
+		category: "Coffee",
+		price: 17.0,
+		images: ["/images/products/colombia-excelso.jpg"],
+		description: "Rich caramel sweetness balanced with a hint of citrus and a medium body. Versatile for various brewing methods.",
+		stock: 20,
+		slug: "colombia-excelso",
+	},
+	{
+		id: 4,
+		name: "Highlands Blend",
+		category: "Coffee",
+		price: 18.0,
+		images: ["/images/products/highlands-blend.jpg"],
+		description: "Our signature blend combining the best of Colombia Excelso, Brazil Fazenda, and Ethiopian Yirgacheffe for a complex and balanced cup.",
+		stock: 25,
+		slug: "highlands-blend",
+	},
+];
+
+export default function FeaturedProducts() {
+	const [currentIndex, setCurrentIndex] = useState(0);
+	const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+
+	// Auto-advance carousel
+	useEffect(() => {
+		if (!isAutoPlaying) return;
+
+		const interval = setInterval(() => {
+			setCurrentIndex((prevIndex) => (prevIndex + 1) % featuredProducts.length);
+		}, 4000); // Change slide every 4 seconds
+
+		return () => clearInterval(interval);
+	}, [isAutoPlaying]);
+
+	const goToSlide = (index: number) => {
+		setCurrentIndex(index);
+		setIsAutoPlaying(false); // Stop auto-play when user manually navigates
+		setTimeout(() => setIsAutoPlaying(true), 10000); // Resume auto-play after 10 seconds
+	};
+
+	const nextSlide = () => {
+		goToSlide((currentIndex + 1) % featuredProducts.length);
+	};
+
+	const prevSlide = () => {
+		goToSlide((currentIndex - 1 + featuredProducts.length) % featuredProducts.length);
+	};
+
+	return (
+		<section className="py-24 bg-soft-white">
+			<div className="container mx-auto px-4">
+				<div className="max-w-6xl mx-auto">
+					{/* Section Header */}
+					<div className="text-center mb-12">
+						<ScrollReveal>
+							<h2 className="text-3xl md:text-4xl text-primary font-bold mb-6">
+								Our Featured Products
+							</h2>
+							<p className="text-gray-700 text-lg max-w-2xl mx-auto">
+								Discover our carefully selected coffee beans, each offering unique flavors and characteristics 
+								from coffee regions around the world.
+							</p>
+						</ScrollReveal>
+					</div>
+
+					{/* Carousel Container */}
+					<div className="relative">
+						<ScrollReveal delay={0.2}>
+							<div className="relative overflow-hidden rounded-xl bg-white shadow-lg">
+								{/* Product Display */}
+								<div className="flex transition-transform duration-500 ease-in-out"
+									 style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+									{featuredProducts.map((product, index) => (
+										<div key={product.id} className="w-full flex-shrink-0">
+											<div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
+												{/* Product Image */}
+												<div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+													<Image
+														src={product.images[0]}
+														alt={product.name}
+														fill
+														className="object-cover transition-transform duration-300 hover:scale-105"
+														onError={(e) => {
+															(e.target as HTMLImageElement).src = 
+																'https://via.placeholder.com/400x400?text=Coffee+Beans';
+														}}
+													/>
+													{product.stock === 0 && (
+														<div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+															<span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold">
+																Out of Stock
+															</span>
+														</div>
+													)}
+												</div>
+
+												{/* Product Info */}
+												<div className="flex flex-col justify-center">
+													<h3 className="text-2xl md:text-3xl font-bold text-primary mb-4">
+														{product.name}
+													</h3>
+													<p className="text-gray-700 mb-6 text-lg leading-relaxed">
+														{product.description}
+													</p>
+													<div className="flex items-center justify-between mb-6">
+														<span className="text-3xl font-bold text-secondary">
+															${product.price.toFixed(2)}
+														</span>
+														<span className="text-sm text-gray-500">
+															{product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+														</span>
+													</div>
+													<div className="flex gap-4">
+														<a
+															href={`/products/${product.slug}`}
+															className="px-6 py-3 bg-secondary text-dark-text font-semibold rounded-full transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
+														>
+															View Product
+														</a>
+														<a
+															href="/products"
+															className="px-6 py-3 bg-transparent text-primary font-semibold rounded-full border-2 border-primary transition-all duration-300 hover:bg-primary hover:text-light"
+														>
+															All Products
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									))}
+								</div>
+
+								{/* Navigation Arrows */}
+								<button
+									onClick={prevSlide}
+									className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+									aria-label="Previous product"
+								>
+									<svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+									</svg>
+								</button>
+								<button
+									onClick={nextSlide}
+									className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+									aria-label="Next product"
+								>
+									<svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+									</svg>
+								</button>
+							</div>
+						</ScrollReveal>
+
+						{/* Dots Indicator */}
+						<div className="flex justify-center mt-8 space-x-2">
+							{featuredProducts.map((_, index) => (
+								<button
+									key={index}
+									onClick={() => goToSlide(index)}
+									className={`w-3 h-3 rounded-full transition-all duration-300 ${
+										index === currentIndex 
+											? 'bg-primary scale-125' 
+											: 'bg-gray-300 hover:bg-gray-400'
+									}`}
+									aria-label={`Go to slide ${index + 1}`}
+								/>
+							))}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
