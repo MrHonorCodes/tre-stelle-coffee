@@ -97,12 +97,42 @@ ${formData.additionalInfo || 'None provided'}
 							<h2 className="text-4xl font-bold text-primary mt-4 mb-6">
 								We love partnering up with other local businesses!
 							</h2>
-							<p className="text-gray-700">
+							<p className="text-gray-700 mb-8">
 								At Tre Stelle Coffee Co., we&apos;re passionate about helping businesses elevate
 								their coffee offerings. As a locally owned Roastery, we understand the importance of
 								quality, consistency, and personalized service. Our goal is to be more than just a
 								supplier – we aim to be your partner in creating exceptional coffee experiences.
 							</p>
+							<div className="flex justify-center">
+								<button
+									onClick={() => {
+										const formSection = document.getElementById('inquiry-form');
+										if (formSection) {
+											formSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+										}
+									}}
+									className="group relative px-8 py-4 bg-gradient-to-r from-secondary to-secondary/90 text-primary font-bold text-lg rounded-full border-2 border-primary shadow-lg hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 ease-out hover:scale-105 focus:outline-none focus:ring-4 focus:ring-secondary/30"
+								>
+									<span className="relative z-10 flex items-center">
+										Get Started Today
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform duration-300"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M19 14l-7 7m0 0l-7-7m7 7V3"
+											/>
+										</svg>
+									</span>
+									<div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-tertiary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+								</button>
+							</div>
 						</ScrollReveal>
 					</div>
 				</div>

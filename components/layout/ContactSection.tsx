@@ -102,7 +102,7 @@ export default function ContactSection() {
 									/>
 								</svg>
 								<address className="not-italic hover:text-secondary transition-colors">
-									17390 Preston Road Suite 210
+									17390 Preston Road, Suite 210
 									<br />
 									Dallas, Texas 75252
 								</address>

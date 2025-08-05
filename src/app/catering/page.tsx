@@ -76,13 +76,7 @@ export default function CateringPage() {
 						<p className="text-lg text-gray-700 mb-8">
 							Contact us to learn more about our catering services and get a custom quote for your event.
 						</p>
-						<div className="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
-							<a
-								href="tel:(972) 555-0123"
-								className="inline-block bg-secondary text-primary font-semibold px-8 py-3 rounded-md transition-all duration-300 hover:bg-secondary/80 hover:-translate-y-1"
-							>
-								Call Us: (972) 555-0123
-							</a>
+						<div className="flex justify-center">
 							<a
 								href="mailto:catering@trestellecoffee.com"
 								className="inline-block bg-primary text-secondary font-semibold px-8 py-3 rounded-md transition-all duration-300 hover:bg-primary/90 hover:-translate-y-1"
