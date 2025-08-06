@@ -97,6 +97,7 @@ export default function Home() {
 										ref={videoRef}
 										controls
 										preload="metadata"
+										poster="/images/Thumbnail.jpg"
 										className="w-full h-full aspect-video object-cover"
 										src="/videos/Introduction.mp4"
 									>
