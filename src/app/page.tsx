@@ -90,15 +90,23 @@ export default function Home() {
 						<div className="w-full lg:w-1/2 max-w-md lg:max-w-none">
 							<FadeIn delay={0.8}>
 								<div 
-									className="rounded-lg overflow-hidden shadow-xl border-2" 
+									className="rounded-lg overflow-hidden shadow-xl border-2 relative" 
 									style={{ borderColor: '#e7c583' }}
 								>
+									{/* Fallback background in case poster doesn't load */}
+									<div 
+										className="absolute inset-0 bg-cover bg-center"
+										style={{
+											backgroundImage: "url('/images/home-coffee-beans.jpg')",
+											zIndex: 1
+										}}
+									/>
 									<video
 										ref={videoRef}
 										controls
 										preload="metadata"
 										poster="/images/Thumbnail.jpg"
-										className="w-full h-full aspect-video object-cover"
+										className="w-full h-full aspect-video object-cover relative z-10"
 										src="/videos/Introduction.mp4"
 									>
 										Your browser does not support the video tag.
