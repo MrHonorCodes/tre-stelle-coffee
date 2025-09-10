@@ -78,7 +78,7 @@ export default function CateringPage() {
 						</p>
 						<div className="flex justify-center">
 							<a
-								href="mailto:catering@trestellecoffee.com"
+								href="mailto:contact@trestellecoffeeco.com"
 								className="inline-block bg-primary text-secondary font-semibold px-8 py-3 rounded-md transition-all duration-300 hover:bg-primary/90 hover:-translate-y-1"
 							>
 								Email Us
