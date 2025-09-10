@@ -60,12 +60,18 @@ export async function POST(req: NextRequest) {
 			isOutOfStock?: boolean;
 		};
 		const products: ProductSanity[] = await client.fetch(
-			`*[_type == "product" && productId in $ids]{ _id, productId, name, price, stripePriceId, isOutOfStock }`,
+			`*[_type == "product" && !(_id in path("drafts.**")) && productId in $ids]{ _id, productId, name, price, stripePriceId, isOutOfStock }`,
 			{ ids: productIds }
 		);
 		const productMap: Record<string, ProductSanity> = Object.fromEntries(
 			products.map((p) => [p.productId, p])
 		);
+
+		// Log any missing products (likely not published yet)
+		const missingProductIds = productIds.filter((id: string) => !productMap[id]);
+		if (missingProductIds.length > 0) {
+			console.warn('Checkout: some productIds were not found as PUBLISHED in Sanity:', missingProductIds);
+		}
 
 		// Build Stripe line items, validating each
 		const stripeLineItems = [];

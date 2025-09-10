@@ -78,9 +78,9 @@ export async function POST(req: NextRequest) {
 				// Get all productIds from the order
 				const productIds = parsedProducts.map((item: { productId?: string }) => item.productId).filter(Boolean);
 				
-				// Fetch products from Sanity using productId field
+				// Fetch PUBLISHED products from Sanity using productId field
 				const sanityProducts = await sanityClient.fetch(
-					`*[_type == "product" && productId in $productIds]{ _id, productId }`,
+					`*[_type == "product" && !(_id in path("drafts.**")) && productId in $productIds]{ _id, productId }`,
 					{ productIds }
 				);
 				
@@ -103,6 +103,11 @@ export async function POST(req: NextRequest) {
 						size: item.size || null,
 					};
 				});
+				// Log any items that didn't resolve to a published product
+				const unresolvedProductIds = orderItems.filter((i) => i.product === null).map((i) => i.productId);
+				if (unresolvedProductIds.length > 0) {
+					console.warn('Webhook: unresolved productIds (not published or missing):', unresolvedProductIds);
+				}
 			}
 		} catch (error) {
 			console.warn('Failed to parse product details JSON:', error);
