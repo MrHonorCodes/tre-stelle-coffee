@@ -661,12 +661,12 @@ ${formData.message}
 										name="endTime"
 										value={formData.endTime}
 										onChange={handleInputChange}
-										max="00:00"
+										max="23:59"
 										required
 										className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300"
 									/>
 									<p className="text-sm text-gray-500 mt-1">
-										Events must end by midnight (12:00 AM)
+										Events must end by 11:59 PM
 									</p>
 								</div>
 
