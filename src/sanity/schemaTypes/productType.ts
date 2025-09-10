@@ -9,8 +9,19 @@ export const productType = defineType({
 			name: 'productId',
 			title: 'Product ID',
 			type: 'string',
-			validation: (Rule) => Rule.required(),
-			description: 'Unique identifier for this product (used for order tracking and Stripe integration)',
+			validation: (Rule) =>
+				Rule.required()
+				.error('Product ID is required')
+				.custom((value, context) => {
+					// Enforce uniqueness across documents
+					if (!value) return true;
+					const { document } = context as { document?: { _id?: string } };
+					const id = document?._id || '';
+					return context?.getClient({ apiVersion: '2024-05-01' })
+						.fetch("count(*[_type == 'product' && productId == $pid && _id != $id])", { pid: value, id })
+						.then((count: number) => (count === 0 ? true : 'Product ID must be unique'));
+				}),
+			description: 'Unique identifier for this product (used for order tracking and Stripe integration). Example: prod_XXXX',
 		}),
 		defineField({
 			name: 'name',

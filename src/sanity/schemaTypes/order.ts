@@ -25,7 +25,6 @@ export default defineType({
 							title: 'Product',
 							type: 'reference',
 							to: [{ type: 'product' }],
-							weak: true,
 							readOnly: true,
 						},
 						{
