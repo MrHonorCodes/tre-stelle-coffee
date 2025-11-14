@@ -6,6 +6,7 @@ import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
 import FreeShippingBanner from '../../components/ui/FreeShippingBanner';
+import HolidayBoxPopup from '../../components/ui/HolidayBoxPopup';
 
 export default function InnerLayoutClient({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
@@ -20,6 +21,7 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 				<div className={`flex-grow ${!isStudioPage ? 'mt-26 sm:mt-28' : ''}`}>{children}</div>
 			</ClientLayout>
 			{!isStudioPage && <Footer />}
+			{!isStudioPage && <HolidayBoxPopup />}
 			{/* </SmoothScroller> */}
 		</>
 	);
