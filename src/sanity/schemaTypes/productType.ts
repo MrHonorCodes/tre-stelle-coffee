@@ -75,6 +75,7 @@ export const productType = defineType({
 					{ title: 'Whole Bean', value: 'whole-bean' },
 					{ title: 'Merchandise', value: 'merchandise' },
 					{ title: 'Brewing Gear', value: 'brewing-gear' },
+					{ title: 'Bundle', value: 'bundle' },
 					{ title: 'Subscription', value: 'subscription' }, // Optional, if needed later
 				],
 				layout: 'dropdown', // Or 'radio'
@@ -112,6 +113,43 @@ export const productType = defineType({
 				],
 			},
 			description: 'Select all available sizes for merchandise products.',
+		}),
+		defineField({
+			name: 'bundleOptions',
+			title: 'Bundle Options',
+			type: 'object',
+			fields: [
+				defineField({
+					name: 'coffeeChoices',
+					title: 'Coffee Choices',
+					type: 'array',
+					of: [{ type: 'reference', to: [{ type: 'product' }] }],
+					description: 'Select coffee products that can be chosen for this bundle.',
+				}),
+				defineField({
+					name: 'hasTShirt',
+					title: 'Includes T-Shirt',
+					type: 'boolean',
+					initialValue: false,
+					description: 'Check if this bundle includes a t-shirt with size selection.',
+				}),
+				defineField({
+					name: 'hasCoffeeMug',
+					title: 'Includes Coffee Mug',
+					type: 'boolean',
+					initialValue: false,
+					description: 'Check if this bundle includes a coffee mug.',
+				}),
+			],
+			hidden: ({ document }) => document?.category !== 'bundle',
+			description: 'Configure options for bundle products.',
+		}),
+		defineField({
+			name: 'isFeatured',
+			title: 'Featured Product',
+			type: 'boolean',
+			initialValue: false,
+			description: 'Check this box to display this product in the featured section on the home page.',
 		}),
 		// You can add more fields here later, like SKU, stock levels, variants, etc.
 	],

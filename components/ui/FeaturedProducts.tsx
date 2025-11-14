@@ -26,8 +26,8 @@ function urlFor(source: SanityImageType) {
 	return builder.image(source).width(800).height(450).fit('fill').url();
 }
 
-// Sanity query for featured products
-const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && category == "whole-bean"][0...4]{
+// Sanity query for featured products - includes coffee products and featured bundles
+const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && (category == "whole-bean" || (category == "bundle" && isFeatured == true))][0...4] | order(_createdAt desc){
   _id,
   name,
   slug,
@@ -35,7 +35,8 @@ const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && category == "whole-bean
   price,
   category,
   isOutOfStock,
-  stripePriceId
+  stripePriceId,
+  isFeatured
 }`;
 
 export default function FeaturedProducts() {

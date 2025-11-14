@@ -50,6 +50,16 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   stripePriceId,
   isOutOfStock,
   sizes,
+  isFeatured,
+  bundleOptions{
+    coffeeChoices[]->{
+      _id,
+      name,
+      slug
+    },
+    hasTShirt,
+    hasCoffeeMug
+  },
   "reviews": *[_type == "review" && references(^._id) && isApproved == true]{
     _id,
     rating,

@@ -50,6 +50,16 @@ const RatingStars = ({ rating, totalStars = 5 }: { rating: number; totalStars?: 
 };
 
 // Reuse the SanityProduct interface (can also be imported from a shared types file)
+interface BundleOptions {
+	coffeeChoices?: {
+		_id: string;
+		name: string;
+		slug: { current: string };
+	}[];
+	hasTShirt?: boolean;
+	hasCoffeeMug?: boolean;
+}
+
 interface SanityProduct extends SanityDocument {
 	_id: string;
 	name: string;
@@ -63,6 +73,8 @@ interface SanityProduct extends SanityDocument {
 	reviews?: SanityReview[];
 	size?: string;
 	sizes?: string[];
+	bundleOptions?: BundleOptions;
+	isFeatured?: boolean;
 }
 
 // Define the Sanity Review Type (can also be imported from a shared types file)
@@ -137,6 +149,9 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 	const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
 	const [selectedSize, setSelectedSize] = useState<string>('');
+	
+	// Bundle product options
+	const [selectedCoffee, setSelectedCoffee] = useState<string>('');
 
 	const [hcaptchaToken, setHcaptchaToken] = useState<string | null>(null);
 	const [isHCaptchaLoaded, setIsHCaptchaLoaded] = useState(false);
@@ -152,6 +167,8 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 
 	const handleAddToCart = () => {
 		if (!product) return;
+		
+		// Validate merchandise size selection
 		if (
 			product.category === 'merchandise' &&
 			product.sizes &&
@@ -164,12 +181,45 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 			setTimeout(() => setShowConfirmation(false), 2000);
 			return;
 		}
+		
+		// Validate bundle options
+		if (product.category === 'bundle' && product.bundleOptions) {
+			if (product.bundleOptions.hasTShirt && !selectedSize) {
+				setToastType('error');
+				setToastMessage('Please select a t-shirt size.');
+				setShowConfirmation(true);
+				setTimeout(() => setShowConfirmation(false), 2000);
+				return;
+			}
+			if (product.bundleOptions.coffeeChoices && product.bundleOptions.coffeeChoices.length > 0 && !selectedCoffee) {
+				setToastType('error');
+				setToastMessage('Please select a coffee choice.');
+				setShowConfirmation(true);
+				setTimeout(() => setShowConfirmation(false), 2000);
+				return;
+			}
+		}
+		
 		setIsAdding(true);
 		// Log before calling addToCart
 		console.log(
-			`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity to add: ${quantity}, Size: ${selectedSize}`
+			`[ProductDisplayClient] About to call addToCart. Product ID: ${product._id}, Name: ${product.name}, Quantity to add: ${quantity}, Size: ${selectedSize}, Coffee: ${selectedCoffee}`
 		);
-		const options = product.category === 'merchandise' ? { size: selectedSize } : undefined;
+		
+		// Build options object based on product type
+		let options: { size?: string; coffee?: string } | undefined = undefined;
+		if (product.category === 'merchandise') {
+			options = { size: selectedSize };
+		} else if (product.category === 'bundle' && product.bundleOptions) {
+			options = {};
+			if (product.bundleOptions.hasTShirt) {
+				options.size = selectedSize;
+			}
+			if (product.bundleOptions.coffeeChoices && product.bundleOptions.coffeeChoices.length > 0) {
+				options.coffee = selectedCoffee;
+			}
+		}
+		
 		const result = addToCart({ ...product }, quantity, options);
 
 		setToastMessage(
@@ -463,6 +513,66 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 								</option>
 							))}
 						</select>
+					</div>
+				)}
+
+				{/* Bundle options for bundle products */}
+				{product.category === 'bundle' && product.bundleOptions && (
+					<div className="mb-6 space-y-4">
+						<h3 className="text-lg font-semibold text-gray-800 mb-3">Customize Your Holiday Box</h3>
+						
+						{/* T-shirt size selection */}
+						{product.bundleOptions.hasTShirt && (
+							<div>
+								<label htmlFor="bundle-size-select" className="block text-sm font-medium text-gray-700 mb-2">
+									Select T-Shirt Size: <span className="text-red-500">*</span>
+								</label>
+								<select
+									id="bundle-size-select"
+									value={selectedSize}
+									onChange={(e) => setSelectedSize(e.target.value)}
+									className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+								>
+									<option value="">Choose a size</option>
+									<option value="S">Small (S)</option>
+									<option value="M">Medium (M)</option>
+									<option value="L">Large (L)</option>
+									<option value="XL">Extra Large (XL)</option>
+								</select>
+							</div>
+						)}
+						
+						{/* Coffee bag selection */}
+						{product.bundleOptions.coffeeChoices && product.bundleOptions.coffeeChoices.length > 0 && (
+							<div>
+								<label htmlFor="coffee-select" className="block text-sm font-medium text-gray-700 mb-2">
+									Select Coffee Bag: <span className="text-red-500">*</span>
+								</label>
+								<select
+									id="coffee-select"
+									value={selectedCoffee}
+									onChange={(e) => setSelectedCoffee(e.target.value)}
+									className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+								>
+									<option value="">Choose a coffee</option>
+									{product.bundleOptions.coffeeChoices.map((coffee) => (
+										<option key={coffee._id} value={coffee.name}>
+											{coffee.name}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+						
+						{/* Coffee mug indicator */}
+						{product.bundleOptions.hasCoffeeMug && (
+							<div className="flex items-center text-sm text-gray-600 bg-gray-50 p-3 rounded-md">
+								<svg className="w-5 h-5 mr-2 text-primary" fill="currentColor" viewBox="0 0 20 20">
+									<path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+								</svg>
+								<span>Includes: Tre Stelle Coffee Co. Coffee Mug</span>
+							</div>
+						)}
 					</div>
 				)}
 
