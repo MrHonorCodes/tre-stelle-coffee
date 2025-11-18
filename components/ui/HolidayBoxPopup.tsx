@@ -2,14 +2,44 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { client } from '../../src/sanity/lib/client';
+import imageUrlBuilder from '@sanity/image-url';
+import type { Image as SanityImageType } from 'sanity';
+
+// Setup for Sanity image URLs
+const builder = imageUrlBuilder(client);
+function urlFor(source: SanityImageType) {
+	if (!source) return '/images/products/placeholder.jpg';
+	return builder.image(source).url();
+}
 
 export default function HolidayBoxPopup() {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
+	const [holidayBoxImage, setHolidayBoxImage] = useState<string | null>(null);
 
 	useEffect(() => {
 		// Set mounted state to true after component mounts
 		setIsMounted(true);
+
+		// Fetch Holiday Box product image
+		async function fetchHolidayBoxImage() {
+			try {
+				const product = await client.fetch(
+					`*[_type == "product" && slug.current == "holiday-box"][0]{
+						images
+					}`
+				);
+				if (product?.images?.[0]) {
+					setHolidayBoxImage(urlFor(product.images[0]));
+				}
+			} catch (error) {
+				console.error('Error fetching Holiday Box image:', error);
+			}
+		}
+		
+		fetchHolidayBoxImage();
 
 		// Check if popup has been shown in this session
 		const hasSeenPopup = sessionStorage.getItem('holidayBoxPromoSeen');
@@ -72,23 +102,25 @@ export default function HolidayBoxPopup() {
 					{/* Image Section */}
 					<div className="relative h-64 md:h-auto bg-primary/10">
 						<div className="absolute inset-0 flex items-center justify-center p-8">
-							{/* Placeholder for Holiday Box image */}
-							<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-tertiary/20 rounded-lg">
-								<div className="text-center">
-									<div className="text-6xl mb-4">🎁</div>
-									<p className="text-primary font-semibold text-lg">Holiday Box</p>
-									<p className="text-gray-600 text-sm mt-2">Image Coming Soon</p>
+							{holidayBoxImage ? (
+								<div className="relative w-full h-full">
+									<Image
+										src={holidayBoxImage}
+										alt="Holiday Box"
+										fill
+										className="object-contain"
+										priority
+									/>
 								</div>
-							</div>
-							{/* When the actual image is uploaded, replace the above div with:
-							<Image
-								src="/images/products/holiday-box.jpg"
-								alt="Holiday Box"
-								fill
-								className="object-contain"
-								priority
-							/>
-							*/}
+							) : (
+								<div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-tertiary/20 rounded-lg">
+									<div className="text-center">
+										<div className="text-6xl mb-4">🎁</div>
+										<p className="text-primary font-semibold text-lg">Holiday Box</p>
+										<p className="text-gray-600 text-sm mt-2">Loading...</p>
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 

@@ -21,8 +21,13 @@ interface SanityProduct extends SanityDocument {
 
 // Setup for Sanity image URLs
 const builder = imageUrlBuilder(client);
-function urlFor(source: SanityImageType) {
+function urlFor(source: SanityImageType, category?: string) {
 	if (!source) return '/images/products/placeholder.jpg';
+	// For bundle products, return full image without any cropping or resizing
+	if (category === 'bundle') {
+		return builder.image(source).url();
+	}
+	// For regular products, use 'fill' to crop to exact dimensions
 	return builder.image(source).width(800).height(450).fit('fill').url();
 }
 
@@ -161,17 +166,34 @@ export default function FeaturedProducts() {
 										<div key={product._id} className="w-full flex-shrink-0">
 											<div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8 md:p-12">
 												{/* Product Image */}
-												<div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden">
-													<Image
-														src={product.images?.[0] ? urlFor(product.images[0]) : '/images/products/placeholder.jpg'}
-														alt={product.name}
-														fill
-														className="object-cover transition-transform duration-300 hover:scale-105"
-														onError={(e) => {
-															(e.target as HTMLImageElement).src = 
-																'https://via.placeholder.com/400x400?text=Coffee+Beans';
-														}}
-													/>
+												<div className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+													{product.category === 'bundle' ? (
+														// Bundle products: smaller square image centered in container
+														<div className="relative w-full aspect-square max-h-full">
+															<Image
+																src={product.images?.[0] ? urlFor(product.images[0], product.category) : '/images/products/placeholder.jpg'}
+																alt={product.name}
+																fill
+																className="object-contain transition-transform duration-300 hover:scale-105"
+																onError={(e) => {
+																	(e.target as HTMLImageElement).src = 
+																		'https://via.placeholder.com/400x400?text=Holiday+Box';
+																}}
+															/>
+														</div>
+													) : (
+														// Regular products: full size image
+														<Image
+															src={product.images?.[0] ? urlFor(product.images[0], product.category) : '/images/products/placeholder.jpg'}
+															alt={product.name}
+															fill
+															className="object-cover transition-transform duration-300 hover:scale-105"
+															onError={(e) => {
+																(e.target as HTMLImageElement).src = 
+																	'https://via.placeholder.com/400x400?text=Coffee+Beans';
+															}}
+														/>
+													)}
 													{product.isOutOfStock && (
 														<div className="absolute inset-0 bg-black/50 flex items-center justify-center">
 															<span className="bg-red-500 text-white px-4 py-2 rounded-full font-semibold">
