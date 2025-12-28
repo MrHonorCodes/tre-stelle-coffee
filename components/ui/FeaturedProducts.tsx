@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { client } from '../../src/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityDocument, Image as SanityImageType } from 'sanity';
+import { isHolidayBoxEnabled } from '../../src/lib/seasonal';
 
 // Sanity Product interface
 interface SanityProduct extends SanityDocument {
@@ -57,7 +58,13 @@ export default function FeaturedProducts() {
 			try {
 				setIsLoading(true);
 				const fetchedProducts = await client.fetch<SanityProduct[]>(FEATURED_PRODUCTS_QUERY);
-				setProducts(fetchedProducts);
+
+				// After Christmas, hide Holiday Box / bundle promos from “Featured”.
+				const filteredProducts = isHolidayBoxEnabled()
+					? fetchedProducts
+					: fetchedProducts.filter((p) => p.category !== 'bundle' && p.slug?.current !== 'holiday-box');
+
+				setProducts(filteredProducts);
 				setError(null);
 			} catch (err) {
 				console.error('Error fetching featured products:', err);

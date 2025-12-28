@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { client } from '../../src/sanity/lib/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { Image as SanityImageType } from 'sanity';
+import { isHolidayBoxEnabled } from '../../src/lib/seasonal';
 
 // Setup for Sanity image URLs
 const builder = imageUrlBuilder(client);
@@ -18,6 +19,8 @@ export default function HolidayBoxPopup() {
 	const [isVisible, setIsVisible] = useState(false);
 	const [isMounted, setIsMounted] = useState(false);
 	const [holidayBoxImage, setHolidayBoxImage] = useState<string | null>(null);
+
+	const holidayBoxEnabled = isHolidayBoxEnabled();
 
 	useEffect(() => {
 		// Set mounted state to true after component mounts
@@ -65,7 +68,7 @@ export default function HolidayBoxPopup() {
 	};
 
 	// Don't render anything until component is mounted on client
-	if (!isMounted || !isVisible) return null;
+	if (!holidayBoxEnabled || !isMounted || !isVisible) return null;
 
 	return (
 		<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
