@@ -21,7 +21,8 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 				<div className={`flex-grow ${!isStudioPage ? 'mt-26 sm:mt-28' : ''}`}>{children}</div>
 			</ClientLayout>
 			{!isStudioPage && <Footer />}
-			{!isStudioPage && <HolidayBoxPopup />}
+			{/* Holiday Box popup disabled - no longer Christmas season */}
+			{/* {!isStudioPage && <HolidayBoxPopup />} */}
 			{/* </SmoothScroller> */}
 		</>
 	);
