@@ -6,6 +6,8 @@ import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
 import FreeShippingBanner from '../../components/ui/FreeShippingBanner';
+// Import retained for easy re-enabling during next holiday season
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HolidayBoxPopup from '../../components/ui/HolidayBoxPopup';
 
 export default function InnerLayoutClient({ children }: { children: React.ReactNode }) {
