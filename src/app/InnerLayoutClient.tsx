@@ -6,6 +6,8 @@ import Navbar from '../../components/layout/Navbar';
 import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
 import FreeShippingBanner from '../../components/ui/FreeShippingBanner';
+// Import retained for easy re-enabling during next holiday season
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import HolidayBoxPopup from '../../components/ui/HolidayBoxPopup';
 
 export default function InnerLayoutClient({ children }: { children: React.ReactNode }) {
@@ -21,7 +23,8 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 				<div className={`flex-grow ${!isStudioPage ? 'mt-26 sm:mt-28' : ''}`}>{children}</div>
 			</ClientLayout>
 			{!isStudioPage && <Footer />}
-			{!isStudioPage && <HolidayBoxPopup />}
+			{/* Holiday Box popup disabled - no longer Christmas season */}
+			{/* {!isStudioPage && <HolidayBoxPopup />} */}
 			{/* </SmoothScroller> */}
 		</>
 	);

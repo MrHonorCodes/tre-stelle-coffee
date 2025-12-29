@@ -32,8 +32,8 @@ function urlFor(source: SanityImageType, category?: string) {
 	return builder.image(source).width(800).height(450).fit('fill').url();
 }
 
-// Sanity query for featured products - includes coffee products and featured bundles
-const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && (category == "whole-bean" || (category == "bundle" && isFeatured == true))][0...4] | order(_createdAt desc){
+// Sanity query for featured products - excludes bundle products (Holiday Box disabled)
+const FEATURED_PRODUCTS_QUERY = `*[_type == "product" && category == "whole-bean"][0...4] | order(_createdAt desc){
   _id,
   name,
   slug,
