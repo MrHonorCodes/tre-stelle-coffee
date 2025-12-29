@@ -2,8 +2,10 @@ import { type SanityDocument } from 'next-sanity';
 import { client } from '@/sanity/lib/client';
 import type { Image as SanityImageType } from 'sanity';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import FadeIn from '../../../../components/ui/FadeIn';
 import ProductDisplayClient from '../../../components/products/ProductDisplayClient';
+import { isHolidayBoxEnabled } from '@/lib/seasonal';
 
 // Define the Sanity Product Type for this server component
 interface SanityProduct extends SanityDocument {
@@ -94,6 +96,12 @@ export async function generateMetadata({
 export default async function ProductDetailPage({ params: paramsPromise }: Props) {
 	const params = await paramsPromise;
 	const { slug } = params;
+
+	// After the holiday season, hide the Holiday Box product route entirely.
+	if (slug === 'holiday-box' && !isHolidayBoxEnabled()) {
+		notFound();
+	}
+
 	const product = await client.fetch<SanityProduct | null>(
 		PRODUCT_QUERY,
 		{ slug },

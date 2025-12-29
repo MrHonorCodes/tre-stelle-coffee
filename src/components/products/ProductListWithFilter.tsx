@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { Image, SanityDocument } from 'sanity';
 import imageUrlBuilder from '@sanity/image-url';
 import { client } from '@/sanity/lib/client';
+import { isHolidayBoxEnabled } from '@/lib/seasonal';
 
 const { projectId, dataset } = client.config();
 const builder = imageUrlBuilder({ projectId: projectId || '', dataset: dataset || '' });
@@ -32,8 +33,13 @@ const CATEGORIES = [
 export default function ProductListWithFilter({ products }: { products: Product[] }) {
 	const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
+	// Hide Holiday Box (and any holiday bundle products) after the season ends.
+	const visibleProducts = isHolidayBoxEnabled()
+		? products
+		: products.filter((p) => p.slug?.current !== 'holiday-box');
+
 	const filteredProducts = selectedCategory === 'all' 
-		? products.sort((a, b) => {
+		? visibleProducts.sort((a, b) => {
 				// Show coffee products first, then others
 				const aIsCoffee = a.category === 'ground-coffee' || a.category === 'whole-bean';
 				const bIsCoffee = b.category === 'ground-coffee' || b.category === 'whole-bean';
@@ -42,7 +48,7 @@ export default function ProductListWithFilter({ products }: { products: Product[
 				if (!aIsCoffee && bIsCoffee) return 1;
 				return 0; // Keep original order for items in same category type
 			})
-		: products.filter((p) => p.category === selectedCategory);
+		: visibleProducts.filter((p) => p.category === selectedCategory);
 
 	return (
 		<>
