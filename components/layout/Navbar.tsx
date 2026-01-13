@@ -45,7 +45,8 @@ export default function Navbar() {
 			path: '/about-us',
 			dropdown: [
 				{ name: 'Our Story', path: '/about-us' },
-				{ name: 'Find Us', path: '/find-us' }
+				{ name: 'Find Us', path: '/find-us' },
+				{ name: 'Press', path: '/press' }
 			]
 		},
 		{ name: 'Our Products', path: '/products' },
