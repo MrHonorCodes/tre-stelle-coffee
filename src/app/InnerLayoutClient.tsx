@@ -7,6 +7,7 @@ import Footer from '../../components/layout/Footer';
 import ClientLayout from '../../components/layout/ClientLayout';
 import FreeShippingBanner from '../../components/ui/FreeShippingBanner';
 import HolidayBoxPopup from '../../components/ui/HolidayBoxPopup';
+import ImmersiveCoffeePopup from '../../components/ui/ImmersiveCoffeePopup';
 
 export default function InnerLayoutClient({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
@@ -22,6 +23,7 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 			</ClientLayout>
 			{!isStudioPage && <Footer />}
 			{!isStudioPage && <HolidayBoxPopup />}
+			{!isStudioPage && <ImmersiveCoffeePopup />}
 			{/* </SmoothScroller> */}
 		</>
 	);
