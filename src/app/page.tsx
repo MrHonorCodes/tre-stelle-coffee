@@ -5,6 +5,7 @@ import FadeIn from '../../components/ui/FadeIn';
 import ScrollReveal from '../../components/ui/ScrollReveal';
 import ContactSection from '../../components/layout/ContactSection';
 import FeaturedProducts from '../../components/ui/FeaturedProducts';
+import FeaturedEvent from '../../components/ui/FeaturedEvent';
 
 // Use Next.js dynamic import with SSR disabled
 // const VideoSection = dynamic(() => import('../../components/ui/VideoSection'), {
@@ -117,6 +118,9 @@ export default function Home() {
 					</div>
 				</div>
 			</section>
+
+			{/* Featured Event Section - Conditionally rendered based on active promotions */}
+			<FeaturedEvent />
 
 			{/* Featured Products Section */}
 			<FeaturedProducts />
