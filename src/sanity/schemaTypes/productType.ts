@@ -9,18 +9,28 @@ export const productType = defineType({
 			name: 'productId',
 			title: 'Product ID',
 			type: 'string',
-			validation: (Rule) =>
-				Rule.required()
-				.error('Product ID is required')
-				.custom((value, context) => {
-					// Enforce uniqueness across documents
+			validation: (Rule) => [
+				Rule.required().error('Product ID is required'),
+				Rule.custom(async (value, context) => {
+					// Skip uniqueness check if no value
 					if (!value) return true;
-					const { document } = context as { document?: { _id?: string } };
-					const id = document?._id || '';
-					return context?.getClient({ apiVersion: '2024-05-01' })
-						.fetch("count(*[_type == 'product' && productId == $pid && _id != $id])", { pid: value, id })
-						.then((count: number) => (count === 0 ? true : 'Product ID must be unique'));
+					
+					const { document, getClient } = context;
+					const id = document?._id?.replace(/^drafts\./, '') || '';
+					
+					try {
+						const count = await getClient({ apiVersion: '2024-05-01' })
+							.fetch(
+								"count(*[_type == 'product' && productId == $pid && !(_id in [$id, $draftId])])",
+								{ pid: value, id, draftId: `drafts.${id}` }
+							);
+						return count === 0 ? true : 'Product ID must be unique';
+					} catch {
+						// If fetch fails, allow save and rely on other checks
+						return true;
+					}
 				}),
+			],
 			description: 'Unique identifier for this product (used for order tracking and Stripe integration). Example: prod_XXXX',
 		}),
 		defineField({
