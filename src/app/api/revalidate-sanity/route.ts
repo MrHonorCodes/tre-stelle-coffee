@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag, revalidatePath } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { parseBody } from 'next-sanity/webhook';
 
 // Define the expected body structure from the webhook (including slug for products)
@@ -28,8 +28,10 @@ export async function POST(req: NextRequest) {
 		}
 
 		// Revalidate the general tag for the document type
-		revalidateTag(body._type);
-		console.log(`Revalidated tag: ${body._type}`);
+		// Next.js 16 requires cacheTag and cacheLife from next/cache for the new API
+		// Using revalidatePath as a workaround for tag-based revalidation
+		revalidatePath('/', 'layout');
+		console.log(`Revalidated layout for type: ${body._type}`);
 
 		let pathRevalidated = false;
 		// If it's a product and a slug is provided, also revalidate the specific product path
@@ -51,12 +53,12 @@ export async function POST(req: NextRequest) {
 		return NextResponse.json({
 			status: 200,
 			revalidated: true,
-			tagRevalidated: body._type,
+			documentType: body._type,
 			pathRevalidated: pathRevalidated
 				? body._type === 'product' && body.slug?.current
 					? `/products/${body.slug.current}`
 					: 'N/A'
-				: 'No specific path revalidated by slug',
+				: 'Layout revalidated',
 			now: Date.now(),
 		});
 	} catch (error: unknown) {
