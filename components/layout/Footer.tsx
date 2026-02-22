@@ -13,7 +13,7 @@ export default function Footer() {
 					<p>
 						&copy; {currentYear} All rights reserved - Tre Stelle Coffee Co. Created by{' '}
 						<a
-							href="https://mrhonor.com"
+							href="https://dannyamzq.com"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="text-secondary hover:underline"
