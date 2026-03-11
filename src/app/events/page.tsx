@@ -738,17 +738,6 @@ ${formData.message}
 
 							<ScrollReveal delay={0.3}>
 								<div className="bg-white rounded-lg shadow-md p-6">
-									<h3 className="text-xl font-bold text-primary mb-3">Is a deposit required?</h3>
-									<p className="text-gray-600">
-										Yes, we need a deposit to secure your booking. The remaining balance is
-										due on the day of your event. The deposit is fully refundable with 7 days&apos;
-										notice of cancellation.
-									</p>
-								</div>
-							</ScrollReveal>
-
-							<ScrollReveal delay={0.4}>
-								<div className="bg-white rounded-lg shadow-md p-6">
 									<h3 className="text-xl font-bold text-primary mb-3">Can I decorate the space?</h3>
 									<p className="text-gray-600">
 										Absolutely! You&apos;re welcome to decorate the space to suit your event. We ask
