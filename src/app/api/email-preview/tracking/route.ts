@@ -1,12 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+function escapeHtml(str: string): string {
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#x27;');
+}
+
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);
-	const productsText = searchParams.get('productsText') || 'Espresso Blend (Qty: 1), Ethiopia Guji (Qty: 2)';
-	const trackingNumber = searchParams.get('trackingNumber') || '9400 0000 0000 0000 0000 00';
-	const firstName = searchParams.get('firstName') || 'there';
+	const rawTrackingNumber = searchParams.get('trackingNumber') || '9400 0000 0000 0000 0000 00';
+	const productsText = escapeHtml(searchParams.get('productsText') || 'Espresso Blend (Qty: 1), Ethiopia Guji (Qty: 2)');
+	const trackingNumber = escapeHtml(rawTrackingNumber);
+	const firstName = escapeHtml(searchParams.get('firstName') || 'there');
 	const uspsTrackingUrl = `https://tools.usps.com/go/TrackConfirmAction?tLabels=${encodeURIComponent(
-		trackingNumber
+		rawTrackingNumber
 	)}`;
 
 	const html = `
