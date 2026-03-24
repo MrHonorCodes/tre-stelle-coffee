@@ -2,18 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-
-// Eventbrite link - update this with the actual link
-const EVENTBRITE_URL = 'https://www.eventbrite.com/e/immersive-coffee-experience-tickets-1981758000527?utm-campaign=social&utm-content=attendeeshare&utm-medium=discovery&utm-term=listing&utm-source=cp&aff=ebdsshcopyurl'; // TODO: Replace with actual Eventbrite URL
+import { IMMERSIVE_COFFEE_EVENTBRITE_URL } from '@/lib/events';
 
 export function isImmersiveCoffeeEventEnabled(now: Date = new Date()): boolean {
 	const override = process.env.NEXT_PUBLIC_ENABLE_IMMERSIVE_COFFEE_EVENT;
 	if (override === 'true') return true;
 	if (override === 'false') return false;
 
-	// Default behavior: enabled from Jan 15 through Feb 15, 2026
-	const start = new Date(2026, 0, 15, 0, 0, 0, 0); // Jan 15, 2026
-	const end = new Date(2026, 1, 15, 23, 59, 59, 999); // Feb 15, 2026 end of day
+	// Default behavior: enabled from Mar 23 through Apr 4, 2026
+	const start = new Date(2026, 2, 23, 0, 0, 0, 0); // Mar 23, 2026
+	const end = new Date(2026, 3, 4, 23, 59, 59, 999); // Apr 4, 2026 end of day
 	return now >= start && now <= end;
 }
 
@@ -47,7 +45,7 @@ export default function ImmersiveCoffeePopup() {
 
 	const handleGetTickets = () => {
 		sessionStorage.setItem('immersiveCoffeeEventSeen', 'true');
-		window.open(EVENTBRITE_URL, '_blank');
+		window.open(IMMERSIVE_COFFEE_EVENTBRITE_URL, '_blank');
 		setIsVisible(false);
 	};
 
@@ -89,7 +87,7 @@ export default function ImmersiveCoffeePopup() {
 				<div className="relative w-full aspect-[3/4]">
 					<Image
 						src="/images/immersive-coffee-event.png"
-						alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - February 15, 2026"
+						alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - April 4, 2026"
 						fill
 						className="object-cover"
 						priority

@@ -165,9 +165,15 @@ ${formData.message}
 						<h1 className="text-4xl md:text-6xl font-extrabold mb-4 leading-tight text-secondary">
 							Event Booking
 						</h1>
-						<p className="text-xl text-light max-w-2xl mx-auto">
+						<p className="text-xl text-light max-w-2xl mx-auto mb-8">
 							Host your next special occasion in our welcoming coffee shop space
 						</p>
+						<a
+							href="#booking-form"
+							className="inline-block px-8 py-4 bg-secondary text-dark-text font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
+						>
+							Submit Request
+						</a>
 					</FadeIn>
 				</div>
 			</section>
@@ -531,7 +537,7 @@ ${formData.message}
     </section>
  */}
 			{/* Booking Form Section */}
-			<section id="booking-form" className="py-16 bg-white">
+			<section id="booking-form" className="py-16 bg-white scroll-mt-16">
 				<div className="container mx-auto px-4">
 					<ScrollReveal>
 						<div className="max-w-4xl mx-auto">

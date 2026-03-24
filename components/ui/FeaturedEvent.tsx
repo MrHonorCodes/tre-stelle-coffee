@@ -4,8 +4,7 @@ import Image from 'next/image';
 import ScrollReveal from './ScrollReveal';
 import { isImmersiveCoffeeEventEnabled } from './ImmersiveCoffeePopup';
 
-// Eventbrite link for the immersive coffee experience
-const EVENTBRITE_URL = 'https://www.eventbrite.com/e/immersive-coffee-experience-tickets-1981758000527?utm-campaign=social&utm-content=attendeeshare&utm-medium=discovery&utm-term=listing&utm-source=cp&aff=ebdsshcopyurl';
+import { IMMERSIVE_COFFEE_EVENTBRITE_URL } from '@/lib/events';
 
 export default function FeaturedEvent() {
 	// Check if the immersive coffee event is enabled
@@ -45,7 +44,7 @@ export default function FeaturedEvent() {
 								<div className="relative aspect-[3/4] w-full max-w-md mx-auto">
 									<Image
 										src="/images/immersive-coffee-event.png"
-										alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - February 15, 2026"
+										alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - April 4, 2026"
 										fill
 										className="object-cover transition-transform duration-500 group-hover:scale-105"
 									/>
@@ -62,7 +61,7 @@ export default function FeaturedEvent() {
 									<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 									</svg>
-									<span className="font-semibold">Sunday, Feb 15 • 6:30 PM - 8:00 PM CST</span>
+									<span className="font-semibold">Saturday, April 4 • 6:30 PM - 8:00 PM CST</span>
 								</div>
 
 								<h3 className="text-2xl md:text-3xl font-bold text-primary mb-6">
@@ -103,7 +102,7 @@ export default function FeaturedEvent() {
 
 								<div className="flex flex-wrap gap-4 justify-center lg:justify-start">
 									<a
-										href={EVENTBRITE_URL}
+										href={IMMERSIVE_COFFEE_EVENTBRITE_URL}
 										target="_blank"
 										rel="noopener noreferrer"
 										className="px-8 py-3 bg-secondary text-primary font-semibold rounded-full uppercase tracking-wide text-sm transition-all duration-300 hover:bg-primary hover:text-secondary border-2 border-secondary hover:border-primary shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
