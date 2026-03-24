@@ -32,6 +32,10 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json({ error: 'Session not found' }, { status: 404 });
 		}
 
+		if (session.payment_status !== 'paid') {
+			return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+		}
+
 		// Extract relevant information
 		const lineItems = session.line_items?.data.map((item) => {
 			// Type guard to ensure price.product is a Stripe.Product
