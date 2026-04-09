@@ -41,19 +41,15 @@ const SANITY_WEBHOOK_SECRET = process.env.SANITY_WEBHOOK_SECRET;
 
 export async function POST(req: NextRequest) {
 	try {
-		// 1. Verify the webhook signature (if a secret is configured)
-		if (SANITY_WEBHOOK_SECRET) {
-			// Note: Sanity webhook signature verification requires specific header and logic.
-			// For simplicity, this example assumes a basic secret check or relies on network-level security.
-			// A more robust solution would involve crypto.timingSafeEqual for signature comparison.
-			const DUMMY_AUTH_TOKEN_FROM_HEADER = req.headers.get('Authorization')?.split(' ')?.[1];
-			if (DUMMY_AUTH_TOKEN_FROM_HEADER !== SANITY_WEBHOOK_SECRET) {
-				// Replace with actual signature verification
-				console.warn('Unauthorized Sanity webhook attempt');
-				// return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-				// For now, we'll log and proceed if the secret is set but doesn't match, for easier local dev
-				// In production, you MUST enforce this.
-			}
+		// 1. Verify the webhook signature
+		if (!SANITY_WEBHOOK_SECRET) {
+			console.error('SANITY_WEBHOOK_SECRET is not configured');
+			return NextResponse.json({ message: 'Webhook secret not configured' }, { status: 503 });
+		}
+		const authToken = req.headers.get('Authorization')?.split(' ')?.[1];
+		if (authToken !== SANITY_WEBHOOK_SECRET) {
+			console.warn('Unauthorized Sanity webhook attempt');
+			return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 		}
 
 		const payload = await req.json();

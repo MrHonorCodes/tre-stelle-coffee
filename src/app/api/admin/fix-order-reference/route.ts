@@ -22,13 +22,14 @@ type OrderItemRef = {
 
 export async function POST(req: NextRequest) {
     try {
-        // Simple auth: require Authorization: Bearer <ADMIN_API_SECRET>
-        if (ADMIN_SECRET) {
-            const bearer = req.headers.get('authorization');
-            const token = bearer?.split(' ')?.[1];
-            if (token !== ADMIN_SECRET) {
-                return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-            }
+        // Require Authorization: Bearer <ADMIN_API_SECRET>
+        if (!ADMIN_SECRET) {
+            return NextResponse.json({ message: 'Admin API secret not configured' }, { status: 503 });
+        }
+        const bearer = req.headers.get('authorization');
+        const token = bearer?.split(' ')?.[1];
+        if (token !== ADMIN_SECRET) {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }
 
         // Parse JSON body if provided; otherwise fall back to query params
@@ -148,13 +149,14 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
-        // Simple auth (optional) via ADMIN_API_SECRET on GET too
-        if (ADMIN_SECRET) {
-            const bearer = req.headers.get('authorization');
-            const token = bearer?.split(' ')?.[1];
-            if (token !== ADMIN_SECRET) {
-                return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
-            }
+        // Require Authorization: Bearer <ADMIN_API_SECRET>
+        if (!ADMIN_SECRET) {
+            return NextResponse.json({ message: 'Admin API secret not configured' }, { status: 503 });
+        }
+        const bearer = req.headers.get('authorization');
+        const token = bearer?.split(' ')?.[1];
+        if (token !== ADMIN_SECRET) {
+            return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
         }
 
         const qp = req.nextUrl?.searchParams;
