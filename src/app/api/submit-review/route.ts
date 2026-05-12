@@ -77,8 +77,16 @@ export async function POST(request: Request) {
 		if (title && (typeof title !== 'string' || title.length > 200)) {
 			return NextResponse.json({ message: 'Title must be 200 characters or less' }, { status: 400 });
 		}
-		if (authorEmail && (typeof authorEmail !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(authorEmail))) {
-			return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
+		if (authorEmail) {
+			if (typeof authorEmail !== 'string') {
+				return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
+			}
+			const atIdx = authorEmail.indexOf('@');
+			const hasValidAt = atIdx > 0 && atIdx === authorEmail.lastIndexOf('@');
+			const hasDomainDot = hasValidAt && authorEmail.indexOf('.', atIdx + 2) > atIdx + 1;
+			if (!hasValidAt || !hasDomainDot) {
+				return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
+			}
 		}
 		if (typeof productId !== 'string' || !/^[a-zA-Z0-9._-]+$/.test(productId)) {
 			return NextResponse.json({ message: 'Invalid product ID' }, { status: 400 });
@@ -124,13 +132,6 @@ export async function POST(request: Request) {
 		);
 	} catch (error) {
 		console.error('Error submitting review:', error);
-		let errorMessage = 'An unknown error occurred.';
-		if (error instanceof Error) {
-			errorMessage = error.message;
-		}
-		return NextResponse.json(
-			{ message: 'Failed to submit review', error: errorMessage },
-			{ status: 500 }
-		);
+		return NextResponse.json({ message: 'Failed to submit review' }, { status: 500 });
 	}
 }
