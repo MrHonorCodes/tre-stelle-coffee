@@ -8,7 +8,7 @@
 // import productsData from '../../data/products.json'; // Data now from Sanity
 // import { useCart } from '../../context/CartContext'; // Client hook
 import { type SanityDocument } from 'next-sanity'; // For typing Sanity documents
-import { client } from '../../sanity/lib/client'; // Your Sanity client
+import { readClient as client } from '../../sanity/lib/client'; // Read-only CDN-cached client
 // import imageUrlBuilder from '@sanity/image-url'; // For Sanity images
 import type { Image } from 'sanity'; // Sanity image type
 // PortableText can be added later when we render rich text details
@@ -16,6 +16,21 @@ import type { Image } from 'sanity'; // Sanity image type
 import ProductListWithFilter from '../../components/products/ProductListWithFilter';
 import FadeIn from '../../../components/ui/FadeIn';
 import ContactSection from '../../../components/layout/ContactSection';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+	title: 'Shop Premium Coffee & Merchandise',
+	description:
+		'Shop specialty coffee beans, blends, and Tre Stelle Coffee Co. merchandise. Roasted in Dallas, TX — shipped fresh.',
+	alternates: { canonical: 'https://trestellecoffeeco.com/products' },
+	openGraph: {
+		title: 'Shop Premium Coffee & Merchandise | Tre Stelle Coffee Co.',
+		description:
+			'Specialty coffee beans, blends, and merchandise from Tre Stelle Coffee Co. Roasted in Dallas, TX.',
+		url: 'https://trestellecoffeeco.com/products',
+		type: 'website',
+	},
+};
 
 // Define the Sanity Product Type (adjust based on your Sanity schema)
 interface SanityProduct extends SanityDocument {

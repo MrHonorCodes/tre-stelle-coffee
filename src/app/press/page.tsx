@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
 import Link from 'next/link';
-import { client } from '../../sanity/lib/client'; // Corrected path
+import { readClient as client } from '../../sanity/lib/client'; // Read-only CDN-cached client
 import imageUrlBuilder from '@sanity/image-url';
 import { PortableText } from '@portabletext/react';
 import type { SanityDocument, Image as SanityImageType, PortableTextBlock } from 'sanity'; // Added PortableTextBlock

@@ -1,5 +1,7 @@
 import { type SanityDocument } from 'next-sanity';
-import { client } from '@/sanity/lib/client';
+import { readClient as client } from '@/sanity/lib/client';
+import { urlFor } from '@/sanity/lib/image';
+import { SITE_URL } from '@/lib/site';
 import type { Image as SanityImageType } from 'sanity';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -87,9 +89,29 @@ export async function generateMetadata({
 	if (!product) {
 		return { title: 'Product Not Found' };
 	}
+	const priceLabel = product.price ? `$${product.price.toFixed(2)}` : '';
+	const description = `${product.name} from Tre Stelle Coffee Co.${priceLabel ? ` ${priceLabel}.` : ''} Premium specialty coffee roasted in Dallas, TX.`;
+	const imageUrl = product.images?.[0]
+		? urlFor(product.images[0]).width(1200).height(630).fit('crop').url()
+		: undefined;
+	const canonical = `${SITE_URL}/products/${slug}`;
 	return {
 		title: `${product.name} | Tre Stelle Coffee`,
-		description: `Details about ${product.name}. Price: $${product.price ? product.price.toFixed(2) : 'N/A'}.`,
+		description,
+		alternates: { canonical },
+		openGraph: {
+			title: `${product.name} | Tre Stelle Coffee`,
+			description,
+			type: 'website',
+			url: canonical,
+			images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630, alt: product.name }] : undefined,
+		},
+		twitter: {
+			card: 'summary_large_image',
+			title: `${product.name} | Tre Stelle Coffee`,
+			description,
+			images: imageUrl ? [imageUrl] : undefined,
+		},
 	};
 }
 
@@ -127,8 +149,52 @@ export default async function ProductDetailPage({ params: paramsPromise }: Props
 		);
 	}
 
+	const productImage = product.images?.[0]
+		? urlFor(product.images[0]).width(1200).height(1200).fit('crop').url()
+		: undefined;
+	const approvedReviews = product.reviews ?? [];
+	const avgRating = approvedReviews.length
+		? approvedReviews.reduce((sum, r) => sum + (r.rating || 0), 0) / approvedReviews.length
+		: 0;
+	const productJsonLd = {
+		'@context': 'https://schema.org',
+		'@type': 'Product',
+		name: product.name,
+		image: productImage ? [productImage] : undefined,
+		description: `${product.name} from Tre Stelle Coffee Co. Premium specialty coffee roasted in Dallas, TX.`,
+		brand: { '@type': 'Brand', name: 'Tre Stelle Coffee Co.' },
+		offers: {
+			'@type': 'Offer',
+			url: `${SITE_URL}/products/${slug}`,
+			priceCurrency: 'USD',
+			price: product.price ?? 0,
+			availability: product.isOutOfStock
+				? 'https://schema.org/OutOfStock'
+				: 'https://schema.org/InStock',
+		},
+		...(approvedReviews.length > 0 && {
+			aggregateRating: {
+				'@type': 'AggregateRating',
+				ratingValue: avgRating.toFixed(1),
+				reviewCount: approvedReviews.length,
+			},
+			review: approvedReviews.slice(0, 5).map((r) => ({
+				'@type': 'Review',
+				reviewRating: { '@type': 'Rating', ratingValue: r.rating, bestRating: 5 },
+				author: { '@type': 'Person', name: r.authorName },
+				datePublished: r.submittedAt,
+				...(r.title && { name: r.title }),
+				reviewBody: r.comment,
+			})),
+		}),
+	};
+
 	return (
 		<main className="min-h-screen bg-soft-white pt-36 pb-12">
+			<script
+				type="application/ld+json"
+				dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+			/>
 			<FadeIn>
 				<div className="container mx-auto px-4">
 					<ProductDisplayClient product={product} />
