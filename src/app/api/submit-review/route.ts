@@ -41,22 +41,64 @@ export async function POST(request: Request) {
 		if (!HCAPTCHA_SECRET) {
 			return NextResponse.json({ message: 'hCaptcha secret not configured.' }, { status: 500 });
 		}
-		const verifyRes = await fetch('https://hcaptcha.com/siteverify', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			body: `response=${hcaptchaToken}&secret=${HCAPTCHA_SECRET}`,
-		});
-		const verifyData = await verifyRes.json();
+		const captchaController = new AbortController();
+		const captchaTimeout = setTimeout(() => captchaController.abort(), 5000);
+		let verifyData: { success: boolean };
+		try {
+			const verifyRes = await fetch('https://hcaptcha.com/siteverify', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: `response=${hcaptchaToken}&secret=${HCAPTCHA_SECRET}`,
+				signal: captchaController.signal,
+			});
+			verifyData = await verifyRes.json();
+		} catch {
+			return NextResponse.json({ message: 'Captcha verification unavailable. Please try again.' }, { status: 503 });
+		} finally {
+			clearTimeout(captchaTimeout);
+		}
 		if (!verifyData.success) {
 			return NextResponse.json({ message: 'Captcha verification failed.' }, { status: 400 });
 		}
 
-		// Basic validation
+		// Input validation
 		if (!productId || !rating || !comment || !authorName) {
 			return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
 		}
 		if (typeof rating !== 'number' || rating < 1 || rating > 5) {
 			return NextResponse.json({ message: 'Invalid rating value' }, { status: 400 });
+		}
+		if (typeof authorName !== 'string' || authorName.length > 100) {
+			return NextResponse.json({ message: 'Author name must be 100 characters or less' }, { status: 400 });
+		}
+		if (typeof comment !== 'string' || comment.length > 1000) {
+			return NextResponse.json({ message: 'Comment must be 1000 characters or less' }, { status: 400 });
+		}
+		if (title && (typeof title !== 'string' || title.length > 200)) {
+			return NextResponse.json({ message: 'Title must be 200 characters or less' }, { status: 400 });
+		}
+		if (authorEmail) {
+			if (typeof authorEmail !== 'string') {
+				return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
+			}
+			const atIdx = authorEmail.indexOf('@');
+			const hasValidAt = atIdx > 0 && atIdx === authorEmail.lastIndexOf('@');
+			const hasDomainDot = hasValidAt && authorEmail.indexOf('.', atIdx + 2) > atIdx + 1;
+			if (!hasValidAt || !hasDomainDot) {
+				return NextResponse.json({ message: 'Invalid email format' }, { status: 400 });
+			}
+		}
+		if (typeof productId !== 'string' || !/^[a-zA-Z0-9._-]+$/.test(productId)) {
+			return NextResponse.json({ message: 'Invalid product ID' }, { status: 400 });
+		}
+
+		// Verify product exists in Sanity before creating review
+		const productExists = await client.fetch<number>(
+			`count(*[_type == "product" && !(_id in path("drafts.**")) && _id == $id])`,
+			{ id: productId }
+		);
+		if (productExists === 0) {
+			return NextResponse.json({ message: 'Product not found' }, { status: 404 });
 		}
 
 		// Create the review document in Sanity
@@ -90,13 +132,6 @@ export async function POST(request: Request) {
 		);
 	} catch (error) {
 		console.error('Error submitting review:', error);
-		let errorMessage = 'An unknown error occurred.';
-		if (error instanceof Error) {
-			errorMessage = error.message;
-		}
-		return NextResponse.json(
-			{ message: 'Failed to submit review', error: errorMessage },
-			{ status: 500 }
-		);
+		return NextResponse.json({ message: 'Failed to submit review' }, { status: 500 });
 	}
 }

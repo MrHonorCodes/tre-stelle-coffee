@@ -1,42 +1,67 @@
 import './globals.css';
-// Navbar and Footer are now imported in InnerLayoutClient
-// import Navbar from '../../components/layout/Navbar';
-// import Footer from '../../components/layout/Footer';
-// ClientLayout is now used within InnerLayoutClient
-// import ClientLayout from '../../components/layout/ClientLayout';
-// import SmoothScroller from '../../components/ui/SmoothScroller';
+import type { Metadata } from 'next';
 import BackToTop from '../../components/ui/BackToTop';
 import { CartProvider } from '../context/CartContext';
-// usePathname is no longer needed here
-// import { usePathname } from 'next/navigation';
-import InnerLayoutClient from './InnerLayoutClient'; // Import the new component
+import InnerLayoutClient from './InnerLayoutClient';
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, BUSINESS } from '@/lib/site';
 
-export const metadata = {
-	title: 'Tre Stelle Coffee Co. | Premium Coffee Roastery',
-	description:
-		'Premium coffee roastery bridging modern and traditional coffee craftsmanship since 2019.',
+export const metadata: Metadata = {
+	metadataBase: new URL(SITE_URL),
+	title: {
+		default: `${SITE_NAME} | Premium Coffee Roastery`,
+		template: `%s | ${SITE_NAME}`,
+	},
+	description: SITE_DESCRIPTION,
+	openGraph: {
+		title: `${SITE_NAME} | Premium Coffee Roastery`,
+		description: SITE_DESCRIPTION,
+		type: 'website',
+		url: SITE_URL,
+		siteName: SITE_NAME,
+		images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: `${SITE_NAME} | Premium Coffee Roastery`,
+		description: SITE_DESCRIPTION,
+		images: [DEFAULT_OG_IMAGE],
+	},
+	alternates: { canonical: SITE_URL },
+};
+
+const localBusinessJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'CafeOrCoffeeShop',
+	name: BUSINESS.name,
+	url: SITE_URL,
+	image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+	telephone: BUSINESS.telephone,
+	email: BUSINESS.email,
+	address: {
+		'@type': 'PostalAddress',
+		streetAddress: BUSINESS.streetAddress,
+		addressLocality: BUSINESS.addressLocality,
+		addressRegion: BUSINESS.addressRegion,
+		postalCode: BUSINESS.postalCode,
+		addressCountry: BUSINESS.addressCountry,
+	},
+	priceRange: '$',
+	sameAs: BUSINESS.sameAs,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-	// const pathname = usePathname(); // Removed
-	// const isStudioPage = pathname.startsWith('/studio'); // Removed
-
 	return (
 		<html lang="en">
 			<body
 				suppressHydrationWarning={true}
 				className="flex flex-col min-h-screen bg-soft-white text-dark-text"
 			>
+				<script
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+				/>
 				<CartProvider>
-					<InnerLayoutClient>{children}</InnerLayoutClient> {/* Use the new component here */}
-					{/* Navbar, ClientLayout, and Footer are now inside InnerLayoutClient */}
-					{/* {!isStudioPage && <Navbar />} // Removed */}
-					{/* <ClientLayout> // Removed */}
-					{/*   <div className="flex-grow"> // Removed */}
-					{/*     {children} // Removed - children are passed to InnerLayoutClient */}
-					{/*   </div> // Removed */}
-					{/* </ClientLayout> // Removed */}
-					{/* {!isStudioPage && <Footer />} // Removed */}
+					<InnerLayoutClient>{children}</InnerLayoutClient>
 					<BackToTop />
 				</CartProvider>
 			</body>

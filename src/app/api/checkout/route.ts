@@ -122,15 +122,23 @@ export async function POST(req: NextRequest) {
 
 		// Determine shipping based on order total
 		const FREE_SHIPPING_THRESHOLD = 50;
-		const PAID_SHIPPING_RATE_ID = 'shr_1RPxYrChXWBA9KQdMnP9LbP3'; // $5.00 shipping
-		const FREE_SHIPPING_RATE_ID = 'shr_1RPxtPChXWBA9KQdTpNbCZIm'; // Replace with your actual free shipping rate ID from Stripe
+		const PAID_SHIPPING_RATE_ID = process.env.STRIPE_PAID_SHIPPING_RATE_ID || 'shr_1RPxYrChXWBA9KQdMnP9LbP3';
+		const FREE_SHIPPING_RATE_ID = process.env.STRIPE_FREE_SHIPPING_RATE_ID || 'shr_1RPxtPChXWBA9KQdTpNbCZIm';
 
-		const shippingOptions = orderTotal >= FREE_SHIPPING_THRESHOLD 
+		const shippingOptions = orderTotal >= FREE_SHIPPING_THRESHOLD
 			? [{ shipping_rate: FREE_SHIPPING_RATE_ID }]
 			: [{ shipping_rate: PAID_SHIPPING_RATE_ID }];
 
-		// For dynamic origin for success and cancel URLs
-		const origin = req.headers.get('origin') || 'http://localhost:3000';
+		// Validate origin against allowlist to prevent open redirect
+		const ALLOWED_ORIGINS = [
+			'https://trestellecoffeeco.com',
+			'https://www.trestellecoffeeco.com',
+			'http://localhost:3000',
+		];
+		const requestOrigin = req.headers.get('origin') || '';
+		const origin = ALLOWED_ORIGINS.includes(requestOrigin)
+			? requestOrigin
+			: 'https://trestellecoffeeco.com';
 
 		const session = await stripe.checkout.sessions.create({
 			payment_method_types: ['card'],
