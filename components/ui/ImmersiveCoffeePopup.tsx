@@ -9,9 +9,9 @@ export function isImmersiveCoffeeEventEnabled(now: Date = new Date()): boolean {
 	if (override === 'true') return true;
 	if (override === 'false') return false;
 
-	// Default behavior: enabled from Mar 23 through Apr 4, 2026
-	const start = new Date(2026, 2, 23, 0, 0, 0, 0); // Mar 23, 2026
-	const end = new Date(2026, 3, 4, 23, 59, 59, 999); // Apr 4, 2026 end of day
+	// Default behavior: enabled from May 20 through May 31, 2026
+	const start = new Date(2026, 4, 20, 0, 0, 0, 0); // May 20, 2026
+	const end = new Date(2026, 4, 31, 23, 59, 59, 999); // May 31, 2026 end of day
 	return now >= start && now <= end;
 }
 
@@ -87,7 +87,7 @@ export default function ImmersiveCoffeePopup() {
 				<div className="relative w-full aspect-[3/4]">
 					<Image
 						src="/images/immersive-coffee-event.jpg"
-						alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - April 4, 2026"
+						alt="Immersive Coffee Experience - Tre Stelle Coffee Co. - May 31, 2026"
 						fill
 						className="object-cover"
 						priority
