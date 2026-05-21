@@ -43,7 +43,7 @@ export default function FeaturedEvent() {
 							<div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-secondary/20 group">
 								<div className="relative aspect-[3/4] w-full max-w-md mx-auto">
 									<Image
-										src="/images/immersive-coffee-event.png"
+										src="/images/immersive-coffee-event.jpg"
 										alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - April 4, 2026"
 										fill
 										className="object-cover transition-transform duration-500 group-hover:scale-105"

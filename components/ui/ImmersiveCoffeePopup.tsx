@@ -86,7 +86,7 @@ export default function ImmersiveCoffeePopup() {
 				{/* Event Image */}
 				<div className="relative w-full aspect-[3/4]">
 					<Image
-						src="/images/immersive-coffee-event.png"
+						src="/images/immersive-coffee-event.jpg"
 						alt="Immersive Coffee Experience - Tre Stelle Coffee Co. x The Habesha Barista - April 4, 2026"
 						fill
 						className="object-cover"
