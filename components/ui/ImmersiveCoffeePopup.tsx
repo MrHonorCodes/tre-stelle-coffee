@@ -94,8 +94,17 @@ export default function ImmersiveCoffeePopup() {
 					/>
 				</div>
 
+				{/* Event Details */}
+				<div className="px-4 pt-4 pb-2 bg-[#f5f0e8]">
+					<h3 className="text-xl font-bold text-primary mb-1">Hands-On Coffee Classes</h3>
+					<p className="text-sm text-gray-600 mb-2">Sunday, May 31 &bull; 6:30 PM &ndash; 8:30 PM CST</p>
+					<p className="text-gray-700 text-sm">
+						Join us for an immersive coffee experience with hands-on latte art lessons and tastings. All levels welcome. <strong>$55/person.</strong>
+					</p>
+				</div>
+
 				{/* Action Buttons */}
-				<div className="p-4 flex flex-col gap-3 bg-[#f5f0e8]">
+				<div className="px-4 pt-2 pb-4 flex flex-col gap-3 bg-[#f5f0e8]">
 					<button
 						onClick={handleGetTickets}
 						className="w-full bg-primary text-light font-semibold py-3 px-6 rounded-full text-center transition-all duration-300 hover:bg-tertiary transform hover:scale-105 shadow-md hover:shadow-lg cursor-pointer"
