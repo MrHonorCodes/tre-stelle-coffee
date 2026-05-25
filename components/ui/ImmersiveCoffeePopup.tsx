@@ -9,9 +9,9 @@ export function isImmersiveCoffeeEventEnabled(now: Date = new Date()): boolean {
 	if (override === 'true') return true;
 	if (override === 'false') return false;
 
-	// Default behavior: enabled from May 20 through May 31, 2026
-	const start = new Date(2026, 4, 20, 0, 0, 0, 0); // May 20, 2026
-	const end = new Date(2026, 4, 31, 23, 59, 59, 999); // May 31, 2026 end of day
+	// Event postponed — disabled until rescheduled
+	const start = new Date(2099, 0, 1);
+	const end = new Date(2099, 0, 1);
 	return now >= start && now <= end;
 }
 
