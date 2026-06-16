@@ -68,8 +68,25 @@ export default function AnniversaryPopup() {
 					/>
 				</div>
 
+				{/* Caption */}
+				<div className="px-5 pt-4 pb-2 bg-[#f5f0e8] text-center">
+					<h3 className="text-xl font-bold text-primary mb-1">
+						We&apos;re Turning 4! 🎉
+					</h3>
+					<p className="text-sm text-gray-700 mb-2">
+						Join us for our 4 Year Celebration on <strong>Saturday, June 20</strong> starting at{' '}
+						<strong>10 AM</strong>. Come toast four years of Tre Stelle with us!
+					</p>
+					<p className="text-sm text-gray-600">
+						☕ Coffee &bull; 🍵 Matcha &bull; 🎧 Live DJ &bull; 👕 Merch &bull; 🎁 Raffle Prizes
+					</p>
+					<p className="text-xs text-gray-500 mt-2">
+						17390 Preston Rd, Ste 210 &bull; Dallas, TX
+					</p>
+				</div>
+
 				{/* CTA */}
-				<div className="p-4 bg-[#f5f0e8] flex flex-col gap-2">
+				<div className="px-4 pt-2 pb-4 bg-[#f5f0e8] flex flex-col gap-2">
 					<a
 						href="https://maps.google.com/?q=17390+Preston+Rd+Ste+210+Dallas+TX"
 						target="_blank"
