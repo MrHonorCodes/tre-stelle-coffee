@@ -8,8 +8,8 @@ export function isAnniversaryEnabled(now: Date = new Date()): boolean {
 	if (override === 'true') return true;
 	if (override === 'false') return false;
 
-	// Show June 16–20, 2026
-	const start = new Date(2026, 5, 16, 0, 0, 0, 0);
+	// Active now through the 4th anniversary on June 20, 2026, then auto-hides
+	const start = new Date(2026, 0, 1, 0, 0, 0, 0);
 	const end = new Date(2026, 5, 20, 23, 59, 59, 999);
 	return now >= start && now <= end;
 }
