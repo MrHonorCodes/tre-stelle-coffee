@@ -73,6 +73,7 @@ interface SanityProduct extends SanityDocument {
 	reviews?: SanityReview[];
 	size?: string;
 	sizes?: string[];
+	optionLabel?: string;
 	bundleOptions?: BundleOptions;
 	isFeatured?: boolean;
 }
@@ -176,7 +177,7 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 			!selectedSize
 		) {
 			setToastType('error');
-			setToastMessage('Please select a size.');
+			setToastMessage(`Please select a ${product.optionLabel ? product.optionLabel.toLowerCase() : 'size'}.`);
 			setShowConfirmation(true);
 			setTimeout(() => setShowConfirmation(false), 2000);
 			return;
@@ -498,7 +499,7 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 				{product.category === 'merchandise' && product.sizes && product.sizes.length > 0 && (
 					<div className="mb-4">
 						<label htmlFor="size-select" className="block text-sm font-medium text-gray-700 mb-1">
-							Select Size:
+							{product.optionLabel ? `${product.optionLabel}:` : 'Select Size:'}
 						</label>
 						<select
 							id="size-select"
@@ -506,7 +507,7 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 							onChange={(e) => setSelectedSize(e.target.value)}
 							className="w-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
 						>
-							<option value="">Choose a size</option>
+							<option value="">{product.optionLabel ? `Choose a ${product.optionLabel.toLowerCase()}` : 'Choose a size'}</option>
 							{product.sizes.map((size) => (
 								<option key={size} value={size}>
 									{size}

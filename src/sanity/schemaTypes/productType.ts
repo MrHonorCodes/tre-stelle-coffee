@@ -125,6 +125,12 @@ export const productType = defineType({
 			description: 'Select all available sizes for merchandise products.',
 		}),
 		defineField({
+			name: 'optionLabel',
+			title: 'Option Label',
+			type: 'string',
+			description: 'Label for the size/style dropdown on merchandise (e.g. "Size", "Style of tote"). Defaults to "Size" if empty.',
+		}),
+		defineField({
 			name: 'bundleOptions',
 			title: 'Bundle Options',
 			type: 'object',
@@ -160,6 +166,12 @@ export const productType = defineType({
 			type: 'boolean',
 			initialValue: false,
 			description: 'Check this box to display this product in the featured section on the home page.',
+		}),
+		defineField({
+			name: 'displayOrder',
+			title: 'Display Order',
+			type: 'number',
+			description: 'Order this product appears in the shop grid (lower numbers first). Leave empty to sort after ordered products.',
 		}),
 		// You can add more fields here later, like SKU, stock levels, variants, etc.
 	],
