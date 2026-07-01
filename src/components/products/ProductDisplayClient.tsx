@@ -505,7 +505,7 @@ export default function ProductDisplayClient({ product }: { product: SanityProdu
 							id="size-select"
 							value={selectedSize}
 							onChange={(e) => setSelectedSize(e.target.value)}
-							className="w-40 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+							className="w-auto min-w-[10rem] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
 						>
 							<option value="">{product.optionLabel ? `Choose a ${product.optionLabel.toLowerCase()}` : 'Choose a size'}</option>
 							{product.sizes.map((size) => (
