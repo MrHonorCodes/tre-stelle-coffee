@@ -30,10 +30,11 @@ interface SanityProduct extends SanityDocument {
 	category?: string; // Assuming category is a string field
 	stripePriceId?: string;
 	isOutOfStock?: boolean; // Added isOutOfStock
+	displayOrder?: number;
 	// stock related fields if managed in Sanity
 }
 
-const PRODUCTS_QUERY = `*[_type == "product"]{
+const PRODUCTS_QUERY = `*[_type == "product"] | order(coalesce(displayOrder, 9999) asc, _createdAt asc){
   _id,
   productId, // <-- Added
   name,
@@ -42,7 +43,8 @@ const PRODUCTS_QUERY = `*[_type == "product"]{
   price,
   category,
   stripePriceId,
-  isOutOfStock // Added isOutOfStock
+  isOutOfStock, // Added isOutOfStock
+  displayOrder
   // details, // Fetch details if you plan to display them on this list page
 }`;
 

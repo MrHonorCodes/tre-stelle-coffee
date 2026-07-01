@@ -20,6 +20,7 @@ interface SanityProduct extends SanityDocument {
 	stripePriceId?: string;
 	isOutOfStock?: boolean;
 	sizes?: string[];
+	optionLabel?: string;
 	reviews?: SanityReview[];
 }
 
@@ -52,6 +53,7 @@ const PRODUCT_QUERY = `*[_type == "product" && slug.current == $slug][0]{
   stripePriceId,
   isOutOfStock,
   sizes,
+  optionLabel,
   isFeatured,
   bundleOptions{
     coffeeChoices[]->{
