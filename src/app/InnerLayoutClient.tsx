@@ -8,8 +8,6 @@ import ClientLayout from '../../components/layout/ClientLayout';
 import FreeShippingBanner from '../../components/ui/FreeShippingBanner';
 import HolidayBoxPopup from '../../components/ui/HolidayBoxPopup';
 import ImmersiveCoffeePopup from '../../components/ui/ImmersiveCoffeePopup';
-import AnniversaryPopup from '../../components/ui/AnniversaryPopup';
-import AnniversaryConfetti from '../../components/ui/AnniversaryConfetti';
 
 export default function InnerLayoutClient({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
@@ -26,8 +24,6 @@ export default function InnerLayoutClient({ children }: { children: React.ReactN
 			{!isStudioPage && <Footer />}
 			{!isStudioPage && <HolidayBoxPopup />}
 			{!isStudioPage && <ImmersiveCoffeePopup />}
-			{!isStudioPage && <AnniversaryPopup />}
-			{!isStudioPage && <AnniversaryConfetti />}
 			{/* </SmoothScroller> */}
 		</>
 	);
