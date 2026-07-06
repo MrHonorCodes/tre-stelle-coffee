@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import FadeIn from '../../../components/ui/FadeIn';
 import ScrollReveal from '../../../components/ui/ScrollReveal';
 import ContactSection from '../../../components/layout/ContactSection';
+import { IMMERSIVE_COFFEE_EVENTBRITE_URL } from '@/lib/events';
 
 // Event Package Type - Commented out as the section using it is also commented out
 /*
@@ -175,6 +176,65 @@ ${formData.message}
 							Submit Request
 						</a>
 					</FadeIn>
+				</div>
+			</section>
+
+			{/* Upcoming Events */}
+			<section className="py-16 bg-white">
+				<div className="container mx-auto px-4">
+					<ScrollReveal>
+						<h2 className="text-3xl md:text-4xl text-primary font-bold mb-10 text-center">
+							Upcoming Events
+						</h2>
+					</ScrollReveal>
+
+					<ScrollReveal delay={0.1}>
+						<div className="max-w-2xl mx-auto bg-soft-white rounded-2xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+							<div className="bg-primary text-secondary flex flex-col items-center justify-center px-8 py-10 md:min-w-[140px]">
+								<span className="text-sm font-semibold uppercase tracking-widest opacity-80">Jul</span>
+								<span className="text-6xl font-extrabold leading-none">26</span>
+								<span className="text-sm font-semibold uppercase tracking-widest opacity-80">Sunday</span>
+							</div>
+							<div className="flex flex-col justify-between p-8 flex-1">
+								<div>
+									<h3 className="text-2xl font-bold text-primary mb-2">
+										Immersive Coffee Experience
+									</h3>
+									<div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+										<span className="flex items-center gap-1">
+											<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+											</svg>
+											6:30 PM – 8:30 PM
+										</span>
+										<span className="flex items-center gap-1">
+											<svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+											</svg>
+											Tre Stelle Coffee Co., Dallas, TX
+										</span>
+										<span className="flex items-center gap-1 font-semibold text-primary">
+											$60 / person
+										</span>
+									</div>
+									<p className="text-gray-700 text-sm">
+										Join us for a unique in-person coffee class — hands-on lessons, tasty sips, and an experience you won&apos;t forget.
+									</p>
+								</div>
+								<div className="mt-6">
+									<a
+										href={IMMERSIVE_COFFEE_EVENTBRITE_URL}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="inline-block px-7 py-3 bg-secondary text-dark-text font-semibold rounded-full text-sm uppercase tracking-wide transition-all duration-300 hover:bg-transparent hover:text-secondary border-2 border-secondary"
+									>
+										Get Tickets
+									</a>
+								</div>
+							</div>
+						</div>
+					</ScrollReveal>
 				</div>
 			</section>
 

@@ -61,7 +61,7 @@ export default function FeaturedEvent() {
 									<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
 									</svg>
-									<span className="font-semibold">Sunday, May 31 • 6:30 PM – 8:30 PM CST</span>
+									<span className="font-semibold">Sunday, July 26 • 6:30 PM – 8:30 PM CST</span>
 								</div>
 
 								<h3 className="text-2xl md:text-3xl font-bold text-primary mb-6">
@@ -76,7 +76,7 @@ export default function FeaturedEvent() {
 
 								<p className="text-gray-700 mb-6 text-lg leading-relaxed">
 									Learn from passionate coffee professionals and connect with others in the community
-									during this immersive experience. Tickets are <strong>$55 per person</strong> — don&apos;t miss it!
+									during this immersive experience. Tickets are <strong>$60 per person</strong> — don&apos;t miss it!
 								</p>
 
 								<ul className="space-y-3 mb-8">
