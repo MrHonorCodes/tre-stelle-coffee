@@ -38,6 +38,10 @@ export default function EventBooking() {
 		message: '',
 	});
 
+	// Submission state
+	const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+	const [errorMessage, setErrorMessage] = useState('');
+
 	// Event packages - Commented out as the section using it is also commented out
 	/*
 const eventPackages: EventPackage[] = [
@@ -89,59 +93,63 @@ const eventPackages: EventPackage[] = [
 		});
 	};
 
-	// Handle form submission
-	const handleSubmit = (e: React.FormEvent) => {
+	// Convert 24-hour time (HH:MM) to a readable 12-hour format
+	const formatTime = (value: string): string => {
+		if (!value) return 'Not specified';
+		const [hourString, minuteString] = value.split(':');
+		let hour = parseInt(hourString, 10);
+		const minute = parseInt(minuteString, 10);
+		const ampm = hour >= 12 ? 'PM' : 'AM';
+		hour = hour % 12;
+		hour = hour ? hour : 12; // Convert hour '0' to '12'
+		const minuteFormatted = minute < 10 ? '0' + minute : minute;
+		return `${hour}:${minuteFormatted} ${ampm}`;
+	};
+
+	// Handle form submission — sends the inquiry through our API (Resend)
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (status === 'submitting') return;
 
-		// Convert 24-hour time to 12-hour format for the email
-		let formattedStartTime = '';
-		let formattedEndTime = '';
-		
-		if (formData.time) {
-			const [hourString, minuteString] = formData.time.split(':');
-			let hour = parseInt(hourString, 10);
-			const minute = parseInt(minuteString, 10);
-			const ampm = hour >= 12 ? 'PM' : 'AM';
-			hour = hour % 12;
-			hour = hour ? hour : 12; // Convert hour '0' to '12'
-			const minuteFormatted = minute < 10 ? '0' + minute : minute;
-			formattedStartTime = `${hour}:${minuteFormatted} ${ampm}`;
-		} else {
-			formattedStartTime = 'Not specified'; // Fallback if time is somehow empty despite being required
+		setStatus('submitting');
+		setErrorMessage('');
+
+		try {
+			const res = await fetch('/api/event-inquiry', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: formData.name,
+					email: formData.email,
+					phone: formData.phone,
+					date: formData.date,
+					startTime: formatTime(formData.time),
+					endTime: formatTime(formData.endTime),
+					message: formData.message,
+				}),
+			});
+
+			if (!res.ok) {
+				const data = await res.json().catch(() => ({}));
+				throw new Error(data?.message || 'Something went wrong. Please try again.');
+			}
+
+			setStatus('success');
+			setFormData({
+				name: '',
+				email: '',
+				phone: '',
+				date: '',
+				time: '',
+				endTime: '',
+				message: '',
+			});
+		} catch (err) {
+			setStatus('error');
+			setErrorMessage(
+				err instanceof Error ? err.message : 'Something went wrong. Please try again.'
+			);
 		}
-
-		if (formData.endTime) {
-			const [hourString, minuteString] = formData.endTime.split(':');
-			let hour = parseInt(hourString, 10);
-			const minute = parseInt(minuteString, 10);
-			const ampm = hour >= 12 ? 'PM' : 'AM';
-			hour = hour % 12;
-			hour = hour ? hour : 12; // Convert hour '0' to '12'
-			const minuteFormatted = minute < 10 ? '0' + minute : minute;
-			formattedEndTime = `${hour}:${minuteFormatted} ${ampm}`;
-		} else {
-			formattedEndTime = 'Not specified'; // Fallback if endTime is somehow empty despite being required
-		}
-
-		// Form submission logic
-		const subject = 'New Event Booking Request';
-		const body = `
-Name: ${formData.name}
-Email: ${formData.email}
-Phone: ${formData.phone}
-Event Date: ${formData.date}
-Start Time: ${formattedStartTime}
-End Time: ${formattedEndTime}
-Event Details:
-${formData.message}
-    `;
-		const mailtoLink = `mailto:contact@trestellecoffeeco.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-		window.location.href = mailtoLink;
-		// Optional: You might want to still give some feedback to the user on the page,
-		// as they will be navigated away to their email client.
-		// For example, you could show a temporary message like "Preparing your email..."
-		// or reset the form.
-		// For now, we'll just navigate.
 	};
 
 	return (
@@ -751,13 +759,43 @@ ${formData.message}
 									></textarea>
 								</div>
 
-								<div className="flex justify-center">
+								<div className="flex flex-col items-center gap-4">
 									<button
 										type="submit"
-										className="px-8 py-4 bg-secondary text-dark-text border-2 border-secondary font-semibold rounded-lg text-lg transition-all duration-300 hover:bg-transparent hover:text-secondary hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-secondary/30 cursor-pointer"
+										disabled={status === 'submitting'}
+										aria-busy={status === 'submitting'}
+										className="px-8 py-4 bg-secondary text-dark-text border-2 border-secondary font-semibold rounded-lg text-lg transition-all duration-300 hover:bg-transparent hover:text-secondary hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-secondary/30 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-secondary disabled:hover:text-dark-text flex items-center gap-2"
 									>
-										Submit Booking Request
+										{status === 'submitting' && (
+											<svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+												<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+											</svg>
+										)}
+										{status === 'submitting' ? 'Sending…' : 'Submit Booking Request'}
 									</button>
+
+									{status === 'success' && (
+										<div
+											role="status"
+											className="w-full text-center bg-green-50 border border-green-200 text-green-800 rounded-lg px-4 py-3"
+										>
+											🎉 Thanks! Your request has been sent. We&apos;ll get back to you within 24 hours.
+										</div>
+									)}
+
+									{status === 'error' && (
+										<div
+											role="alert"
+											className="w-full text-center bg-red-50 border border-red-200 text-red-800 rounded-lg px-4 py-3"
+										>
+											{errorMessage} If it keeps happening, please call us at{' '}
+											<a href="tel:9723734355" className="font-semibold underline">
+												(972) 373-4355
+											</a>
+											.
+										</div>
+									)}
 								</div>
 							</form>
 						</div>
