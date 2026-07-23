@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { createClient } from '@sanity/client';
+import { parseBody } from 'next-sanity/webhook';
 import type Stripe from 'stripe';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -36,29 +37,28 @@ interface SanityOrderDocument {
 	productDetails?: string; // Legacy field
 }
 
-// Optional: A secret to verify the webhook request is from Sanity
-const SANITY_WEBHOOK_SECRET = process.env.SANITY_WEBHOOK_SECRET;
-
 export async function POST(req: NextRequest) {
 	try {
-		// 1. Verify the webhook signature
-		if (!SANITY_WEBHOOK_SECRET) {
+		// 1. Verify the request is a genuine Sanity webhook using its native
+		//    HMAC signature (the `sanity-webhook-signature` header). This mirrors
+		//    /api/revalidate-sanity. Sanity does NOT send an Authorization header,
+		//    so a Bearer-token check would reject every legitimate webhook.
+		if (!process.env.SANITY_WEBHOOK_SECRET) {
 			console.error('SANITY_WEBHOOK_SECRET is not configured');
 			return NextResponse.json({ message: 'Webhook secret not configured' }, { status: 503 });
 		}
-		const authToken = req.headers.get('Authorization')?.split(' ')?.[1];
-		if (authToken !== SANITY_WEBHOOK_SECRET) {
-			console.warn('Unauthorized Sanity webhook attempt');
+
+		const { body: payload, isValidSignature } = await parseBody<{ _id?: string }>(
+			req,
+			process.env.SANITY_WEBHOOK_SECRET
+		);
+
+		if (!isValidSignature) {
+			console.warn('send-tracking-email: invalid Sanity webhook signature');
 			return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
 		}
 
-		const payload = await req.json();
-		// Sanity typically sends the document ID in _id for updates
-		// The actual structure might vary based on your webhook configuration (GROQ projection)
-		// Assuming the payload directly contains the fields of the updated 'order' document,
-		// or at least the ID to fetch it.
-
-		const orderId = payload?._id; // Or however Sanity sends the document ID
+		const orderId = payload?._id; // Sanity sends the document ID as _id
 
 		if (!orderId) {
 			console.error('Sanity Webhook: Missing order ID in payload');
